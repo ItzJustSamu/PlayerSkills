@@ -42,7 +42,7 @@ public class ChatEvent implements Listener {
                     Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
                     success = true;
                 } catch (Exception ex) {
-//                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an integer. This is a number which cannot contain a fractional component.");
+                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an integer. This is a number which cannot contain a fractional component.");
                 }
             } else if (conf.getType() == ConfigType.DOUBLE || conf.getType() == ConfigType.NUMBER) {
                 try {
@@ -50,7 +50,7 @@ public class ChatEvent implements Listener {
                     Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
                     success = true;
                 } catch (Exception ex) {
-//                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an double. This is a number which can include fractional components.");
+                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an double. This is a number which can include fractional components.");
                 }
             } else if (conf.getType() == ConfigType.BOOLEAN) {
                 try {
@@ -58,7 +58,7 @@ public class ChatEvent implements Listener {
                     Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
                     success = true;
                 } catch (Exception ex) {
-//                    event.getPlayer().sendMessage(ChatColor.RED + "The value must either be true or false.");
+                    event.getPlayer().sendMessage(ChatColor.RED + "The value must either be true or false.");
                 }
             } else if (conf.getType() == ConfigType.STRING) {
                 Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(message));

@@ -75,7 +75,7 @@ public abstract class Skill implements Listener {
         }
 
         if (obj instanceof Integer) {
-            return ((double) ((int) obj));
+            return ((int) obj);
         } else {
             return (double) obj;
         }

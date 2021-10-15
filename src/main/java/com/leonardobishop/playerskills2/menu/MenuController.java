@@ -1,5 +1,6 @@
 package com.leonardobishop.playerskills2.menu;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 public class MenuController implements Listener {
 
-    private static final HashMap<Player, Menu> tracker = new HashMap<>();
+    private static final HashMap<HumanEntity, Menu> tracker = new HashMap<>();
 
     public static void open(Player player, Menu menu) {
         player.openInventory(menu.toInventory());
@@ -28,11 +29,11 @@ public class MenuController implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (tracker.containsKey((Player) event.getWhoClicked())) {
+        if (tracker.containsKey(event.getWhoClicked())) {
             if ((event.getWhoClicked().getOpenInventory() != null)
                     && (event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory())) {
                 event.setCancelled(true);
-                Menu menu = tracker.get((Player) event.getWhoClicked());
+                Menu menu = tracker.get(event.getWhoClicked());
                 menu.onClick(event.getSlot());
             }
         }
@@ -40,9 +41,9 @@ public class MenuController implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (tracker.containsKey((Player) event.getPlayer())) {
-            Menu menu = tracker.get((Player) event.getPlayer());
-            tracker.remove((Player) event.getPlayer());
+        if (tracker.containsKey(event.getPlayer())) {
+            Menu menu = tracker.get(event.getPlayer());
+            tracker.remove(event.getPlayer());
             menu.onClose();
         }
     }

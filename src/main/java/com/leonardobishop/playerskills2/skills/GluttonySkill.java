@@ -54,7 +54,7 @@ public class GluttonySkill extends Skill {
         int gluttonyLevel = sPlayer.getLevel(this.getConfigName());
         // java.lang.Integer cannot be cast to java.lang.Double
         // my fucking ass
-        double multiplier = 1D + (((double) gluttonyLevel) * (super.getDecimalNumber("percent-increase") / 100D));
+        double multiplier = 1D + ((gluttonyLevel) * (super.getDecimalNumber("percent-increase") / 100D));
 
         double newLevel = diff * multiplier;
         player.setFoodLevel(player.getFoodLevel() + (int) newLevel);

@@ -10,7 +10,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class VaultFundingSource implements FundingSource {
 
     private Economy economy;
-    private PlayerSkills plugin;
 
     public VaultFundingSource(PlayerSkills plugin) {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);

@@ -184,8 +184,8 @@ public class Config {
                 ism.setDisplayName(name);
             }
             String[] enchantments = cEnchantments.split(Pattern.quote(","));
-            for (int i = 0; i < enchantments.length; i++) {
-                String[] enchantment = enchantments[i].split(Pattern.quote(":"));
+            for (String s : enchantments) {
+                String[] enchantment = s.split(Pattern.quote(":"));
                 if (enchantment.length < 2) {
                     continue;
                 }

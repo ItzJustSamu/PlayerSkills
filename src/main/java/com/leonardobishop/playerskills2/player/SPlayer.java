@@ -111,7 +111,6 @@ public class SPlayer {
         } catch (IOException e) {
             e.printStackTrace();
             plugin.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
-            return;
         }
     }
 
