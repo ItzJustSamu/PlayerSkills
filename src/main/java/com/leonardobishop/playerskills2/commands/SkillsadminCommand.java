@@ -12,12 +12,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 public class SkillsadminCommand implements CommandExecutor {
 
-    private PlayerSkills plugin;
+    private final PlayerSkills plugin;
 
     public SkillsadminCommand(PlayerSkills plugin) {
         this.plugin = plugin;

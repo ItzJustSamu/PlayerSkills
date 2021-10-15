@@ -1,9 +1,7 @@
 package com.leonardobishop.playerskills2.menu;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.Skill;
-import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.ConfigEditWrapper;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;

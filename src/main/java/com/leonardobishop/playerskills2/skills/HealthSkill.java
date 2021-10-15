@@ -2,16 +2,12 @@ package com.leonardobishop.playerskills2.skills;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -21,9 +17,9 @@ import java.util.UUID;
 
 public class HealthSkill extends Skill {
 
-    private HashMap<UUID, Integer> hitpointsFromPlayerskills = new HashMap<>();
-    private HashMap<UUID, Double> knownMaxHitpoints = new HashMap<>();
-    private HashMap<UUID, Double> hitpoints = new HashMap<>();
+    private final HashMap<UUID, Integer> hitpointsFromPlayerskills = new HashMap<>();
+    private final HashMap<UUID, Double> knownMaxHitpoints = new HashMap<>();
+    private final HashMap<UUID, Double> hitpoints = new HashMap<>();
 
     public HealthSkill(PlayerSkills plugin) {
         super(plugin, "Health", "health");
@@ -102,7 +98,7 @@ public class HealthSkill extends Skill {
                 }
             }
         }.runTaskTimer(plugin, (HealthSkill.super.getConfig().containsKey("compatibility-mode") &&
-                (boolean) HealthSkill.super.getConfig().get("compatibility-mode") ? 1L : 20L),
+                        (boolean) HealthSkill.super.getConfig().get("compatibility-mode") ? 1L : 20L),
                 (HealthSkill.super.getConfig().containsKey("compatibility-mode") && (boolean) HealthSkill.super.getConfig().get("compatibility-mode") ? 1L : 20L));
     }
 

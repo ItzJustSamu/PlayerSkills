@@ -13,14 +13,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
 public class ChatEvent implements Listener {
 
-    private PlayerSkills plugin;
-    private HashMap<Player, ConfigEditWrapper> creatorConfigValue = new HashMap<>();
+    private final PlayerSkills plugin;
+    private final HashMap<Player, ConfigEditWrapper> creatorConfigValue = new HashMap<>();
 
     public ChatEvent(PlayerSkills plugin) {
         this.plugin = plugin;
@@ -69,7 +68,7 @@ public class ChatEvent implements Listener {
             final boolean trueSuccess = success;
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (trueSuccess) {
-                    event.getPlayer().sendMessage(ChatColor.GREEN + "Value of " + ChatColor.WHITE + conf.getKey() + ChatColor.GREEN + " changed to " + ChatColor.WHITE +  conf.getValue() + ".");
+                    event.getPlayer().sendMessage(ChatColor.GREEN + "Value of " + ChatColor.WHITE + conf.getKey() + ChatColor.GREEN + " changed to " + ChatColor.WHITE + conf.getValue() + ".");
                 } else {
                     event.getPlayer().sendMessage(ChatColor.RED + "There was an error with your input. The value has not been changed.");
                 }
@@ -85,6 +84,7 @@ public class ChatEvent implements Listener {
             event.setCancelled(true);
         }
     }
+
     public HashMap<Player, ConfigEditWrapper> getCreatorConfigValue() {
         return creatorConfigValue;
     }

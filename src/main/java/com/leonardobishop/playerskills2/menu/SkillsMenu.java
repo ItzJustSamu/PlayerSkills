@@ -17,9 +17,9 @@ import java.util.HashMap;
 
 public class SkillsMenu extends Menu {
 
-    private PlayerSkills plugin;
-    private Player player;
-    private SPlayer sPlayer;
+    private final PlayerSkills plugin;
+    private final Player player;
+    private final SPlayer sPlayer;
 
     public SkillsMenu(PlayerSkills plugin, Player player, SPlayer sPlayer) {
         this.plugin = plugin;

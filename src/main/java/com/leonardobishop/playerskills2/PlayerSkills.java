@@ -1,6 +1,5 @@
 package com.leonardobishop.playerskills2;
 
-import com.google.common.io.ByteStreams;
 import com.leonardobishop.playerskills2.commands.SkillsCommand;
 import com.leonardobishop.playerskills2.commands.SkillsadminCommand;
 import com.leonardobishop.playerskills2.events.ChatEvent;
@@ -28,11 +27,11 @@ public class PlayerSkills extends JavaPlugin {
 
     @Deprecated
     private static PlayerSkills instance;
-    private HashMap<String, Skill> skillRegistrar = new HashMap<>();
+    private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
     private ChatEvent chatEvent;
     private FundingSource fundingSource;
     private boolean verboseLogging;
-    private DecimalFormat percentageFormat = new DecimalFormat("#.#");
+    private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
 //    public ProtocolManager protocolManager;
 
 

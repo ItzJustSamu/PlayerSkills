@@ -12,58 +12,20 @@ import java.util.UUID;
 public class SPlayer {
 
     // ******************************
+    // STATIC
+    // ******************************
+    private static final HashMap<UUID, SPlayer> players = new HashMap<>();
+    // ******************************
     // INSTANCE
     // ******************************
-    private UUID player;
+    private final UUID player;
     private int points;
-    private HashMap<String, Integer> skills;
+    private final HashMap<String, Integer> skills;
 
     public SPlayer(UUID player) {
         this.player = player;
         this.skills = new HashMap<>();
     }
-
-    public UUID getPlayer() {
-        return player;
-    }
-
-    public HashMap<String, Integer> getSkills() {
-        return skills;
-    }
-
-    public int getLevel(String skill) {
-        return skills.getOrDefault(skill, 0);
-    }
-
-    public void setLevel(String skill, int level) {
-        skills.put(skill, level);
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getNextPointPrice(PlayerSkills plugin) {
-        int base = Config.get(plugin, "points.price").getInt();
-        if (Config.get(plugin, "points.dynamic-price.enabled").getBoolean()) {
-            int points = getPoints();
-            for (int i : getSkills().values()) {
-                points += i;
-            }
-            return base + (points * Config.get(plugin, "points.dynamic-price.price-increase-per-point").getInt());
-        } else {
-            return base;
-        }
-    }
-
-    // ******************************
-    // STATIC
-    // ******************************
-    private static HashMap<UUID, SPlayer> players = new HashMap<>();
 
     public static SPlayer load(PlayerSkills plugin, UUID uuid) {
         File users = new File(plugin.getDataFolder() + File.separator + "users");
@@ -155,5 +117,42 @@ public class SPlayer {
 
     public static HashMap<UUID, SPlayer> getPlayers() {
         return players;
+    }
+
+    public UUID getPlayer() {
+        return player;
+    }
+
+    public HashMap<String, Integer> getSkills() {
+        return skills;
+    }
+
+    public int getLevel(String skill) {
+        return skills.getOrDefault(skill, 0);
+    }
+
+    public void setLevel(String skill, int level) {
+        skills.put(skill, level);
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getNextPointPrice(PlayerSkills plugin) {
+        int base = Config.get(plugin, "points.price").getInt();
+        if (Config.get(plugin, "points.dynamic-price.enabled").getBoolean()) {
+            int points = getPoints();
+            for (int i : getSkills().values()) {
+                points += i;
+            }
+            return base + (points * Config.get(plugin, "points.dynamic-price.price-increase-per-point").getInt());
+        } else {
+            return base;
+        }
     }
 }

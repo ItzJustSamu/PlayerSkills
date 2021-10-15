@@ -10,12 +10,12 @@ import java.util.HashMap;
 
 public abstract class Skill implements Listener {
 
-    private PlayerSkills plugin;
-    private String name;
-    private String configName;
-    private HashMap<String, Object> config = new HashMap<>();
-    private HashMap<Integer, Integer> pointPriceOverrides = new HashMap<>();
-    private ArrayList<CreatorConfigValue> creatorConfigValues = new ArrayList<>();
+    private final PlayerSkills plugin;
+    private final String name;
+    private final String configName;
+    private final HashMap<String, Object> config = new HashMap<>();
+    private final HashMap<Integer, Integer> pointPriceOverrides = new HashMap<>();
+    private final ArrayList<CreatorConfigValue> creatorConfigValues = new ArrayList<>();
     private String itemLocation;
 
     public Skill(PlayerSkills plugin, String name, String configName) {

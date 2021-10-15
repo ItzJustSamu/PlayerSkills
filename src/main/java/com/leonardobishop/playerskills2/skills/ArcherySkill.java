@@ -18,7 +18,7 @@ public class ArcherySkill extends Skill {
         super(plugin, "Archery", "archery");
 
         super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "max-level",
-                10,"The maximum level the player can attain.", true));
+                10, "The maximum level the player can attain.", true));
         super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "gui-slot",
                 15, "The slot in the GUI where the skill will be put in.", true));
         super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.NUMBER, "damage-increment",

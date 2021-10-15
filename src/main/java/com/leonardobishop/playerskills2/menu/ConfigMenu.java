@@ -1,27 +1,22 @@
 package com.leonardobishop.playerskills2.menu;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.Skill;
 import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ConfigMenu extends Menu {
 
-    private PlayerSkills plugin;
-    private Player player;
-    private HashMap<Integer, Skill> slotToSkill = new HashMap<>();
+    private final PlayerSkills plugin;
+    private final Player player;
+    private final HashMap<Integer, Skill> slotToSkill = new HashMap<>();
 
     public ConfigMenu(PlayerSkills plugin, Player player) {
         this.plugin = plugin;

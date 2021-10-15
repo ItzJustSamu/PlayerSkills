@@ -4,12 +4,11 @@ import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class LeaveEvent implements Listener {
 
-    private PlayerSkills plugin;
+    private final PlayerSkills plugin;
 
     public LeaveEvent(PlayerSkills plugin) {
         this.plugin = plugin;

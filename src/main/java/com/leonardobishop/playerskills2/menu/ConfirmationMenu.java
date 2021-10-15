@@ -2,9 +2,7 @@ package com.leonardobishop.playerskills2.menu;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.skills.Skill;
 import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,15 +11,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashMap;
-
 public class ConfirmationMenu extends Menu {
 
-    private PlayerSkills plugin;
-    private Player player;
-    private SPlayer sPlayer;
-    private ItemStack display;
-    private Runnable callback;
+    private final PlayerSkills plugin;
+    private final Player player;
+    private final SPlayer sPlayer;
+    private final ItemStack display;
+    private final Runnable callback;
     private Menu superMenu;
 
     public ConfirmationMenu(PlayerSkills plugin, Player player, SPlayer sPlayer, ItemStack display, Runnable callback) {

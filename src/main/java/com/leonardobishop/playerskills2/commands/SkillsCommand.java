@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SkillsCommand implements CommandExecutor {
 
-    private PlayerSkills plugin;
+    private final PlayerSkills plugin;
 
     public SkillsCommand(PlayerSkills plugin) {
         this.plugin = plugin;

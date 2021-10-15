@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinEvent implements Listener {
 
-    private PlayerSkills plugin;
+    private final PlayerSkills plugin;
 
     public JoinEvent(PlayerSkills plugin) {
         this.plugin = plugin;

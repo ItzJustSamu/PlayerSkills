@@ -6,7 +6,6 @@
 package com.leonardobishop.playerskills2.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -126,16 +125,16 @@ public class Config {
 
         public ItemStack getItemStack(Map<String, String> placeholders) {
             String cName = Config.get(plugin, config, path + ".name").getString();
-            int cAmount = Config.get(plugin, config,path + ".amount", 1).getInt();
-            String cEnchantments = Config.get(plugin, config,path + ".enchantments", "").getString();
-            List<String> cLore = Config.get(plugin, config,path + ".lore").getStringList();
+            int cAmount = Config.get(plugin, config, path + ".amount", 1).getInt();
+            String cEnchantments = Config.get(plugin, config, path + ".enchantments", "").getString();
+            List<String> cLore = Config.get(plugin, config, path + ".lore").getStringList();
             String cType;
-            if (Config.get(plugin, config,path + ".item").getString() != null) {
-                cType = Config.get(plugin, config,path + ".item").getString();
-            } else if (Config.get(plugin, config,path + ".type").getString() != null) {
-                cType = Config.get(plugin, config,path + ".type").getString();
-            } else if (Config.get(plugin, config,path + ".material").getString() != null) {
-                cType = Config.get(plugin, config,path + ".material").getString();
+            if (Config.get(plugin, config, path + ".item").getString() != null) {
+                cType = Config.get(plugin, config, path + ".item").getString();
+            } else if (Config.get(plugin, config, path + ".type").getString() != null) {
+                cType = Config.get(plugin, config, path + ".type").getString();
+            } else if (Config.get(plugin, config, path + ".material").getString() != null) {
+                cType = Config.get(plugin, config, path + ".material").getString();
             } else {
                 cType = path + ".type";
             }

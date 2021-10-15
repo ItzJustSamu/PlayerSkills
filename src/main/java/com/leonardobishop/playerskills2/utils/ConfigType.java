@@ -9,8 +9,8 @@ public enum ConfigType {
     LIST("List of type <{type}>", "{help} in the format '[element1, element2, ...]'"),
     STRING("String", "Any series of characters");
 
-    private String description;
-    private String help;
+    private final String description;
+    private final String help;
 
     ConfigType(String description, String help) {
         this.description = description;

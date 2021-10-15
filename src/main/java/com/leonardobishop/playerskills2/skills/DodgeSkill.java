@@ -5,7 +5,6 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -59,7 +58,8 @@ public class DodgeSkill extends Skill {
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             if (!Config.get(super.getPlugin(), "messages.dodge").getColoredString().equals("")) {
                 player.sendMessage(Config.get(super.getPlugin(), "messages.dodge").getColoredString());
-            }            event.setCancelled(true);
+            }
+            event.setCancelled(true);
         }
     }
 

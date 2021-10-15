@@ -5,33 +5,23 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
-import org.bukkit.EntityEffect;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.entity.*;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LacerateSkill extends Skill {
 
-    private HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
+    private final HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
         super(plugin, "Lacerate", "lacerate");
@@ -102,6 +92,7 @@ public class LacerateSkill extends Skill {
         }
         BukkitTask bt = new BukkitRunnable() {
             int times = 0;
+
             @Override
             public void run() {
                 player.damage((int) LacerateSkill.super.getConfig().get("bleed-damage"), null);

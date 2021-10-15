@@ -10,7 +10,21 @@ import java.util.HashMap;
 
 public class MenuController implements Listener {
 
-    private static HashMap<Player, Menu> tracker = new HashMap<>();
+    private static final HashMap<Player, Menu> tracker = new HashMap<>();
+
+    public static void open(Player player, Menu menu) {
+        player.openInventory(menu.toInventory());
+        tracker.put(player, menu);
+    }
+
+    public static boolean isMenuOpenElsewhere(Class<?> type) {
+        for (Menu menu : tracker.values()) {
+            if (menu.getClass() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -31,20 +45,6 @@ public class MenuController implements Listener {
             tracker.remove((Player) event.getPlayer());
             menu.onClose();
         }
-    }
-
-    public static void open(Player player, Menu menu) {
-        player.openInventory(menu.toInventory());
-        tracker.put(player, menu);
-    }
-
-    public static boolean isMenuOpenElsewhere(Class<?> type) {
-        for (Menu menu : tracker.values()) {
-            if (menu.getClass() == type) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
