@@ -10,81 +10,46 @@
     <name>PlayerSkills2</name>
 
     <properties>
-        <release.version>${version}</release.version>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.jar.outputDirectory>target</maven.jar.outputDirectory>
     </properties>
 
     <build>
         <finalName>PlayerSkills2</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
-
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>*.*</include>
-                </includes>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>replace</id>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <tasks>
-                                <echo message="Bukkit plugin.yml version is: ${release.version}"/>
-                                <replace token="%PLUGIN_VERSION%" value="${release.version}" dir="target/classes">
-                                    <include name="**/*.yml"/>
-                                </replace>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <outputDirectory>${maven.jar.outputDirectory}</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>
 
     <repositories>
-        <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-
-        <!-- Vault -->
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
-
-        <!-- ProtocolLib -->
         <repository>
             <id>dmulloy2-repo</id>
             <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
@@ -102,9 +67,9 @@
 
         <!-- Vault -->
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+            <version>1.7.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -112,7 +77,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.4.0</version>
+            <version>4.7.0</version>
         </dependency>
     </dependencies>
 
