@@ -178,7 +178,7 @@ gui:
   background:
     enabled: true
     name: " "
-    type: "STAINED_GLASS_PANE:7"
+    type: "GRAY_STAINED_GLASS_PANE"
   placeholders:
     skillprice-max: "--"
     next-max: "--"
@@ -221,15 +221,15 @@ gui-confirmation:
   background:
     enabled: true
     name: " "
-    type: "STAINED_GLASS_PANE:7"
+    type: "GRAY_STAINED_GLASS_PANE"
   accept:
     name: "&a&lConfirm"
-    type: "STAINED_GLASS_PANE:5"
+    type: "LIME_STAINED_GLASS_PANE"
     lore:
       - "&7Confirm action."
   deny:
     name: "&c&lDecline"
-    type: "STAINED_GLASS_PANE:14"
+    type: "RED_STAINED_GLASS_PANE"
     lore:
       - "&7Decline and return to the previous menu."
 
