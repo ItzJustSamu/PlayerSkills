@@ -1,10 +1,10 @@
 package com.leonardobishop.playerskills2.menu;
 
+import com.cryptomorin.xseries.XSound;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.Skill;
 import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 
-public class SkillsMenu extends Menu {
+public class SkillsMenu implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;
@@ -103,7 +103,7 @@ public class SkillsMenu extends Menu {
                     Runnable callback = () -> {
                         sPlayer.setLevel(skill.getConfigName(), sPlayer.getLevel(skill.getConfigName()) + 1);
                         sPlayer.setPoints(sPlayer.getPoints() - price);
-                        player.playSound(player.getLocation(), Sounds.ORB_PICKUP.bukkitSound(), 2, 2);
+                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2, 2);
                         MenuController.open(player, SkillsMenu.this);
                     };
                     if (Config.get(plugin, "gui-confirmation.enabled.purchase-skills").getBoolean()) {
@@ -115,7 +115,7 @@ public class SkillsMenu extends Menu {
                     }
                     return;
                 } else {
-                    player.playSound(player.getLocation(), Sounds.ITEM_BREAK.bukkitSound(), 1, 0.6f);
+                    XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             }
         }
@@ -126,10 +126,10 @@ public class SkillsMenu extends Menu {
             Runnable callback = () -> {
                 if (plugin.getFundingSource().doTransaction(sPlayer, price, player)) {
                     sPlayer.setPoints(sPlayer.getPoints() + 1);
-                    player.playSound(player.getLocation(), Sounds.CLICK.bukkitSound(), 1, 1);
+                    XSound.UI_BUTTON_CLICK.play(player, 1, 1);
                     MenuController.open(player, SkillsMenu.this);
                 } else {
-                    player.playSound(player.getLocation(), Sounds.ITEM_BREAK.bukkitSound(), 1, 0.6f);
+                    XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
             if (Config.get(plugin, "gui-confirmation.enabled.purchase-skill-points").getBoolean()) {
@@ -149,10 +149,10 @@ public class SkillsMenu extends Menu {
                         }
                     }
                     sPlayer.getSkills().clear();
-                    player.playSound(player.getLocation(), Sounds.EXPLODE.bukkitSound(), 1, 1);
+                    XSound.ENTITY_GENERIC_EXPLODE.play(player, 1, 1);
                     MenuController.open(player, SkillsMenu.this);
                 } else {
-                    player.playSound(player.getLocation(), Sounds.ITEM_BREAK.bukkitSound(), 1, 0.6f);
+                    XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
             if (Config.get(plugin, "gui-confirmation.enabled.reset-skills").getBoolean()) {
@@ -164,10 +164,4 @@ public class SkillsMenu extends Menu {
             }
         }
     }
-
-    @Override
-    public void onClose() {
-
-    }
-
 }

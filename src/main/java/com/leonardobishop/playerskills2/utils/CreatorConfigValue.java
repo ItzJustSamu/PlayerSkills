@@ -7,10 +7,10 @@ public class CreatorConfigValue {
 
     private final ConfigType type;
     private final String key;
-    private Object value;
     private final Object def;
     private final String description;
     private final boolean required;
+    private Object value;
 
     public CreatorConfigValue(ConfigType type, String key, Object value, Object def, String description, boolean required) {
         this.type = type;
@@ -57,6 +57,4 @@ public class CreatorConfigValue {
     public boolean getRequired() {
         return required;
     }
-
-
 }

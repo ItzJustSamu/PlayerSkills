@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ConfigSkillMenu extends Menu {
+public class ConfigSkillMenu implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;
@@ -117,10 +117,4 @@ public class ConfigSkillMenu extends Menu {
             player.sendMessage(ChatColor.GREEN + "Default: " + ChatColor.DARK_GRAY + skill.getDefault());
         }
     }
-
-    @Override
-    public void onClose() {
-
-    }
-
 }

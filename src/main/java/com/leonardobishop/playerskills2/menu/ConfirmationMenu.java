@@ -11,7 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ConfirmationMenu extends Menu {
+public class ConfirmationMenu implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;

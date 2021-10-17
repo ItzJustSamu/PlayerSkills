@@ -19,8 +19,8 @@ public class SPlayer {
     // INSTANCE
     // ******************************
     private final UUID player;
-    private int points;
     private final HashMap<String, Integer> skills;
+    private int points;
 
     public SPlayer(UUID player) {
         this.player = player;

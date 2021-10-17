@@ -25,27 +25,11 @@ import java.util.HashMap;
 
 public class PlayerSkills extends JavaPlugin {
 
-    @Deprecated
-    private static PlayerSkills instance;
     private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
+    private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
     private ChatEvent chatEvent;
     private FundingSource fundingSource;
     private boolean verboseLogging;
-    private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
-//    public ProtocolManager protocolManager;
-
-
-    /**
-     * For API access in terms of registering custom skills only.
-     * For players, use the methods in class SPlayer.
-     *
-     * @return the main class
-     * @deprecated should really get instance of main class through Bukkit's getPlugin() method
-     */
-    @Deprecated
-    public static PlayerSkills getInstance() {
-        return instance;
-    }
 
     public FundingSource getFundingSource() {
         return fundingSource;
@@ -53,11 +37,8 @@ public class PlayerSkills extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
         super.getLogger().info("Thank you for purchasing PlayerSkills2.");
         super.getLogger().info("If this is a leaked version, then shame on you :(");
-
-//        protocolManager = ProtocolLibrary.getProtocolManager();
 
         percentageFormat.setRoundingMode(RoundingMode.CEILING);
 
@@ -71,7 +52,6 @@ public class PlayerSkills extends JavaPlugin {
         CriticalsSkill criticalsSkill = new CriticalsSkill(this);
         ArcherySkill archerySkill = new ArcherySkill(this);
         LacerateSkill lacerateSkill = new LacerateSkill(this);
-//        MiningSkill miningSkill = new MiningSkill(this);
 
         registerSkill(gluttonySkill);
         registerSkill(strengthSkill);
@@ -81,7 +61,6 @@ public class PlayerSkills extends JavaPlugin {
         registerSkill(criticalsSkill);
         registerSkill(archerySkill);
         registerSkill(lacerateSkill);
-//        registerSkill(miningSkill);
 
         this.chatEvent = new ChatEvent(this);
         Bukkit.getPluginCommand("skills").setExecutor(new SkillsCommand(this));

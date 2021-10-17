@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 
-public class ConfigMenu extends Menu {
+public class ConfigMenu implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;
@@ -65,10 +65,4 @@ public class ConfigMenu extends Menu {
             MenuController.open(player, config);
         }
     }
-
-    @Override
-    public void onClose() {
-
-    }
-
 }

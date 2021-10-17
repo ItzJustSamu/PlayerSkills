@@ -2,12 +2,14 @@ package com.leonardobishop.playerskills2.menu;
 
 import org.bukkit.inventory.Inventory;
 
-public abstract class Menu {
+public interface Menu {
 
-    public abstract Inventory toInventory();
+    Inventory toInventory();
 
-    public abstract void onClick(int slot);
+    void onClick(int slot);
 
-    public abstract void onClose();
+    default void onClose() {
+        // EMPTY
+    }
 
 }
