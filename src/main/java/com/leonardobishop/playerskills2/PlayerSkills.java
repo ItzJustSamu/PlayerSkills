@@ -15,10 +15,14 @@ import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.ConfigEditWrapper;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -108,8 +112,7 @@ public class PlayerSkills extends JavaPlugin {
     }
 
     public boolean registerSkill(Skill skill) {
-        if (super.getConfig().contains("disabled-skills") &&
-                super.getConfig().getStringList("disabled-skills").contains(skill.getConfigName())) {
+        if (getConfig().contains("disabled-skills") && getConfig().getStringList("disabled-skills").contains(skill.getConfigName())) {
             return false;
         }
         skillRegistrar.put(skill.getConfigName(), skill);
@@ -186,94 +189,39 @@ public class PlayerSkills extends JavaPlugin {
     }
 
     private void createConfig() {
-        File directory = new File(String.valueOf(this.getDataFolder()));
+        File directory = this.getDataFolder();
         if (!directory.exists() && !directory.isDirectory()) {
             directory.mkdir();
         }
 
-        File config = new File(this.getDataFolder() + File.separator + "config.yml");
+        File config = new File(directory + File.separator + "config.yml");
         if (!config.exists()) {
-            try {
-                config.createNewFile();
-                try (InputStream in = this.getResource("config.yml")) {
-                    OutputStream out = new FileOutputStream(config);
-                    byte[] buffer = new byte[1024];
-                    int length = in.read(buffer);
-                    while (length != -1) {
-                        out.write(buffer, 0, length);
-                        length = in.read(buffer);
-                    }
+            saveResource("config.yml", false);
+        } else {
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(config);
+            InputStream packed = this.getResource("config.yml");
+            assert packed != null;
+            YamlConfiguration packedFile = YamlConfiguration.loadConfiguration(new InputStreamReader(packed));
+
+            boolean changed = false;
+            for (String s : packedFile.getConfigurationSection("skills").getKeys(false)) {
+                if (!yaml.contains("skills." + s)) {
+                    logInfo("Writing new skill to config: " + s);
+                    changed = true;
+                    yaml.set("skills." + s, packedFile.getConfigurationSection("skills." + s));
+                }
+            }
+
+            if (changed) {
+                try {
+                    yaml.save(config);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
             }
-        } else {
-//            TODO: finish
-//            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(config);
-//            File packed = new File(PlayerSkills.class.getClassLoader().getResource("config.yml").getFile());
-//            YamlConfiguration packedFile = YamlConfiguration.loadConfiguration(packed);
-//
-//            boolean changed = false;
-//            for (String s : packedFile.getConfigurationSection("skills").getKeys(false)) {
-//                if (!yaml.contains("skills." + s)) {
-//                    logInfo("Writing new skill to config: " + s);
-//                    changed = true;
-//                    yaml.set("skills." + s, packedFile.getConfigurationSection("skills." + s));
-//                }
-//            }
-//
-//            if (changed) {
-//                try {
-//                    yaml.save(config);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-        }
-        File defaultConfig = new File(this.getDataFolder() + File.separator + "defaultconfig.yml");
-        if (defaultConfig.exists()) {
-            defaultConfig.delete();
-        }
-        try {
-            defaultConfig.createNewFile();
-            try (InputStream in = this.getResource("config.yml")) {
-                OutputStream out = new FileOutputStream(defaultConfig);
-                byte[] buffer = new byte[1024];
-                int length = in.read(buffer);
-                while (length != -1) {
-                    out.write(buffer, 0, length);
-                    length = in.read(buffer);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        File readme = new File(this.getDataFolder() + File.separator + "readme.txt");
-        if (readme.exists()) {
-            readme.delete();
-        }
-        try {
-            readme.createNewFile();
-            try (InputStream in = this.getResource("readme.txt")) {
-                OutputStream out = new FileOutputStream(readme);
-                byte[] buffer = new byte[1024];
-                int length = in.read(buffer);
-                while (length != -1) {
-                    out.write(buffer, 0, length);
-                    length = in.read(buffer);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveResource("readme.txt", false);
     }
 
 }
