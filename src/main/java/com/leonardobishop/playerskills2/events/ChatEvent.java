@@ -27,55 +27,56 @@ public class ChatEvent implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if (creatorConfigValue.containsKey(event.getPlayer())) {
-            event.setCancelled(true);
-            ConfigEditWrapper wrapper = creatorConfigValue.get(event.getPlayer());
-            CreatorConfigValue conf = wrapper.getConfigValue();
-            creatorConfigValue.remove(event.getPlayer());
-
-            String message = event.getMessage();
-            boolean success = false;
-
-            if (conf.getType() == ConfigType.INTEGER) {
-                try {
-                    int m = Integer.parseInt(message);
-                    Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
-                    success = true;
-                } catch (Exception ex) {
-                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an integer. This is a number which cannot contain a fractional component.");
-                }
-            } else if (conf.getType() == ConfigType.DOUBLE || conf.getType() == ConfigType.NUMBER) {
-                try {
-                    double m = Double.parseDouble(message);
-                    Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
-                    success = true;
-                } catch (Exception ex) {
-                    event.getPlayer().sendMessage(ChatColor.RED + "The value must be an double. This is a number which can include fractional components.");
-                }
-            } else if (conf.getType() == ConfigType.BOOLEAN) {
-                try {
-                    boolean m = Boolean.parseBoolean(message);
-                    Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
-                    success = true;
-                } catch (Exception ex) {
-                    event.getPlayer().sendMessage(ChatColor.RED + "The value must either be true or false.");
-                }
-            } else if (conf.getType() == ConfigType.STRING) {
-                Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(message));
-                success = true;
-            }
-
-            final boolean trueSuccess = success;
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (trueSuccess) {
-                    event.getPlayer().sendMessage(ChatColor.GREEN + "Value of " + ChatColor.WHITE + conf.getKey() + ChatColor.GREEN + " changed to " + ChatColor.WHITE + conf.getValue() + ".");
-                } else {
-                    event.getPlayer().sendMessage(ChatColor.RED + "There was an error with your input. The value has not been changed.");
-                }
-                ConfigSkillMenu menu = new ConfigSkillMenu(plugin, event.getPlayer(), wrapper.getSkill());
-                MenuController.open(event.getPlayer(), menu);
-            });
+        if (!creatorConfigValue.containsKey(event.getPlayer())) {
+            return;
         }
+        event.setCancelled(true);
+        ConfigEditWrapper wrapper = creatorConfigValue.get(event.getPlayer());
+        CreatorConfigValue conf = wrapper.getConfigValue();
+        creatorConfigValue.remove(event.getPlayer());
+
+        String message = event.getMessage();
+        boolean success = false;
+
+        if (conf.getType() == ConfigType.INTEGER) {
+            try {
+                int m = Integer.parseInt(message);
+                Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
+                success = true;
+            } catch (Exception ex) {
+                event.getPlayer().sendMessage(ChatColor.RED + "The value must be an integer. This is a number which cannot contain a fractional component.");
+            }
+        } else if (conf.getType() == ConfigType.DOUBLE || conf.getType() == ConfigType.NUMBER) {
+            try {
+                double m = Double.parseDouble(message);
+                Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
+                success = true;
+            } catch (Exception ex) {
+                event.getPlayer().sendMessage(ChatColor.RED + "The value must be an double. This is a number which can include fractional components.");
+            }
+        } else if (conf.getType() == ConfigType.BOOLEAN) {
+            try {
+                boolean m = Boolean.parseBoolean(message);
+                Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(m));
+                success = true;
+            } catch (Exception ex) {
+                event.getPlayer().sendMessage(ChatColor.RED + "The value must either be true or false.");
+            }
+        } else if (conf.getType() == ConfigType.STRING) {
+            Bukkit.getScheduler().runTask(plugin, () -> conf.setValue(message));
+            success = true;
+        }
+
+        final boolean trueSuccess = success;
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (trueSuccess) {
+                event.getPlayer().sendMessage(ChatColor.GREEN + "Value of " + ChatColor.WHITE + conf.getKey() + ChatColor.GREEN + " changed to " + ChatColor.WHITE + conf.getValue() + ".");
+            } else {
+                event.getPlayer().sendMessage(ChatColor.RED + "There was an error with your input. The value has not been changed.");
+            }
+            ConfigSkillMenu menu = new ConfigSkillMenu(plugin, event.getPlayer(), wrapper.getSkill());
+            MenuController.open(event.getPlayer(), menu);
+        });
     }
 
     @EventHandler
