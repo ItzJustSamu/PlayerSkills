@@ -67,8 +67,8 @@ public class PlayerSkills extends JavaPlugin {
         registerSkill(lacerateSkill);
 
         this.chatEvent = new ChatEvent(this);
-        Bukkit.getPluginCommand("skills").setExecutor(new SkillsCommand(this));
-        Bukkit.getPluginCommand("skillsadmin").setExecutor(new SkillsadminCommand(this));
+        getCommand("skills").setExecutor(new SkillsCommand(this));
+        getCommand("skillsadmin").setExecutor(new SkillsadminCommand(this));
         Bukkit.getPluginManager().registerEvents(new MenuController(), this);
         Bukkit.getPluginManager().registerEvents(new JoinEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new LeaveEvent(this), this);
