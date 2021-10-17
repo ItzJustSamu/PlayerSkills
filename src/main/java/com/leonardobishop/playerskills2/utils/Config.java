@@ -151,16 +151,12 @@ public class Config {
                     lore.add(ChatColor.translateAlternateColorCodes('&', s));
                 }
             }
-            if (StringUtils.isNumeric(cType)) {
-                type = Material.getMaterial(Integer.parseInt(cType));
-            } else if (Material.getMaterial(cType) != null) {
+            if (Material.getMaterial(cType) != null) {
                 type = Material.getMaterial(cType);
             } else if (cType.contains(":")) {
                 String[] parts = cType.split(Pattern.quote(":"));
                 if (parts.length > 1) {
-                    if (StringUtils.isNumeric(parts[0])) {
-                        type = Material.getMaterial(Integer.parseInt(parts[0]));
-                    } else if (Material.getMaterial(parts[0]) != null) {
+                    if (Material.getMaterial(parts[0]) != null) {
                         type = Material.getMaterial(parts[0]);
                     }
                     if (StringUtils.isNumeric(parts[1])) {

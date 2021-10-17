@@ -1,5 +1,6 @@
 package com.leonardobishop.playerskills2.menu;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
@@ -7,7 +8,6 @@ import com.leonardobishop.playerskills2.skills.Skill;
 import com.leonardobishop.playerskills2.utils.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +35,8 @@ public class SkillsMenu implements Menu {
         Inventory inventory = Bukkit.createInventory(null, size, title);
 
         if (plugin.getConfig().getBoolean("gui.background.enabled")) {
-            ItemStack background = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
+            ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
+            assert background != null;
             ItemMeta backgroundm = background.getItemMeta();
             backgroundm.setDisplayName(" ");
             background.setItemMeta(backgroundm);

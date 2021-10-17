@@ -5,6 +5,7 @@ main: com.leonardobishop.playerskills2.PlayerSkills
 author: lmbishop
 prefix: PlayerSkills2
 softdepend: [Vault, ProtocolLib]
+api-version: 1.13
 
 commands:
   skills:

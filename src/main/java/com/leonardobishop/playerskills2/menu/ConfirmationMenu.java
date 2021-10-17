@@ -1,5 +1,6 @@
 package com.leonardobishop.playerskills2.menu;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
@@ -45,7 +46,8 @@ public class ConfirmationMenu implements Menu {
         Inventory inventory = Bukkit.createInventory(null, size, title);
 
         if (plugin.getConfig().getBoolean("gui-confirmation.background.enabled")) {
-            ItemStack background = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
+            ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
+            assert background != null;
             ItemMeta backgroundm = background.getItemMeta();
             backgroundm.setDisplayName(" ");
             background.setItemMeta(backgroundm);
@@ -59,7 +61,8 @@ public class ConfirmationMenu implements Menu {
             }
         }
 
-        ItemStack yes = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 5);
+        ItemStack yes = XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
+        assert yes != null;
         ItemMeta yesm = yes.getItemMeta();
         yesm.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Confirm");
         yes.setItemMeta(yesm);
@@ -68,7 +71,8 @@ public class ConfirmationMenu implements Menu {
             yes = yesconfig;
         }
 
-        ItemStack no = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 14);
+        ItemStack no = XMaterial.RED_STAINED_GLASS_PANE.parseItem();
+        assert no != null;
         ItemMeta nom = no.getItemMeta();
         nom.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + "Decline");
         no.setItemMeta(nom);
