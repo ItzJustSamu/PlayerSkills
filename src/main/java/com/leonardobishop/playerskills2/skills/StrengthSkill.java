@@ -15,14 +15,10 @@ public class StrengthSkill extends Skill {
     public StrengthSkill(PlayerSkills plugin) {
         super(plugin, "Strength", "strength");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
-                10, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
-                11, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("damage-increment",
-                6, "Percentage increase in damage per level.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
-                Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 10, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 11, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("damage-increment", 6, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler

@@ -7,24 +7,18 @@ public class CreatorConfigValue {
 
     private final String key;
     private final Object def;
-    private final String description;
-    private final boolean required;
     private Object value;
 
-    public CreatorConfigValue(String key, Object value, Object def, String description, boolean required) {
+    public CreatorConfigValue(String key, Object value, Object def) {
         this.key = key;
         this.value = value;
         this.def = def;
-        this.description = description;
-        this.required = required;
     }
 
-    public CreatorConfigValue(String key, Object value, String description, boolean required) {
+    public CreatorConfigValue(String key, Object value) {
         this.key = key;
         this.value = value;
         this.def = value;
-        this.description = description;
-        this.required = required;
     }
 
     public String getKey() {
@@ -41,13 +35,5 @@ public class CreatorConfigValue {
 
     public Object getDefault() {
         return def;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public boolean getRequired() {
-        return required;
     }
 }

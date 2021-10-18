@@ -15,14 +15,10 @@ public class GluttonySkill extends Skill {
     public GluttonySkill(PlayerSkills plugin) {
         super(plugin, "Gluttony", "gluttony");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
-                4, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
-                21, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
-                50, "Percentage increase in food intake per level.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
-                Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 4, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 21, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 50, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler

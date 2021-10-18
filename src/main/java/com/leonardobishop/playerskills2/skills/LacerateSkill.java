@@ -25,22 +25,14 @@ public class LacerateSkill extends Skill {
     public LacerateSkill(PlayerSkills plugin) {
         super(plugin, "Lacerate", "lacerate");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
-                4, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
-                23, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
-                4, "Percentage increase in chance to cut an enemy.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-cycles",
-                8, "Amount of times a player will take damage.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-interval",
-                50, "Interval, in ticks, of each cycle.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-damage",
-                2, "The damage each bleed cycle will do.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("apply-to-non-players",
-                false, "Whether or not this skill will cause non players to bleed.", false));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
-                Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 4, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 23, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 4, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-cycles", 8, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-interval", 50, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-damage", 2, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("apply-to-non-players", false, false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler

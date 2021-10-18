@@ -17,14 +17,10 @@ public class DodgeSkill extends Skill {
     public DodgeSkill(PlayerSkills plugin) {
         super(plugin, "Dodge", "dodge");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
-                6, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
-                13, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
-                2, "Percentage increase in chance to dodge.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
-                Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 6, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 13, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 2, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler

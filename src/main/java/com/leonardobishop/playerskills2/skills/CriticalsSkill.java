@@ -17,16 +17,11 @@ public class CriticalsSkill extends Skill {
     public CriticalsSkill(PlayerSkills plugin) {
         super(plugin, "Criticals", "criticals");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
-                3, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
-                14, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
-                4, "Percentage increase in damage per level.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("critical-multiplier",
-                1.5, "Multiplier for a critical attack.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
-                Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 3, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 14, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 4, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("critical-multiplier", 1.5, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler
