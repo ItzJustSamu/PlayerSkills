@@ -18,7 +18,6 @@ public enum ConfigType {
     }
 
     public String getDescription() {
-        //TODO expand lol
         return description.replace("{type}", STRING.description);
     }
 
