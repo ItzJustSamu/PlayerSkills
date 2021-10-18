@@ -2,7 +2,6 @@ package com.leonardobishop.playerskills2.commands;
 
 import com.leonardobishop.playerskills2.Permissions;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.menu.SkillsMenu;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
@@ -44,7 +43,7 @@ public class SkillsCommand extends Command {
             }
         }
 
-        MenuController.open(player, new SkillsMenu(plugin, player, sPlayer));
+        new SkillsMenu(plugin, player, sPlayer).open(player);
         return true;
     }
 

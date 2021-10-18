@@ -28,11 +28,11 @@ public class SkillsMenu implements Menu {
     }
 
     @Override
-    public Inventory toInventory() {
+    public Inventory getInventory() {
         String title = Config.get(plugin, "gui.title").getColoredString();
         int size = Config.get(plugin, "gui.size").getInt();
 
-        Inventory inventory = Bukkit.createInventory(null, size, title);
+        Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (plugin.getConfig().getBoolean("gui.background.enabled")) {
             ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
@@ -105,12 +105,12 @@ public class SkillsMenu implements Menu {
                         sPlayer.setLevel(skill.getConfigName(), sPlayer.getLevel(skill.getConfigName()) + 1);
                         sPlayer.setPoints(sPlayer.getPoints() - price);
                         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2, 2);
-                        MenuController.open(player, SkillsMenu.this);
+                        this.open(player);
                     };
                     if (Config.get(plugin, "gui-confirmation.enabled.purchase-skills").getBoolean()) {
-                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, sPlayer,
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                                 player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
-                        MenuController.open(player, confirmationMenu);
+                        confirmationMenu.open(player);
                     } else {
                         callback.run();
                     }
@@ -128,15 +128,15 @@ public class SkillsMenu implements Menu {
                 if (plugin.getFundingSource().doTransaction(sPlayer, price, player)) {
                     sPlayer.setPoints(sPlayer.getPoints() + 1);
                     XSound.UI_BUTTON_CLICK.play(player, 1, 1);
-                    MenuController.open(player, SkillsMenu.this);
+                    this.open(player);
                 } else {
                     XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
             if (Config.get(plugin, "gui-confirmation.enabled.purchase-skill-points").getBoolean()) {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, sPlayer,
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                         player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
-                MenuController.open(player, confirmationMenu);
+                confirmationMenu.open(player);
             } else {
                 callback.run();
             }
@@ -151,15 +151,15 @@ public class SkillsMenu implements Menu {
                     }
                     sPlayer.getSkills().clear();
                     XSound.ENTITY_GENERIC_EXPLODE.play(player, 1, 1);
-                    MenuController.open(player, SkillsMenu.this);
+                    this.open(player);
                 } else {
                     XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
             if (Config.get(plugin, "gui-confirmation.enabled.reset-skills").getBoolean()) {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, sPlayer,
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                         player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
-                MenuController.open(player, confirmationMenu);
+                confirmationMenu.open(player);
             } else {
                 callback.run();
             }

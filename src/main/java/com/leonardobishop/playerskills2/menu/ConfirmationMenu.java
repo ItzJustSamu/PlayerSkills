@@ -2,7 +2,6 @@ package com.leonardobishop.playerskills2.menu;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,34 +14,28 @@ public class ConfirmationMenu implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;
-    private final SPlayer sPlayer;
     private final ItemStack display;
     private final Runnable callback;
-    private Menu superMenu;
+    private final Menu superMenu;
 
-    public ConfirmationMenu(PlayerSkills plugin, Player player, SPlayer sPlayer, ItemStack display, Runnable callback) {
-        this.plugin = plugin;
-        this.player = player;
-        this.sPlayer = sPlayer;
-        this.display = display;
-        this.callback = callback;
+    public ConfirmationMenu(PlayerSkills plugin, Player player, ItemStack display, Runnable callback) {
+        this(plugin, player, display, callback, null);
     }
 
-    public ConfirmationMenu(PlayerSkills plugin, Player player, SPlayer sPlayer, ItemStack display, Runnable callback, Menu superMenu) {
+    public ConfirmationMenu(PlayerSkills plugin, Player player, ItemStack display, Runnable callback, Menu superMenu) {
         this.plugin = plugin;
         this.player = player;
-        this.sPlayer = sPlayer;
         this.display = display;
         this.callback = callback;
         this.superMenu = superMenu;
     }
 
     @Override
-    public Inventory toInventory() {
+    public Inventory getInventory() {
         String title = Config.get(plugin, "gui-confirmation.title").getColoredString();
         int size = 27;
 
-        Inventory inventory = Bukkit.createInventory(null, size, title);
+        Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (plugin.getConfig().getBoolean("gui-confirmation.background.enabled")) {
             ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
@@ -95,14 +88,14 @@ public class ConfirmationMenu implements Menu {
     public void onClick(int slot) {
         if (slot == 10 || slot == 11 || slot == 12) {
             if (superMenu != null) {
-                MenuController.open(player, superMenu);
+                superMenu.open(player);
             } else {
                 player.closeInventory();
             }
         } else if (slot == 14 || slot == 15 || slot == 16) {
             callback.run();
             if (superMenu != null) {
-                MenuController.open(player, superMenu);
+                superMenu.open(player);
             }
         }
     }
@@ -110,7 +103,7 @@ public class ConfirmationMenu implements Menu {
     @Override
     public void onClose() {
         if (superMenu != null) {
-            MenuController.open(player, superMenu);
+            superMenu.open(player);
         }
     }
 

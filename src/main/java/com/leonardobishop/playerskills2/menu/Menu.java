@@ -1,10 +1,9 @@
 package com.leonardobishop.playerskills2.menu;
 
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 
-public interface Menu {
-
-    Inventory toInventory();
+public interface Menu extends InventoryHolder {
 
     void onClick(int slot);
 
@@ -12,4 +11,7 @@ public interface Menu {
         // EMPTY
     }
 
+    default void open(Player player) {
+        player.openInventory(getInventory());
+    }
 }

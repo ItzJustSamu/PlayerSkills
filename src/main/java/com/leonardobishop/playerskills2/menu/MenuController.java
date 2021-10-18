@@ -1,39 +1,35 @@
 package com.leonardobishop.playerskills2.menu;
 
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-
-import java.util.HashMap;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 public class MenuController implements Listener {
 
-    private static final HashMap<HumanEntity, Menu> tracker = new HashMap<>();
-
-    public static void open(Player player, Menu menu) {
-        player.openInventory(menu.toInventory());
-        tracker.put(player, menu);
-    }
-
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (tracker.containsKey(event.getWhoClicked()) && event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()) {
-            event.setCancelled(true);
-            Menu menu = tracker.get(event.getWhoClicked());
-            menu.onClick(event.getSlot());
+        Inventory inventory = event.getClickedInventory();
+        if (inventory == null) {
+            return;
         }
+        InventoryHolder holder = inventory.getHolder();
+        if (!(holder instanceof Menu)) {
+            return;
+        }
+        Menu menu = (Menu) holder;
+        event.setCancelled(true);
+        menu.onClick(event.getSlot());
     }
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (tracker.containsKey(event.getPlayer())) {
-            Menu menu = tracker.get(event.getPlayer());
-            tracker.remove(event.getPlayer());
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof Menu) {
+            Menu menu = (Menu) holder;
             menu.onClose();
         }
     }
-
 }
