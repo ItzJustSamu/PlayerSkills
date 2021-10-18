@@ -29,7 +29,7 @@ public class CriticalsSkill extends Skill {
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) {
             return;

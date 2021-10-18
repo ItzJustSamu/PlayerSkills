@@ -27,7 +27,7 @@ public class DodgeSkill extends Skill {
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;

@@ -43,7 +43,7 @@ public class LacerateSkill extends Skill {
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player) || (!(event.getEntity() instanceof Player)
                 && (!(super.getConfig().containsKey("apply-to-non-players")) || !((boolean) super.getConfig().get("apply-to-non-players"))))) {

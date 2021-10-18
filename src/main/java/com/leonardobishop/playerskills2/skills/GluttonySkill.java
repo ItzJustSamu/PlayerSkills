@@ -25,7 +25,7 @@ public class GluttonySkill extends Skill {
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onFood(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
         if (this.getConfig().containsKey("only-in-worlds")) {
