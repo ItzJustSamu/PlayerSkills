@@ -5,9 +5,9 @@
 
 package com.leonardobishop.playerskills2.utils;
 
-import org.apache.commons.lang.StringUtils;
+import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -140,9 +140,8 @@ public class Config {
             }
 
             String name;
-            Material type = null;
-            int data = 0;
             List<String> lore = new ArrayList<>();
+            XMaterial xMaterial;
             if (cLore != null) {
                 for (String s : cLore) {
                     for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
@@ -151,25 +150,9 @@ public class Config {
                     lore.add(ChatColor.translateAlternateColorCodes('&', s));
                 }
             }
-            if (Material.getMaterial(cType) != null) {
-                type = Material.getMaterial(cType);
-            } else if (cType.contains(":")) {
-                String[] parts = cType.split(Pattern.quote(":"));
-                if (parts.length > 1) {
-                    if (Material.getMaterial(parts[0]) != null) {
-                        type = Material.getMaterial(parts[0]);
-                    }
-                    if (StringUtils.isNumeric(parts[1])) {
-                        data = Integer.parseInt(parts[1]);
-                    }
-                }
-            }
+            xMaterial = XMaterial.matchXMaterial(cType).orElse(XMaterial.STONE);
 
-            if (type == null) {
-                type = Material.STONE;
-            }
-
-            ItemStack is = new ItemStack(type, 1, (short) data);
+            ItemStack is = xMaterial.parseItem();
             ItemMeta ism = is.getItemMeta();
             ism.setLore(lore);
             if (cName != null) {
@@ -185,11 +168,11 @@ public class Config {
                 if (enchantment.length < 2) {
                     continue;
                 }
-                Enchantment e = Enchantment.getByName(enchantment[0]);
-                if (e == null) {
+                Optional<Enchantment> e = XEnchantment.matchXEnchantment(enchantment[0]).map(XEnchantment::parseEnchantment);
+                if (!e.isPresent()) {
                     continue;
                 }
-                ism.addEnchant(e, Integer.parseInt(enchantment[1]), true);
+                ism.addEnchant(e.get(), Integer.parseInt(enchantment[1]), true);
             }
             is.setItemMeta(ism);
             is.setAmount(cAmount);
