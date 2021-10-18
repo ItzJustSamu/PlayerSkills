@@ -1,10 +1,10 @@
-package com.leonardobishop.playerskills2.commands;
+package com.leonardobishop.playerskills2.command;
 
 import com.leonardobishop.playerskills2.Permissions;
 import com.leonardobishop.playerskills2.PlayerSkills;
+import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.menu.SkillsMenu;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

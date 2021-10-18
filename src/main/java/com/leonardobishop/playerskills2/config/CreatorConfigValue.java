@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.utils;
+package com.leonardobishop.playerskills2.config;
 
 /**
  * Used to generate default configurations and for the in game editor.

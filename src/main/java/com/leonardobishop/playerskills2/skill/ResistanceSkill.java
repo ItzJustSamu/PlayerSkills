@@ -1,41 +1,33 @@
-package com.leonardobishop.playerskills2.skills;
+package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
+import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ArcherySkill extends Skill {
+public class ResistanceSkill extends Skill {
 
-    public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery");
+    public ResistanceSkill(PlayerSkills plugin) {
+        super(plugin, "Resistance", "resistance");
 
         super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 10, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 15, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("damage-increment", 6, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 12, true));
+        super.getCreatorConfigValues().add(new CreatorConfigValue("damage-drop", 3, true));
         super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
     }
 
     @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
-        Player player = null;
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-            if (arrow.getShooter() instanceof Player) {
-                player = (Player) arrow.getShooter();
-            }
-        }
-
-        if (player == null) {
+    public void onHit(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
+        Player player = (Player) event.getEntity();
         if (this.getConfig().containsKey("only-in-worlds")) {
             List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
             if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
@@ -52,25 +44,25 @@ public class ArcherySkill extends Skill {
             return;
         }
 
-        int archeryLevel = sPlayer.getLevel(this.getConfigName());
+        int resistanceLevel = sPlayer.getLevel(this.getConfigName());
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * super.getDecimalNumber("damage-increment");
-        double weightedDamage = archeryLevel * percentile;
-        event.setDamage(event.getDamage() + weightedDamage);
+        percentile = percentile * super.getDecimalNumber("damage-drop");
+        double weightedDamage = resistanceLevel * percentile;
+        event.setDamage(event.getDamage() - weightedDamage);
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int archeryLevel = player.getLevel(this.getConfigName());
-        double damage = 100 + (archeryLevel * super.getDecimalNumber("damage-increment"));
+        int resistanceLevel = player.getLevel(this.getConfigName());
+        double damage = 100 - (resistanceLevel * super.getDecimalNumber("damage-drop"));
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int archeryLevel = player.getLevel(this.getConfigName()) + 1;
-        double damage = 100 + (archeryLevel * super.getDecimalNumber("damage-increment"));
+        int resistanceLevel = player.getLevel(this.getConfigName()) + 1;
+        double damage = 100 - (resistanceLevel * super.getDecimalNumber("damage-drop"));
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 }

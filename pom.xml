@@ -50,11 +50,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.cryptomorin.xseries</pattern>
-                                    <shadedPattern>com.leonardobishop.playerskills2.utils.xseries</shadedPattern>
+                                    <shadedPattern>com.leonardobishop.playerskills2.lib.xseries</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>me.hsgamer.hscore</pattern>
-                                    <shadedPattern>com.leonardobishop.playerskills2.utils.hscore</shadedPattern>
+                                    <shadedPattern>com.leonardobishop.playerskills2.lib.hscore</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

@@ -3,7 +3,7 @@
  * source code package, for the full license governing this code.
  */
 
-package com.leonardobishop.playerskills2.utils;
+package com.leonardobishop.playerskills2.config;
 
 import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;

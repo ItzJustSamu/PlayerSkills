@@ -1,17 +1,16 @@
 package com.leonardobishop.playerskills2;
 
-import com.leonardobishop.playerskills2.commands.SkillsAdminCommand;
-import com.leonardobishop.playerskills2.commands.SkillsCommand;
-import com.leonardobishop.playerskills2.events.JoinEvent;
-import com.leonardobishop.playerskills2.events.LeaveEvent;
+import com.leonardobishop.playerskills2.command.SkillsAdminCommand;
+import com.leonardobishop.playerskills2.command.SkillsCommand;
+import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.VaultFundingSource;
 import com.leonardobishop.playerskills2.fundingsource.XPFundingSource;
+import com.leonardobishop.playerskills2.listener.PlayerListener;
 import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.skills.*;
-import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
+import com.leonardobishop.playerskills2.skill.*;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,8 +64,7 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
-        registerListener(new JoinEvent(this));
-        registerListener(new LeaveEvent(this));
+        registerListener(new PlayerListener(this));
 
         verboseLogging = Config.get(this, "options.logging.verbose", false).getBoolean();
         if (verboseLogging) {

@@ -2,7 +2,7 @@ package com.leonardobishop.playerskills2.menu;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.utils.Config;
+import com.leonardobishop.playerskills2.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

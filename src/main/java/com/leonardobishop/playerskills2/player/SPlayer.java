@@ -1,7 +1,7 @@
 package com.leonardobishop.playerskills2.player;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.utils.Config;
+import com.leonardobishop.playerskills2.config.Config;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

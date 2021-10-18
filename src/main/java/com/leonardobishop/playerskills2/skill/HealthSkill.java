@@ -1,8 +1,8 @@
-package com.leonardobishop.playerskills2.skills;
+package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
+import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
