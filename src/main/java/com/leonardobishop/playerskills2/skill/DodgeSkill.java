@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DodgeSkill extends Skill {
@@ -30,11 +29,8 @@ public class DodgeSkill extends Skill {
         }
 
         Player player = (Player) event.getEntity();
-        if (this.getConfig().containsKey("only-in-worlds")) {
-            List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
-            if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                return;
-            }
+        if (isWorldNotAllowed(player)) {
+            return;
         }
 
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());

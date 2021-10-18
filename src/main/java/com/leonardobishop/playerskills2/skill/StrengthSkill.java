@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class StrengthSkill extends Skill {
 
@@ -28,11 +27,8 @@ public class StrengthSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (this.getConfig().containsKey("only-in-worlds")) {
-            List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
-            if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                return;
-            }
+        if (isWorldNotAllowed(player)) {
+            return;
         }
 
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());

@@ -15,7 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LacerateSkill extends Skill {
@@ -43,11 +42,8 @@ public class LacerateSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (this.getConfig().containsKey("only-in-worlds")) {
-            List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
-            if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                return;
-            }
+        if (isWorldNotAllowed(player)) {
+            return;
         }
 
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());

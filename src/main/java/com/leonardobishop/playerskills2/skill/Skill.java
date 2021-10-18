@@ -3,10 +3,12 @@ package com.leonardobishop.playerskills2.skill;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class Skill implements Listener {
 
@@ -79,5 +81,13 @@ public abstract class Skill implements Listener {
         } else {
             return (double) obj;
         }
+    }
+
+    public boolean isWorldNotAllowed(Player player) {
+        if (this.getConfig().containsKey("only-in-worlds")) {
+            List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
+            return !listOfWorlds.contains(player.getLocation().getWorld().getName());
+        }
+        return false;
     }
 }

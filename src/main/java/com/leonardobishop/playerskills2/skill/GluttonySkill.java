@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class GluttonySkill extends Skill {
 
@@ -24,11 +23,8 @@ public class GluttonySkill extends Skill {
     @EventHandler
     public void onFood(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
-        if (this.getConfig().containsKey("only-in-worlds")) {
-            List<String> listOfWorlds = (List<String>) this.getConfig().get("only-in-worlds");
-            if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                return;
-            }
+        if (isWorldNotAllowed(player)) {
+            return;
         }
 
         if (player.getFoodLevel() >= event.getFoodLevel()) {

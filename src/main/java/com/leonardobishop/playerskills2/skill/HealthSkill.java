@@ -11,7 +11,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class HealthSkill extends Skill {
@@ -43,11 +42,8 @@ public class HealthSkill extends Skill {
                         }
                         continue;
                     }
-                    if (HealthSkill.this.getConfig().containsKey("only-in-worlds")) {
-                        List<String> listOfWorlds = (List<String>) HealthSkill.this.getConfig().get("only-in-worlds");
-                        if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                            return;
-                        }
+                    if (isWorldNotAllowed(player)) {
+                        return;
                     }
 
                     int hpNeeded = (sPlayer.getLevel(HealthSkill.super.getConfigName()) * (((int) HealthSkill.super.getConfig().get
@@ -101,34 +97,29 @@ public class HealthSkill extends Skill {
         Player player = event.getPlayer();
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
-        if (HealthSkill.this.getConfig().containsKey("only-in-worlds")) {
-            String to = player.getLocation().getWorld().getName();
-            List<String> listOfWorlds = (List<String>) HealthSkill.this.getConfig().get("only-in-worlds");
-            if (!listOfWorlds.contains(to)) {
-                if (HealthSkill.super.getConfig().containsKey("compatibility-mode") &&
-                        (boolean) HealthSkill.super.getConfig().get("compatibility-mode")) {
-                    int hpApplied;
-                    if (!knownMaxHitpoints.containsKey(player.getUniqueId()) ||
-                            knownMaxHitpoints.get(player.getUniqueId()) != player.getMaxHealth()) {
-                        // maxhitpoints has changed from when playerskills altered it, assume health from playerskills
-                        // is 0
-                        return;
-                    } else {
-                        hpApplied = hitpointsFromPlayerskills.getOrDefault(player.getUniqueId(), 0);
-                    }
+        if (isWorldNotAllowed(player)) {
+            return;
+        }
 
-                    int hpNeeded = (sPlayer.getLevel(HealthSkill.super.getConfigName()) * (((int) HealthSkill.super.getConfig().get
-                            ("extra-health-per-level")) * 2));
-
-                    if (hpApplied == hpNeeded) {
-                        player.setMaxHealth(player.getMaxHealth() - hpNeeded);
-                    }
-
-                    hitpoints.put(player.getUniqueId(), player.getHealth());
-                } else {
-                    player.setMaxHealth(20);
-                }
+        if (HealthSkill.super.getConfig().containsKey("compatibility-mode") && (boolean) HealthSkill.super.getConfig().get("compatibility-mode")) {
+            int hpApplied;
+            if (!knownMaxHitpoints.containsKey(player.getUniqueId()) || knownMaxHitpoints.get(player.getUniqueId()) != player.getMaxHealth()) {
+                // maxhitpoints has changed from when playerskills altered it, assume health from playerskills
+                // is 0
+                return;
+            } else {
+                hpApplied = hitpointsFromPlayerskills.getOrDefault(player.getUniqueId(), 0);
             }
+
+            int hpNeeded = (sPlayer.getLevel(HealthSkill.super.getConfigName()) * (((int) HealthSkill.super.getConfig().get("extra-health-per-level")) * 2));
+
+            if (hpApplied == hpNeeded) {
+                player.setMaxHealth(player.getMaxHealth() - hpNeeded);
+            }
+
+            hitpoints.put(player.getUniqueId(), player.getHealth());
+        } else {
+            player.setMaxHealth(20);
         }
     }
 
