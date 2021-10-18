@@ -2,7 +2,6 @@ package com.leonardobishop.playerskills2;
 
 import com.leonardobishop.playerskills2.commands.SkillsCommand;
 import com.leonardobishop.playerskills2.commands.SkillsadminCommand;
-import com.leonardobishop.playerskills2.events.ChatEvent;
 import com.leonardobishop.playerskills2.events.JoinEvent;
 import com.leonardobishop.playerskills2.events.LeaveEvent;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
@@ -12,11 +11,9 @@ import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.*;
 import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.ConfigEditWrapper;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -31,7 +28,6 @@ public class PlayerSkills extends JavaPlugin {
 
     private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
     private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
-    private ChatEvent chatEvent;
     private FundingSource fundingSource;
     private boolean verboseLogging;
 
@@ -66,19 +62,11 @@ public class PlayerSkills extends JavaPlugin {
         registerSkill(archerySkill);
         registerSkill(lacerateSkill);
 
-        this.chatEvent = new ChatEvent(this);
         getCommand("skills").setExecutor(new SkillsCommand(this));
         getCommand("skillsadmin").setExecutor(new SkillsadminCommand(this));
         Bukkit.getPluginManager().registerEvents(new MenuController(), this);
         Bukkit.getPluginManager().registerEvents(new JoinEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new LeaveEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(chatEvent, this);
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!SPlayer.getPlayers().containsKey(player.getUniqueId())) {
-                SPlayer.load(this, player.getUniqueId());
-            }
-        }
 
         verboseLogging = Config.get(this, "options.logging.verbose", false).getBoolean();
         if (verboseLogging) {
@@ -137,37 +125,6 @@ public class PlayerSkills extends JavaPlugin {
         return true;
     }
 
-    public void writeSkillConfigCreatorValuesToFile() {
-        for (Skill skill : skillRegistrar.values()) {
-            for (CreatorConfigValue conf : skill.getCreatorConfigValues()) {
-                super.getConfig().set("skills." + skill.getConfigName() + ".config." + conf.getKey(), conf.getValue());
-            }
-        }
-        super.saveConfig();
-    }
-
-    public void reloadSkillConfigs() {
-        for (Skill skill : skillRegistrar.values()) {
-            skill.getConfig().clear();
-            for (String key : super.getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".config").getKeys(false)) {
-                Object value = super.getConfig().get("skills." + skill.getConfigName() + ".config." + key);
-                skill.getConfig().put(key, value);
-                for (CreatorConfigValue conf : skill.getCreatorConfigValues()) {
-                    if (conf.getKey().equals(key)) {
-                        conf.setValue(value);
-                    }
-                }
-            }
-            if (super.getConfig().contains("skills." + skill.getConfigName() + ".price-override")) {
-                for (String key : super.getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".price-override").getKeys(false)) {
-                    int price = super.getConfig().getInt("skills." + skill.getConfigName() + ".price-override." + key);
-                    skill.getPointPriceOverrides().put(Integer.valueOf(key), price);
-                }
-            }
-        }
-        super.saveConfig();
-    }
-
     public boolean isVerboseLogging() {
         return verboseLogging;
     }
@@ -182,10 +139,6 @@ public class PlayerSkills extends JavaPlugin {
 
     public void logError(String message) {
         super.getLogger().severe(message);
-    }
-
-    public void lockPlayerEditor(Player player, ConfigEditWrapper wrapper) {
-        chatEvent.getCreatorConfigValue().put(player, wrapper);
     }
 
     private void createConfig() {

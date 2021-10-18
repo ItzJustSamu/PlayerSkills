@@ -18,24 +18,12 @@ public class MenuController implements Listener {
         tracker.put(player, menu);
     }
 
-    public static boolean isMenuOpenElsewhere(Class<?> type) {
-        for (Menu menu : tracker.values()) {
-            if (menu.getClass() == type) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (tracker.containsKey(event.getWhoClicked())) {
-            if ((event.getWhoClicked().getOpenInventory() != null)
-                    && (event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory())) {
-                event.setCancelled(true);
-                Menu menu = tracker.get(event.getWhoClicked());
-                menu.onClick(event.getSlot());
-            }
+        if (tracker.containsKey(event.getWhoClicked()) && event.getClickedInventory() == event.getWhoClicked().getOpenInventory().getTopInventory()) {
+            event.setCancelled(true);
+            Menu menu = tracker.get(event.getWhoClicked());
+            menu.onClick(event.getSlot());
         }
     }
 

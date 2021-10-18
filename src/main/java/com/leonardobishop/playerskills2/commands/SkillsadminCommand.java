@@ -1,8 +1,6 @@
 package com.leonardobishop.playerskills2.commands;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.menu.ConfigMenu;
-import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.Skill;
 import org.bukkit.Bukkit;
@@ -97,18 +95,7 @@ public class SkillsadminCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "Skill data for (" + ChatColor.GRAY + sPlayer.getPlayer() + ChatColor.GREEN + ") " +
                         "has been reset.");
             }
-        } else if (args.length >= 1) {
-            if (args[0].equalsIgnoreCase("editor") && sender instanceof Player) {
-                if (MenuController.isMenuOpenElsewhere(ConfigMenu.class)) {
-                    sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Warning! "
-                            + ChatColor.RED + "Another user is already using the editor - this may cause unexpected behaviour!");
-                }
-                sender.sendMessage(ChatColor.GREEN + "Please do not edit the config.yml file while inside the editor, otherwise you may lose any changes.");
-                ConfigMenu configMenu = new ConfigMenu(plugin, (Player) sender);
-                MenuController.open((Player) sender, configMenu);
-            }
         } else {
-            sender.sendMessage(ChatColor.RED + "/skillsadmin editor");
             sender.sendMessage(ChatColor.RED + "/skillsadmin view <player>");
             sender.sendMessage(ChatColor.RED + "/skillsadmin givepoints <player> [-]<points>");
             sender.sendMessage(ChatColor.RED + "/skillsadmin setskill <player> <skill name> <level>");
