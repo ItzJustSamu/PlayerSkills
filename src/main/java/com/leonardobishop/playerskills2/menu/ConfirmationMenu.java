@@ -103,7 +103,7 @@ public class ConfirmationMenu implements Menu {
     @Override
     public void onClose() {
         if (superMenu != null) {
-            superMenu.open(player);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> superMenu.open(player));
         }
     }
 
