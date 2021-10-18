@@ -6,21 +6,3 @@ author: lmbishop
 prefix: PlayerSkills2
 softdepend: [Vault, ProtocolLib]
 api-version: 1.13
-
-commands:
-  skills:
-    description: Open skills menu
-    usage: /skills
-    permission: playerskills.command
-    aliases: [s, skills, skill]
-  skillsadmin:
-    description: Change players skill points
-    usage: /skillsadmin
-    permission: playerskills.admin
-    aliases: [sa, skillsadmin, skilladmin]
-
-permissions:
-  playerskills.command:
-    description: Skills permission
-  playerskills.admin:
-    description: Skills admin commands

@@ -11,6 +11,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <core.version>3.16</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -51,6 +52,10 @@
                                     <pattern>com.cryptomorin.xseries</pattern>
                                     <shadedPattern>com.leonardobishop.playerskills2.utils.xseries</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>me.hsgamer.hscore</pattern>
+                                    <shadedPattern>com.leonardobishop.playerskills2.utils.hscore</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -67,6 +72,10 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -88,7 +97,11 @@
             <artifactId>XSeries</artifactId>
             <version>8.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>me.HSGamer</groupId>
+            <artifactId>HSCore-bukkit-baseplugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
     </dependencies>
-
 
 </project>

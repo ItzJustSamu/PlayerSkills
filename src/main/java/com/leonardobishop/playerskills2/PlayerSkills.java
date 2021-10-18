@@ -1,7 +1,7 @@
 package com.leonardobishop.playerskills2;
 
+import com.leonardobishop.playerskills2.commands.SkillsAdminCommand;
 import com.leonardobishop.playerskills2.commands.SkillsCommand;
-import com.leonardobishop.playerskills2.commands.SkillsadminCommand;
 import com.leonardobishop.playerskills2.events.JoinEvent;
 import com.leonardobishop.playerskills2.events.LeaveEvent;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
@@ -12,9 +12,9 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.*;
 import com.leonardobishop.playerskills2.utils.Config;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
+import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-public class PlayerSkills extends JavaPlugin {
+public class PlayerSkills extends BasePlugin {
 
     private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
     private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
@@ -36,7 +36,7 @@ public class PlayerSkills extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() {
+    public void enable() {
         super.getLogger().info("Thank you for purchasing PlayerSkills2.");
         super.getLogger().info("If this is a leaked version, then shame on you :(");
 
@@ -62,11 +62,11 @@ public class PlayerSkills extends JavaPlugin {
         registerSkill(archerySkill);
         registerSkill(lacerateSkill);
 
-        getCommand("skills").setExecutor(new SkillsCommand(this));
-        getCommand("skillsadmin").setExecutor(new SkillsadminCommand(this));
-        Bukkit.getPluginManager().registerEvents(new MenuController(), this);
-        Bukkit.getPluginManager().registerEvents(new JoinEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new LeaveEvent(this), this);
+        registerCommand(new SkillsCommand(this));
+        registerCommand(new SkillsAdminCommand(this));
+        registerListener(new MenuController());
+        registerListener(new JoinEvent(this));
+        registerListener(new LeaveEvent(this));
 
         verboseLogging = Config.get(this, "options.logging.verbose", false).getBoolean();
         if (verboseLogging) {
@@ -88,7 +88,7 @@ public class PlayerSkills extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    public void disable() {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(this, player);
         }

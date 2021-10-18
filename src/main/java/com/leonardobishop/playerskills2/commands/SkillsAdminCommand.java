@@ -1,29 +1,32 @@
 package com.leonardobishop.playerskills2.commands;
 
+import com.leonardobishop.playerskills2.Permissions;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skills.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Set;
 
-public class SkillsadminCommand implements CommandExecutor {
+public class SkillsAdminCommand extends Command {
 
     private final PlayerSkills plugin;
 
-    public SkillsadminCommand(PlayerSkills plugin) {
+    public SkillsAdminCommand(PlayerSkills plugin) {
+        super("skillsadmin", "Change players skill points", "/skillsadmin", Arrays.asList("sa", "skillsadmin", "skilladmin"));
+        setPermission(Permissions.ADMIN.getName());
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!sender.hasPermission("playerskills.admin")) {
-            return true;
+    public boolean execute(CommandSender sender, String label, String[] args) {
+        if (!testPermission(sender)) {
+            return false;
         }
         if (args.length >= 4) {
             if (args[0].equalsIgnoreCase("setskill")) {
