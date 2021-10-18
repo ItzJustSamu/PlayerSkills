@@ -3,7 +3,6 @@ package com.leonardobishop.playerskills2.skills;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.utils.Config;
-import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,21 +25,21 @@ public class LacerateSkill extends Skill {
     public LacerateSkill(PlayerSkills plugin) {
         super(plugin, "Lacerate", "lacerate");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "max-level",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
                 4, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "gui-slot",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
                 23, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.DOUBLE, "percent-increase",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
                 4, "Percentage increase in chance to cut an enemy.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "bleed-cycles",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-cycles",
                 8, "Amount of times a player will take damage.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "bleed-interval",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-interval",
                 50, "Interval, in ticks, of each cycle.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "bleed-damage",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-damage",
                 2, "The damage each bleed cycle will do.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.BOOLEAN, "apply-to-non-players",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("apply-to-non-players",
                 false, "Whether or not this skill will cause non players to bleed.", false));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.LIST, "only-in-worlds",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 

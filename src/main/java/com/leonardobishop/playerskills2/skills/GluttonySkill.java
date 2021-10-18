@@ -2,7 +2,6 @@ package com.leonardobishop.playerskills2.skills;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,13 +15,13 @@ public class GluttonySkill extends Skill {
     public GluttonySkill(PlayerSkills plugin) {
         super(plugin, "Gluttony", "gluttony");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "max-level",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
                 4, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "gui-slot",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
                 21, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.DOUBLE, "percent-increase",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase",
                 50, "Percentage increase in food intake per level.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.LIST, "only-in-worlds",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 

@@ -2,7 +2,6 @@ package com.leonardobishop.playerskills2.skills;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.ConfigType;
 import com.leonardobishop.playerskills2.utils.CreatorConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,15 +23,15 @@ public class HealthSkill extends Skill {
     public HealthSkill(PlayerSkills plugin) {
         super(plugin, "Health", "health");
 
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "max-level",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level",
                 5, "The maximum level the player can attain.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "gui-slot",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot",
                 22, "The slot in the GUI where the skill will be put in.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.INTEGER, "extra-health-per-level",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("extra-health-per-level",
                 1, "Extra hearts per level.", true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.BOOLEAN, "compatibility-mode",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("compatibility-mode",
                 false, "Attempts to work alongside other plugins that change max-health.", false));
-        super.getCreatorConfigValues().add(new CreatorConfigValue(ConfigType.LIST, "only-in-worlds",
+        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds",
                 Arrays.asList("world", "world_nether", "world_the_end"), "Permitted in certain worlds.", false));
     }
 

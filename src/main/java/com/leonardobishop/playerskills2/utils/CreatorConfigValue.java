@@ -5,15 +5,13 @@ package com.leonardobishop.playerskills2.utils;
  */
 public class CreatorConfigValue {
 
-    private final ConfigType type;
     private final String key;
     private final Object def;
     private final String description;
     private final boolean required;
     private Object value;
 
-    public CreatorConfigValue(ConfigType type, String key, Object value, Object def, String description, boolean required) {
-        this.type = type;
+    public CreatorConfigValue(String key, Object value, Object def, String description, boolean required) {
         this.key = key;
         this.value = value;
         this.def = def;
@@ -21,17 +19,12 @@ public class CreatorConfigValue {
         this.required = required;
     }
 
-    public CreatorConfigValue(ConfigType type, String key, Object value, String description, boolean required) {
-        this.type = type;
+    public CreatorConfigValue(String key, Object value, String description, boolean required) {
         this.key = key;
         this.value = value;
         this.def = value;
         this.description = description;
         this.required = required;
-    }
-
-    public ConfigType getType() {
-        return type;
     }
 
     public String getKey() {
