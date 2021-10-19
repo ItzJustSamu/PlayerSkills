@@ -7,7 +7,6 @@ import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.Skill;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -50,39 +49,27 @@ public class SkillsMenu implements Menu {
             }
         }
 
-        StringBuilder experienceBar = new StringBuilder();
-        experienceBar.append(ChatColor.GREEN);
-        experienceBar.append(player.getLevel());
-        experienceBar.append(" ");
-        for (double f = 0; f <= player.getExp(); f = f + 0.03) {
-            experienceBar.append(ChatColor.GREEN).append("|");
-        }
-        int toAdd = 30 - ChatColor.stripColor(experienceBar.toString()).length();
-        for (int i = 0; i <= toAdd; i++) {
-            experienceBar.append(ChatColor.GRAY).append("|");
-        }
-
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("{price}", plugin.getFundingSource().appendSymbol(String.valueOf(sPlayer.getNextPointPrice(plugin))));
-        placeholders.put("{xpbar}", experienceBar.toString());
         placeholders.put("{points}", String.valueOf(sPlayer.getPoints()));
 
         for (Skill skill : plugin.getSkillRegistrar().values()) {
             HashMap<String, String> skillPlaceholders = new HashMap<>();
             skillPlaceholders.put("{prev}", skill.getPreviousString(sPlayer));
-            if (sPlayer.getLevel(skill.getConfigName()) >= ((int) skill.getConfig().get("max-level"))) {
+            int maxLevel = skill.getMaxLevel();
+            if (skill.getLevel(sPlayer) >= maxLevel) {
                 skillPlaceholders.put("{next}", Config.get(plugin, "gui.placeholders.next-max", "--").getString());
                 skillPlaceholders.put("{skillprice}", Config.get(plugin, "gui.placeholders.skillprice-max", "--").getString());
             } else {
                 skillPlaceholders.put("{next}", skill.getNextString(sPlayer));
-                skillPlaceholders.put("{skillprice}", String.valueOf(skill.getPriceOverride(sPlayer.getLevel(skill.getConfigName()) + 1)));
+                skillPlaceholders.put("{skillprice}", String.valueOf(skill.getPriceOverride(skill.getLevel(sPlayer) + 1)));
             }
-            skillPlaceholders.put("{level}", String.valueOf(sPlayer.getLevel(skill.getConfigName())));
-            skillPlaceholders.put("{max}", String.valueOf((int) skill.getConfig().get("max-level")));
+            skillPlaceholders.put("{level}", String.valueOf(skill.getLevel(sPlayer)));
+            skillPlaceholders.put("{max}", String.valueOf(maxLevel));
 
             skillPlaceholders.putAll(placeholders);
 
-            inventory.setItem((int) skill.getConfig().get("gui-slot"), Config.get(plugin, skill.getItemLocation()).getItemStack(skillPlaceholders));
+            inventory.setItem(skill.getGuiSlot(), Config.get(plugin, skill.getItemLocation()).getItemStack(skillPlaceholders));
         }
 
         for (String s : Config.get(plugin, "gui.other").getKeys()) {
@@ -98,11 +85,11 @@ public class SkillsMenu implements Menu {
     @Override
     public void onClick(int slot) {
         for (Skill skill : plugin.getSkillRegistrar().values()) {
-            if (slot == (int) skill.getConfig().get("gui-slot") && (sPlayer.getLevel(skill.getConfigName()) < ((int) skill.getConfig().get("max-level")))) {
-                int price = skill.getPriceOverride(sPlayer.getLevel(skill.getConfigName()) + 1);
+            if (slot == skill.getGuiSlot() && (skill.getLevel(sPlayer) < skill.getMaxLevel())) {
+                int price = skill.getPriceOverride(skill.getLevel(sPlayer) + 1);
                 if ((sPlayer.getPoints() >= price)) {
                     Runnable callback = () -> {
-                        sPlayer.setLevel(skill.getConfigName(), sPlayer.getLevel(skill.getConfigName()) + 1);
+                        sPlayer.setLevel(skill.getConfigName(), skill.getLevel(sPlayer) + 1);
                         sPlayer.setPoints(sPlayer.getPoints() - price);
                         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2, 2);
                         this.open(player);

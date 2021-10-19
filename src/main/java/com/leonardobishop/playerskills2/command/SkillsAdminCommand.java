@@ -57,7 +57,7 @@ public class SkillsAdminCommand extends Command {
                 }
 
                 sPlayer.setLevel(s.getConfigName(), level);
-                sender.sendMessage(ChatColor.GREEN + "Skill level for " + s.getName() + " updated to " + sPlayer.getLevel(s.getConfigName()) + ".");
+                sender.sendMessage(ChatColor.GREEN + "Skill level for " + s.getName() + " updated to " + s.getLevel(sPlayer) + ".");
             }
         } else if (args.length >= 3) {
             if (args[0].equalsIgnoreCase("givepoints")) {
@@ -83,7 +83,7 @@ public class SkillsAdminCommand extends Command {
 
                 sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Skills");
                 for (Skill skill : plugin.getSkillRegistrar().values()) {
-                    sender.sendMessage(ChatColor.RED + skill.getName() + ": " + ChatColor.GRAY + sPlayer.getLevel(skill.getConfigName()));
+                    sender.sendMessage(ChatColor.RED + skill.getName() + ": " + ChatColor.GRAY + skill.getLevel(sPlayer));
                 }
                 sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Points: " + ChatColor.GRAY + sPlayer.getPoints());
             } else if (args[0].equalsIgnoreCase("fullreset")) {

@@ -2,25 +2,20 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CriticalsSkill extends Skill {
+    private final SkillNumberConfigValue percentIncrease = new SkillNumberConfigValue(this, "percent-increase", 4);
+    private final SkillNumberConfigValue criticalMultiplier = new SkillNumberConfigValue(this, "critical-multiplier", 1.5);
 
     public CriticalsSkill(PlayerSkills plugin) {
-        super(plugin, "Criticals", "criticals");
-
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 3, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 14, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 4, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("critical-multiplier", 1.5, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
+        super(plugin, "Criticals", "criticals", 3, 14);
     }
 
     @EventHandler
@@ -43,29 +38,29 @@ public class CriticalsSkill extends Skill {
             return;
         }
 
-        int criticalLevel = sPlayer.getLevel(this.getConfigName());
+        int criticalLevel = getLevel(sPlayer);
 
-        double chance = criticalLevel * super.getDecimalNumber("percent-increase");
+        double chance = criticalLevel * percentIncrease.getDouble();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             if (!Config.get(super.getPlugin(), "messages.critical").getColoredString().equals("")) {
                 player.sendMessage(Config.get(super.getPlugin(), "messages.critical").getColoredString());
             }
-            event.setDamage(event.getDamage() * (double) super.getConfig().get("critical-multiplier"));
+            event.setDamage(event.getDamage() * criticalMultiplier.getDouble());
         }
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int criticalLevel = player.getLevel(this.getConfigName());
-        double damage = criticalLevel * super.getDecimalNumber("percent-increase");
+        int criticalLevel = getLevel(player);
+        double damage = criticalLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int criticalLevel = player.getLevel(this.getConfigName()) + 1;
-        double damage = criticalLevel * super.getDecimalNumber("percent-increase");
+        int criticalLevel = getLevel(player) + 1;
+        double damage = criticalLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 }

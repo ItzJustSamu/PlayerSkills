@@ -1,23 +1,17 @@
 package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-import java.util.Arrays;
-
 public class GluttonySkill extends Skill {
+    private final SkillNumberConfigValue percentIncrease = new SkillNumberConfigValue(this, "percent-increase", 50);
 
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony");
-
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 4, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 21, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 50, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
+        super(plugin, "Gluttony", "gluttony", 4, 21);
     }
 
     @EventHandler
@@ -42,10 +36,8 @@ public class GluttonySkill extends Skill {
         }
 
         int diff = event.getFoodLevel() - player.getFoodLevel();
-        int gluttonyLevel = sPlayer.getLevel(this.getConfigName());
-        // java.lang.Integer cannot be cast to java.lang.Double
-        // my fucking ass
-        double multiplier = 1D + ((gluttonyLevel) * (super.getDecimalNumber("percent-increase") / 100D));
+        int gluttonyLevel = getLevel(sPlayer);
+        double multiplier = 1D + (gluttonyLevel * (percentIncrease.getDouble() / 100D));
 
         double newLevel = diff * multiplier;
         player.setFoodLevel(player.getFoodLevel() + (int) newLevel);
@@ -53,15 +45,15 @@ public class GluttonySkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int gluttonyLevel = player.getLevel(this.getConfigName());
-        double heal = 100 + (gluttonyLevel * super.getDecimalNumber("percent-increase"));
+        int gluttonyLevel = getLevel(player);
+        double heal = 100 + (gluttonyLevel * percentIncrease.getDouble());
         return getPlugin().getPercentageFormat().format(heal) + "%";
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int gluttonyLevel = player.getLevel(this.getConfigName()) + 1;
-        double heal = 100 + (gluttonyLevel * super.getDecimalNumber("percent-increase"));
+        int gluttonyLevel = getLevel(player) + 1;
+        double heal = 100 + (gluttonyLevel * percentIncrease.getDouble());
         return getPlugin().getPercentageFormat().format(heal) + "%";
     }
 }

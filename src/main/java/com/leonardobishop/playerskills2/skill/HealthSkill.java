@@ -1,8 +1,9 @@
 package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.skill.config.SkillConfigValue;
+import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -10,21 +11,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class HealthSkill extends Skill {
 
+    private final SkillNumberConfigValue extraHealthPerLevel = new SkillNumberConfigValue(this, "extra-health-per-level", 1);
+    private final SkillConfigValue<Boolean> compatibilityMode = new SkillConfigValue<>(this, Boolean.class, "compatibility-mode", false);
     private final Map<UUID, Integer> knownMaxHealth = new IdentityHashMap<>();
+    private BukkitTask task;
 
     public HealthSkill(PlayerSkills plugin) {
-        super(plugin, "Health", "health");
-
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 5, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 22, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("extra-health-per-level", 1, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("compatibility-mode", false, false));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
+        super(plugin, "Health", "health", 5, 22);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class HealthSkill extends Skill {
                         clearPlayer(player);
                         return;
                     }
-                    int hpNeeded = (sPlayer.getLevel(HealthSkill.super.getConfigName()) * (((int) HealthSkill.super.getConfig().get("extra-health-per-level")) * 2));
+                    int hpNeeded = (getLevel(sPlayer) * (extraHealthPerLevel.getInt() * 2));
                     if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
                         clearPlayer(player);
                         if (hpNeeded > 0) {
@@ -57,8 +59,20 @@ public class HealthSkill extends Skill {
                 }
             }
         };
-        long tick = (getConfig().containsKey("compatibility-mode") && (boolean) getConfig().get("compatibility-mode") ? 1L : 20L);
-        runnable.runTaskTimer(plugin, tick, tick);
+        long tick = compatibilityMode.get() ? 1L : 20L;
+        task = runnable.runTaskTimer(plugin, tick, tick);
+    }
+
+    @Override
+    public void disable(PlayerSkills plugin) {
+        super.disable(plugin);
+        if (task != null) {
+            try {
+                task.cancel();
+            } catch (Exception ignored) {
+                // IGNORED
+            }
+        }
     }
 
     private void addNewHealth(Player player, int amount) {
@@ -90,15 +104,15 @@ public class HealthSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int healthLevel = player.getLevel(this.getConfigName());
-        int hp = healthLevel * ((int) getConfig().get("extra-health-per-level"));
+        int healthLevel = getLevel(player);
+        int hp = healthLevel * extraHealthPerLevel.getInt();
         return hp + (hp == 1 ? " heart" : " hearts");
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int healthLevel = player.getLevel(this.getConfigName()) + 1;
-        int hp = healthLevel * ((int) getConfig().get("extra-health-per-level"));
+        int healthLevel = getLevel(player) + 1;
+        int hp = healthLevel * extraHealthPerLevel.getInt();
         return hp + (hp == 1 ? " heart" : " hearts");
     }
 }

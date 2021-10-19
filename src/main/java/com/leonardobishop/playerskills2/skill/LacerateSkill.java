@@ -2,8 +2,9 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.skill.config.SkillConfigValue;
+import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,31 +14,25 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LacerateSkill extends Skill {
+    private final SkillNumberConfigValue percentIncrease = new SkillNumberConfigValue(this, "percent-increase", 4);
+    private final SkillNumberConfigValue bleedCycles = new SkillNumberConfigValue(this, "bleed-cycles", 8);
+    private final SkillNumberConfigValue bleedInterval = new SkillNumberConfigValue(this, "bleed-interval", 50);
+    private final SkillNumberConfigValue bleedDamage = new SkillNumberConfigValue(this, "bleed-damage", 2);
+    private final SkillConfigValue<Boolean> applyToNonPlayers = new SkillConfigValue<>(this, Boolean.class, "apply-to-non-players", false);
 
     private final HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate");
-
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 4, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 23, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 4, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-cycles", 8, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-interval", 50, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("bleed-damage", 2, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("apply-to-non-players", false, false));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
+        super(plugin, "Lacerate", "lacerate", 4, 23);
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player) || (!(event.getEntity() instanceof Player)
-                && (!(super.getConfig().containsKey("apply-to-non-players")) || !((boolean) super.getConfig().get("apply-to-non-players"))))) {
+        if (!(event.getDamager() instanceof Player) || (!(event.getEntity() instanceof Player) && (!applyToNonPlayers.get()))) {
             return;
         }
 
@@ -55,9 +50,9 @@ public class LacerateSkill extends Skill {
             return;
         }
 
-        int lacerateLevel = sPlayer.getLevel(this.getConfigName());
+        int lacerateLevel = getLevel(sPlayer);
 
-        double chance = lacerateLevel * super.getDecimalNumber("percent-increase");
+        double chance = lacerateLevel * percentIncrease.getDouble();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             LivingEntity victim = (LivingEntity) event.getEntity();
@@ -82,18 +77,18 @@ public class LacerateSkill extends Skill {
 
             @Override
             public void run() {
-                player.damage((int) LacerateSkill.super.getConfig().get("bleed-damage"), null);
+                player.damage(bleedDamage.getInt(), null);
                 times++;
-                if (times >= (int) LacerateSkill.super.getConfig().get("bleed-cycles")) {
-                    LacerateSkill.this.cutEntities.remove(player);
+                if (times >= bleedCycles.getInt()) {
+                    cutEntities.remove(player);
                     try {
                         this.cancel();
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                         // cancelled check throws error in 1.8
                     }
                 }
             }
-        }.runTaskTimer(super.getPlugin(), (int) super.getConfig().get("bleed-interval"), (int) super.getConfig().get("bleed-interval"));
+        }.runTaskTimer(super.getPlugin(), bleedInterval.getLong(), bleedInterval.getLong());
         cutEntities.put(player, bt);
     }
 
@@ -103,7 +98,7 @@ public class LacerateSkill extends Skill {
             BukkitTask bt = cutEntities.get(event.getEntity());
             try {
                 bt.cancel();
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
                 // cancelled check throws error in 1.8
             }
             cutEntities.remove(event.getEntity());
@@ -116,7 +111,7 @@ public class LacerateSkill extends Skill {
             BukkitTask bt = cutEntities.get(event.getPlayer());
             try {
                 bt.cancel();
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
                 // cancelled check throws error in 1.8
             }
             cutEntities.remove(event.getPlayer());
@@ -125,15 +120,15 @@ public class LacerateSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int lacerateLevel = player.getLevel(this.getConfigName());
-        double damage = lacerateLevel * super.getDecimalNumber("percent-increase");
+        int lacerateLevel = getLevel(player);
+        double damage = lacerateLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int lacerateLevel = player.getLevel(this.getConfigName()) + 1;
-        double damage = lacerateLevel * super.getDecimalNumber("percent-increase");
+        int lacerateLevel = getLevel(player) + 1;
+        double damage = lacerateLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 }

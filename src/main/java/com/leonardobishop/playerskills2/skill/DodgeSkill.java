@@ -2,24 +2,19 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DodgeSkill extends Skill {
+    private final SkillNumberConfigValue percentIncrease = new SkillNumberConfigValue(this, "percent-increase", 2);
 
     public DodgeSkill(PlayerSkills plugin) {
-        super(plugin, "Dodge", "dodge");
-
-        super.getCreatorConfigValues().add(new CreatorConfigValue("max-level", 6, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("gui-slot", 13, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("percent-increase", 2, true));
-        super.getCreatorConfigValues().add(new CreatorConfigValue("only-in-worlds", Arrays.asList("world", "world_nether", "world_the_end")));
+        super(plugin, "Dodge", "dodge", 6, 13);
     }
 
     @EventHandler
@@ -42,9 +37,9 @@ public class DodgeSkill extends Skill {
             return;
         }
 
-        int dodgeLevel = sPlayer.getLevel(this.getConfigName());
+        int dodgeLevel = getLevel(sPlayer);
 
-        double chance = dodgeLevel * super.getDecimalNumber("percent-increase");
+        double chance = dodgeLevel * percentIncrease.getDouble();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             if (!Config.get(super.getPlugin(), "messages.dodge").getColoredString().equals("")) {
@@ -56,15 +51,15 @@ public class DodgeSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int dodgeLevel = player.getLevel(this.getConfigName());
-        double damage = dodgeLevel * super.getDecimalNumber("percent-increase");
+        int dodgeLevel = getLevel(player);
+        double damage = dodgeLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int dodgeLevel = player.getLevel(this.getConfigName()) + 1;
-        double damage = dodgeLevel * super.getDecimalNumber("percent-increase");
+        int dodgeLevel = getLevel(player) + 1;
+        double damage = dodgeLevel * percentIncrease.getDouble();
         return getPlugin().getPercentageFormat().format(damage) + "%";
     }
 }

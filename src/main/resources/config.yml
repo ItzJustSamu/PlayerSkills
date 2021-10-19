@@ -199,8 +199,6 @@ gui:
       lore:
        - "&7You have &e{points} &7points."
        - "&eLeft-Click &7to purchase a skill point for &e{price}&7."
-       - " "
-       - "&7XP: {xpbar}"
     reset:
       slot: 5
       name: "&cReset"

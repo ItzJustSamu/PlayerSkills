@@ -3,7 +3,6 @@ package com.leonardobishop.playerskills2;
 import com.leonardobishop.playerskills2.command.SkillsAdminCommand;
 import com.leonardobishop.playerskills2.command.SkillsCommand;
 import com.leonardobishop.playerskills2.config.Config;
-import com.leonardobishop.playerskills2.config.CreatorConfigValue;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.VaultFundingSource;
 import com.leonardobishop.playerskills2.fundingsource.XPFundingSource;
@@ -13,6 +12,7 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -90,6 +90,7 @@ public class PlayerSkills extends BasePlugin {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(this, player);
         }
+        skillRegistrar.values().forEach(skill -> skill.disable(this));
         skillRegistrar.clear();
     }
 
@@ -102,20 +103,25 @@ public class PlayerSkills extends BasePlugin {
             return false;
         }
         skillRegistrar.put(skill.getConfigName(), skill);
-        for (String key : super.getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".config").getKeys(false)) {
-            Object value = super.getConfig().get("skills." + skill.getConfigName() + ".config." + key);
-            skill.getConfig().put(key, value);
-            for (CreatorConfigValue conf : skill.getCreatorConfigValues()) {
-                if (conf.getKey().equals(key)) {
-                    conf.setValue(value);
-                }
-            }
+        ConfigurationSection section = getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".config");
+        if (section != null) {
+            section.getValues(false).forEach(skill.getConfig()::put);
         }
-        if (super.getConfig().contains("skills." + skill.getConfigName() + ".price-override")) {
-            for (String key : super.getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".price-override").getKeys(false)) {
-                int price = super.getConfig().getInt("skills." + skill.getConfigName() + ".price-override." + key);
-                skill.getPointPriceOverrides().put(Integer.valueOf(key), price);
-            }
+        ConfigurationSection priceOverride = getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".price-override");
+        if (priceOverride != null) {
+            priceOverride.getValues(false).forEach((key, value) -> {
+                int level;
+                try {
+                    level = Integer.parseInt(key);
+                } catch (Exception e) {
+                    return;
+                }
+                if (!(value instanceof Number)) {
+                    return;
+                }
+                int price = ((Number) value).intValue();
+                skill.getPointPriceOverrides().put(level, price);
+            });
         }
         skill.setItemLocation("skills." + skill.getConfigName() + ".display");
         skill.enable(this);
