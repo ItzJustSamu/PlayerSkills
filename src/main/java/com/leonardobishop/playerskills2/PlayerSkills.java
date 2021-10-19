@@ -14,6 +14,7 @@ import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +91,10 @@ public class PlayerSkills extends BasePlugin {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(this, player);
         }
-        skillRegistrar.values().forEach(skill -> skill.disable(this));
+        skillRegistrar.values().forEach(skill -> {
+            skill.disable();
+            HandlerList.unregisterAll(skill);
+        });
         skillRegistrar.clear();
     }
 
@@ -124,7 +128,7 @@ public class PlayerSkills extends BasePlugin {
             });
         }
         skill.setItemLocation("skills." + skill.getConfigName() + ".display");
-        skill.enable(this);
+        skill.enable();
         Bukkit.getPluginManager().registerEvents(skill, this);
         return true;
     }

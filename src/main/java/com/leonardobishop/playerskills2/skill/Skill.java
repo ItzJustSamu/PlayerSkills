@@ -6,7 +6,6 @@ import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
 import com.leonardobishop.playerskills2.skill.config.SkillRawConfigValue;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.Collections;
@@ -62,12 +61,12 @@ public abstract class Skill implements Listener {
 
     public abstract String getNextString(SPlayer player);
 
-    public void enable(PlayerSkills plugin) {
-
+    public void enable() {
+        // EMPTY
     }
 
-    public void disable(PlayerSkills plugin) {
-        HandlerList.unregisterAll(this);
+    public void disable() {
+        // EMPTY
     }
 
     public int getLevel(SPlayer player) {

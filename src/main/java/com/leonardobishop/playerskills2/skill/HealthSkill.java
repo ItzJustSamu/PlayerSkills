@@ -30,7 +30,7 @@ public class HealthSkill extends Skill {
     }
 
     @Override
-    public void enable(PlayerSkills plugin) {
+    public void enable() {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -60,12 +60,12 @@ public class HealthSkill extends Skill {
             }
         };
         long tick = compatibilityMode.get() ? 1L : 20L;
-        task = runnable.runTaskTimer(plugin, tick, tick);
+        task = runnable.runTaskTimer(getPlugin(), tick, tick);
     }
 
     @Override
-    public void disable(PlayerSkills plugin) {
-        super.disable(plugin);
+    public void disable() {
+        super.disable();
         if (task != null) {
             try {
                 task.cancel();
