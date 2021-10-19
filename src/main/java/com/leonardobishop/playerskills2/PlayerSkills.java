@@ -37,30 +37,18 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
-        super.getLogger().info("Thank you for purchasing PlayerSkills2.");
-        super.getLogger().info("If this is a leaked version, then shame on you :(");
-
         percentageFormat.setRoundingMode(RoundingMode.CEILING);
 
         createConfig();
 
-        GluttonySkill gluttonySkill = new GluttonySkill(this);
-        StrengthSkill strengthSkill = new StrengthSkill(this);
-        ResistanceSkill resistanceSkill = new ResistanceSkill(this);
-        DodgeSkill dodgeSkill = new DodgeSkill(this);
-        HealthSkill healthSkill = new HealthSkill(this);
-        CriticalsSkill criticalsSkill = new CriticalsSkill(this);
-        ArcherySkill archerySkill = new ArcherySkill(this);
-        LacerateSkill lacerateSkill = new LacerateSkill(this);
-
-        registerSkill(gluttonySkill);
-        registerSkill(strengthSkill);
-        registerSkill(resistanceSkill);
-        registerSkill(dodgeSkill);
-        registerSkill(healthSkill);
-        registerSkill(criticalsSkill);
-        registerSkill(archerySkill);
-        registerSkill(lacerateSkill);
+        registerSkill(new GluttonySkill(this));
+        registerSkill(new StrengthSkill(this));
+        registerSkill(new ResistanceSkill(this));
+        registerSkill(new DodgeSkill(this));
+        registerSkill(new HealthSkill(this));
+        registerSkill(new CriticalsSkill(this));
+        registerSkill(new ArcherySkill(this));
+        registerSkill(new LacerateSkill(this));
 
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
@@ -181,8 +169,6 @@ public class PlayerSkills extends BasePlugin {
                 }
             }
         }
-
-        saveResource("readme.txt", false);
     }
 
 }
