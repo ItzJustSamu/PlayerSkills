@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class PlayerSkills extends BasePlugin {
 
@@ -60,18 +61,19 @@ public class PlayerSkills extends BasePlugin {
             logInfo("Verbose logging is enabled. If there is too much spam in the console from PlayerSkills2, you can disable this in the config.");
         }
 
-        Config.ConfigObject fundingSource = Config.get(this, "points.funding-source");
-        if (!fundingSource.isNull()) {
-            if (fundingSource.getString().equalsIgnoreCase("VAULT")) {
-                logInfo("Initialised with Vault as the skill point funding source.");
-                this.fundingSource = new VaultFundingSource(this);
-            } else {
-                logInfo("Initialised with the players XP as the skill point funding source.");
-                this.fundingSource = new XPFundingSource();
-            }
-        } else {
-            this.fundingSource = new XPFundingSource();
-        }
+        this.fundingSource = Optional.of(Config.get(this, "points.funding-source"))
+                .filter(value -> !value.isNull())
+                .map(Config.ConfigObject::getString)
+                .map(value -> {
+                    if (value.equalsIgnoreCase("VAULT")) {
+                        logInfo("Initialised with Vault as the skill point funding source.");
+                        return new VaultFundingSource(this);
+                    } else {
+                        logInfo("Initialised with the players XP as the skill point funding source.");
+                        return new XPFundingSource();
+                    }
+                })
+                .orElseGet(XPFundingSource::new);
     }
 
     @Override
