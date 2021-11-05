@@ -21,8 +21,8 @@ public class VaultFundingSource implements FundingSource {
     }
 
     @Override
-    public String appendSymbol(String price) {
-        return "$" + price;
+    public String getSymbol(int price) {
+        return price <= 1 ? economy.currencyNameSingular() : economy.currencyNamePlural();
     }
 
     @Override

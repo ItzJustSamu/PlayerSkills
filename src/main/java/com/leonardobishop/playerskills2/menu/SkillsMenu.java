@@ -51,7 +51,9 @@ public class SkillsMenu implements Menu {
         }
 
         HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("{price}", plugin.getFundingSource().appendSymbol(String.valueOf(sPlayer.getNextPointPrice(plugin))));
+        int price = sPlayer.getNextPointPrice(plugin);
+        placeholders.put("{price}", Integer.toString(price));
+        placeholders.put("{symbol}", plugin.getFundingSource().getSymbol(price));
         placeholders.put("{points}", String.valueOf(sPlayer.getPoints()));
 
         for (Skill skill : plugin.getSkillRegistrar().values()) {

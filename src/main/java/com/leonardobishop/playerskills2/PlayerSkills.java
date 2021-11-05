@@ -70,10 +70,10 @@ public class PlayerSkills extends BasePlugin {
                         return new VaultFundingSource(this);
                     } else {
                         logInfo("Initialised with the players XP as the skill point funding source.");
-                        return new XPFundingSource();
+                        return new XPFundingSource(this);
                     }
                 })
-                .orElseGet(XPFundingSource::new);
+                .orElseGet(() -> new XPFundingSource(this));
     }
 
     @Override
