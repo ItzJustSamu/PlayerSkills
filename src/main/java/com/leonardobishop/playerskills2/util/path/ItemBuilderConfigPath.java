@@ -1,7 +1,7 @@
-package com.leonardobishop.playerskills2.utils.path;
+package com.leonardobishop.playerskills2.util.path;
 
-import com.leonardobishop.playerskills2.utils.modifier.HideAttributesModifier;
-import com.leonardobishop.playerskills2.utils.modifier.XMaterialModifier;
+import com.leonardobishop.playerskills2.util.modifier.HideAttributesModifier;
+import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.AmountModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;

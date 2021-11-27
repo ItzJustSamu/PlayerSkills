@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.utils.modifier;
+package com.leonardobishop.playerskills2.util.modifier;
 
 import me.hsgamer.hscore.bukkit.item.ItemMetaModifier;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;

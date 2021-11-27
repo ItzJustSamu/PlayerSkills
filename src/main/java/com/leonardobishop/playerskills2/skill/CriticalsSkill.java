@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.modifier.XMaterialModifier;
+import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.leonardobishop.playerskills2.utils.Utils.getPercentageFormat;
+import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class CriticalsSkill extends Skill {
     private final DoubleConfigPath percentIncrease = new DoubleConfigPath("percent-increase", 4D);

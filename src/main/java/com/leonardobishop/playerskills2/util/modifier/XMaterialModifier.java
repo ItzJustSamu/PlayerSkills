@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.utils.modifier;
+package com.leonardobishop.playerskills2.util.modifier;
 
 import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemModifier;

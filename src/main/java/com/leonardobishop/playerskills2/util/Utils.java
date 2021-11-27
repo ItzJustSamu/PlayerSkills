@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.utils;
+package com.leonardobishop.playerskills2.util;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;

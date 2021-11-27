@@ -3,7 +3,7 @@ package com.leonardobishop.playerskills2.skill;
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.utils.modifier.XMaterialModifier;
+import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import java.util.Collections;
 import java.util.List;
 
-import static com.leonardobishop.playerskills2.utils.Utils.getPercentageFormat;
+import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class ResistanceSkill extends Skill {
     private final DoubleConfigPath damageDrop = new DoubleConfigPath("damage-drop", 3D);
