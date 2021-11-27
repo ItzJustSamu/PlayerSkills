@@ -119,11 +119,6 @@
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-gui-advanced</artifactId>
-            <version>${core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-config-path</artifactId>
             <version>${core.version}</version>
         </dependency>
