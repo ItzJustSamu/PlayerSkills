@@ -12,23 +12,14 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Optional;
 
 public class PlayerSkills extends BasePlugin {
 
     private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
-    private final DecimalFormat percentageFormat = new DecimalFormat("#.#");
     private FundingSource fundingSource;
     private boolean verboseLogging;
 
@@ -38,8 +29,6 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
-        percentageFormat.setRoundingMode(RoundingMode.CEILING);
-
         createConfig();
 
         registerSkill(new GluttonySkill(this));
@@ -88,39 +77,18 @@ public class PlayerSkills extends BasePlugin {
         skillRegistrar.clear();
     }
 
-    public DecimalFormat getPercentageFormat() {
-        return percentageFormat;
-    }
-
-    public boolean registerSkill(Skill skill) {
-        if (getConfig().contains("disabled-skills") && getConfig().getStringList("disabled-skills").contains(skill.getConfigName())) {
-            return false;
+    public void registerSkill(Skill skill) {
+        if (isSkillDisabled(skill)) {
+            return;
         }
+        skill.setup();
         skillRegistrar.put(skill.getConfigName(), skill);
-        ConfigurationSection section = getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".config");
-        if (section != null) {
-            section.getValues(false).forEach(skill.getConfig()::put);
-        }
-        ConfigurationSection priceOverride = getConfig().getConfigurationSection("skills." + skill.getConfigName() + ".price-override");
-        if (priceOverride != null) {
-            priceOverride.getValues(false).forEach((key, value) -> {
-                int level;
-                try {
-                    level = Integer.parseInt(key);
-                } catch (Exception e) {
-                    return;
-                }
-                if (!(value instanceof Number)) {
-                    return;
-                }
-                int price = ((Number) value).intValue();
-                skill.getPointPriceOverrides().put(level, price);
-            });
-        }
-        skill.setItemLocation("skills." + skill.getConfigName() + ".display");
         skill.enable();
         Bukkit.getPluginManager().registerEvents(skill, this);
-        return true;
+    }
+
+    public boolean isSkillDisabled(Skill skill) {
+        return getConfig().contains("disabled-skills") && getConfig().getStringList("disabled-skills").contains(skill.getConfigName());
     }
 
     public boolean isVerboseLogging() {
@@ -140,37 +108,6 @@ public class PlayerSkills extends BasePlugin {
     }
 
     private void createConfig() {
-        File directory = this.getDataFolder();
-        if (!directory.exists() && !directory.isDirectory()) {
-            directory.mkdir();
-        }
-
-        File config = new File(directory + File.separator + "config.yml");
-        if (!config.exists()) {
-            saveResource("config.yml", false);
-        } else {
-            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(config);
-            InputStream packed = this.getResource("config.yml");
-            assert packed != null;
-            YamlConfiguration packedFile = YamlConfiguration.loadConfiguration(new InputStreamReader(packed));
-
-            boolean changed = false;
-            for (String s : packedFile.getConfigurationSection("skills").getKeys(false)) {
-                if (!yaml.contains("skills." + s)) {
-                    logInfo("Writing new skill to config: " + s);
-                    changed = true;
-                    yaml.set("skills." + s, packedFile.getConfigurationSection("skills." + s));
-                }
-            }
-
-            if (changed) {
-                try {
-                    yaml.save(config);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        saveResource("config.yml", false);
     }
-
 }

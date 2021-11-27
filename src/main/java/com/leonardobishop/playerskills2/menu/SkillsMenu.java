@@ -9,7 +9,6 @@ import com.leonardobishop.playerskills2.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -57,28 +56,7 @@ public class SkillsMenu implements Menu {
         placeholders.put("{points}", String.valueOf(sPlayer.getPoints()));
 
         for (Skill skill : plugin.getSkillRegistrar().values()) {
-            HashMap<String, String> skillPlaceholders = new HashMap<>();
-            skillPlaceholders.put("{prev}", skill.getPreviousString(sPlayer));
-            int maxLevel = skill.getMaxLevel();
-            if (skill.getLevel(sPlayer) >= maxLevel) {
-                skillPlaceholders.put("{next}", Config.get(plugin, "gui.placeholders.next-max", "--").getString());
-                skillPlaceholders.put("{skillprice}", Config.get(plugin, "gui.placeholders.skillprice-max", "--").getString());
-            } else {
-                skillPlaceholders.put("{next}", skill.getNextString(sPlayer));
-                skillPlaceholders.put("{skillprice}", String.valueOf(skill.getPriceOverride(skill.getLevel(sPlayer) + 1)));
-            }
-            skillPlaceholders.put("{level}", String.valueOf(skill.getLevel(sPlayer)));
-            skillPlaceholders.put("{max}", String.valueOf(maxLevel));
-
-            skillPlaceholders.putAll(placeholders);
-
-            ItemStack skillItem = Config.get(plugin, skill.getItemLocation()).getItemStack(skillPlaceholders);
-            ItemMeta skillMeta = skillItem.getItemMeta();
-            if (skillMeta != null) {
-                skillMeta.addItemFlags(ItemFlag.values());
-                skillItem.setItemMeta(skillMeta);
-            }
-            inventory.setItem(skill.getGuiSlot(), skillItem);
+            inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
         }
 
         for (String s : Config.get(plugin, "gui.other").getKeys()) {

@@ -1,14 +1,25 @@
 package com.leonardobishop.playerskills2.skill;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
-import com.leonardobishop.playerskills2.skill.config.SkillNumberConfigValue;
+import com.leonardobishop.playerskills2.utils.modifier.XMaterialModifier;
+import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
+import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.ConfigPath;
+import me.hsgamer.hscore.config.path.DoubleConfigPath;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.Collections;
+import java.util.List;
+
+import static com.leonardobishop.playerskills2.utils.Utils.getPercentageFormat;
+
 public class StrengthSkill extends Skill {
-    private final SkillNumberConfigValue damageIncrement = new SkillNumberConfigValue(this, "damage-increment", 6);
+    private final DoubleConfigPath damageIncrement = new DoubleConfigPath("damage-increment", 6D);
 
     public StrengthSkill(PlayerSkills plugin) {
         super(plugin, "Strength", "strength", 10, 11);
@@ -37,22 +48,42 @@ public class StrengthSkill extends Skill {
         int strengthLevel = getLevel(sPlayer);
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * damageIncrement.getDouble();
+        percentile = percentile * damageIncrement.getValue();
         double weightedDamage = strengthLevel * percentile;
         event.setDamage(event.getDamage() + weightedDamage);
     }
 
     @Override
+    public List<ConfigPath<?>> getAdditionalConfigPaths() {
+        return Collections.singletonList(damageIncrement);
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder()
+                .addItemModifier(new NameModifier().setName("&cStrength Overview"))
+                .addItemModifier(new XMaterialModifier(XMaterial.IRON_SWORD))
+                .addItemModifier(new LoreModifier().setLore(
+                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&7This skill increases damage dealt to other players.",
+                        "&7Level: &e{level}&7/&e{max}&7",
+                        " ",
+                        "&cDamage dealt: ",
+                        "   &e{prev}% &7 >>> &e{next}%"
+                ));
+    }
+
+    @Override
     public String getPreviousString(SPlayer player) {
         int strengthLevel = getLevel(player);
-        double damage = 100 + (strengthLevel * damageIncrement.getDouble());
-        return getPlugin().getPercentageFormat().format(damage) + "%";
+        double damage = 100 + (strengthLevel * damageIncrement.getValue());
+        return getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int strengthLevel = getLevel(player) + 1;
-        double damage = 100 + (strengthLevel * damageIncrement.getDouble());
-        return getPlugin().getPercentageFormat().format(damage) + "%";
+        double damage = 100 + (strengthLevel * damageIncrement.getValue());
+        return getPercentageFormat().format(damage);
     }
 }
