@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.config.path;
+package com.leonardobishop.playerskills2.utils.path;
 
 import com.leonardobishop.playerskills2.utils.modifier.HideAttributesModifier;
 import com.leonardobishop.playerskills2.utils.modifier.XMaterialModifier;

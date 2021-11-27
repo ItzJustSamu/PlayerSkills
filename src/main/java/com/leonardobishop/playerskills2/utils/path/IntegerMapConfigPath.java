@@ -1,4 +1,4 @@
-package com.leonardobishop.playerskills2.config.path;
+package com.leonardobishop.playerskills2.utils.path;
 
 import me.hsgamer.hscore.config.AdvancedConfigPath;
 import me.hsgamer.hscore.config.Config;
