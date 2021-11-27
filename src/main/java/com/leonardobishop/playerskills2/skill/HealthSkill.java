@@ -8,8 +8,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.BooleanConfigPath;
-import me.hsgamer.hscore.config.path.IntegerConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -22,8 +21,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class HealthSkill extends Skill {
-    private final IntegerConfigPath extraHealthPerLevel = new IntegerConfigPath("extra-health-per-level", 1);
-    private final BooleanConfigPath compatibilityMode = new BooleanConfigPath("compatibility-mode", false);
+    private final ConfigPath<Integer> extraHealthPerLevel = Paths.integerPath("extra-health-per-level", 1);
+    private final ConfigPath<Boolean> compatibilityMode = Paths.booleanPath("compatibility-mode", false);
     private final Map<UUID, Integer> knownMaxHealth = new IdentityHashMap<>();
     private BukkitTask task;
 

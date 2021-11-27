@@ -8,7 +8,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
@@ -19,7 +19,7 @@ import java.util.List;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class GluttonySkill extends Skill {
-    private final DoubleConfigPath percentIncrease = new DoubleConfigPath("percent-increase", 50D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 50D);
 
     public GluttonySkill(PlayerSkills plugin) {
         super(plugin, "Gluttony", "gluttony", 4, 21);

@@ -9,10 +9,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.BooleanConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
-import me.hsgamer.hscore.config.path.IntegerConfigPath;
-import me.hsgamer.hscore.config.path.LongConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,11 +27,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class LacerateSkill extends Skill {
-    private final DoubleConfigPath percentIncrease = new DoubleConfigPath("percent-increase", 4D);
-    private final IntegerConfigPath bleedCycles = new IntegerConfigPath("bleed-cycles", 8);
-    private final LongConfigPath bleedInterval = new LongConfigPath("bleed-interval", 50L);
-    private final IntegerConfigPath bleedDamage = new IntegerConfigPath("bleed-damage", 2);
-    private final BooleanConfigPath applyToNonPlayers = new BooleanConfigPath("apply-to-non-players", false);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 4D);
+    private final ConfigPath<Integer> bleedCycles = Paths.integerPath("bleed-cycles", 8);
+    private final ConfigPath<Long> bleedInterval = Paths.longPath("bleed-interval", 50L);
+    private final ConfigPath<Integer> bleedDamage = Paths.integerPath("bleed-damage", 2);
+    private final ConfigPath<Boolean> applyToNonPlayers = Paths.booleanPath("apply-to-non-players", false);
 
     private final HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
 

@@ -8,7 +8,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,7 +19,7 @@ import java.util.List;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class ResistanceSkill extends Skill {
-    private final DoubleConfigPath damageDrop = new DoubleConfigPath("damage-drop", 3D);
+    private final ConfigPath<Double> damageDrop = Paths.doublePath("damage-drop", 3D);
 
     public ResistanceSkill(PlayerSkills plugin) {
         super(plugin, "Resistance", "resistance", 10, 12);

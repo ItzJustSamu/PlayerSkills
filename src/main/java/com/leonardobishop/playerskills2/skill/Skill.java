@@ -3,14 +3,14 @@ package com.leonardobishop.playerskills2.skill;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.config.SkillConfig;
+import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.util.path.IntegerMapConfigPath;
 import com.leonardobishop.playerskills2.util.path.ItemBuilderConfigPath;
 import com.leonardobishop.playerskills2.util.path.StringListConfigPath;
-import com.leonardobishop.playerskills2.player.SPlayer;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.StickyConfigPath;
-import me.hsgamer.hscore.config.path.IntegerConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -45,9 +45,9 @@ public abstract class Skill implements Listener {
 
     public void setup() {
         config.setup();
-        this.maxLevelConfig = new IntegerConfigPath("max-level", defaultMaxLevel);
+        this.maxLevelConfig = Paths.integerPath("max-level", defaultMaxLevel);
         maxLevelConfig.setConfig(config);
-        this.guiSlotConfig = new IntegerConfigPath("gui-slot", defaultGuiSlot);
+        this.guiSlotConfig = Paths.integerPath("gui-slot", defaultGuiSlot);
         guiSlotConfig.setConfig(config);
         this.onlyInWorldsConfig = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
         onlyInWorldsConfig.setConfig(config);

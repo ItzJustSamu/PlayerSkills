@@ -8,7 +8,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +20,7 @@ import java.util.List;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class ArcherySkill extends Skill {
-    private final DoubleConfigPath damageIncrement = new DoubleConfigPath("damage-increment", 6D);
+    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 6D);
 
     public ArcherySkill(PlayerSkills plugin) {
         super(plugin, "Archery", "archery", 10, 15);

@@ -9,7 +9,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,8 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class CriticalsSkill extends Skill {
-    private final DoubleConfigPath percentIncrease = new DoubleConfigPath("percent-increase", 4D);
-    private final DoubleConfigPath criticalMultiplier = new DoubleConfigPath("critical-multiplier", 1.5D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 4D);
+    private final ConfigPath<Double> criticalMultiplier = Paths.doublePath("critical-multiplier", 1.5D);
 
     public CriticalsSkill(PlayerSkills plugin) {
         super(plugin, "Criticals", "criticals", 3, 14);

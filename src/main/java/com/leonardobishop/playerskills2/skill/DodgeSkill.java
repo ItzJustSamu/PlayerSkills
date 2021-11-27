@@ -9,7 +9,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.path.DoubleConfigPath;
+import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class DodgeSkill extends Skill {
-    private final DoubleConfigPath percentIncrease = new DoubleConfigPath("percent-increase", 2D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 2D);
 
     public DodgeSkill(PlayerSkills plugin) {
         super(plugin, "Dodge", "dodge", 6, 13);
