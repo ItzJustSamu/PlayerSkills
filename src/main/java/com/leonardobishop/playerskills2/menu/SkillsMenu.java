@@ -50,7 +50,7 @@ public class SkillsMenu implements Menu {
         }
 
         HashMap<String, String> placeholders = new HashMap<>();
-        int price = sPlayer.getNextPointPrice(plugin);
+        int price = sPlayer.getNextPointPrice();
         placeholders.put("{price}", Integer.toString(price));
         placeholders.put("{symbol}", plugin.getFundingSource().getSymbol(price));
         placeholders.put("{points}", String.valueOf(sPlayer.getPoints()));
@@ -97,7 +97,7 @@ public class SkillsMenu implements Menu {
 
 
         if (slot == Config.get(plugin, "gui.other.points.slot").getInt()) {
-            int price = sPlayer.getNextPointPrice(plugin);
+            int price = sPlayer.getNextPointPrice();
             Runnable callback = () -> {
                 if (plugin.getFundingSource().doTransaction(sPlayer, price, player)) {
                     sPlayer.setPoints(sPlayer.getPoints() + 1);

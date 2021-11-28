@@ -21,6 +21,11 @@ public class VaultFundingSource implements FundingSource {
     }
 
     @Override
+    public String getSymbol(int price) {
+        return price <= 1 ? economy.currencyNameSingular() : economy.currencyNamePlural();
+    }
+
+    @Override
     public boolean doTransaction(SPlayer sPlayer, int price, Player player) {
         if (economy.getBalance(player) > price) {
             economy.withdrawPlayer(player, price);
