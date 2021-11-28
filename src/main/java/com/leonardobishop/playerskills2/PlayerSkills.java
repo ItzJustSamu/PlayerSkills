@@ -89,16 +89,12 @@ public class PlayerSkills extends BasePlugin {
     }
 
     public void registerSkill(Skill skill) {
-        if (isSkillDisabled(skill)) {
+        if (MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getConfigName())) {
             return;
         }
         skillRegistrar.put(skill.getConfigName(), skill);
         skill.setup();
         skill.enable();
-    }
-
-    public boolean isSkillDisabled(Skill skill) {
-        return MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getConfigName());
     }
 
     public Map<String, Skill> getSkillRegistrar() {
