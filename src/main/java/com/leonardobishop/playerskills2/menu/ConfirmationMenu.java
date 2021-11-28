@@ -1,14 +1,12 @@
 package com.leonardobishop.playerskills2.menu;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class ConfirmationMenu implements Menu {
 
@@ -32,46 +30,20 @@ public class ConfirmationMenu implements Menu {
 
     @Override
     public Inventory getInventory() {
-        String title = Config.get(plugin, "gui-confirmation.title").getColoredString();
+        String title = MessageUtils.colorize(MainConfig.GUI_CONFIRMATION_TITLE.getValue());
         int size = 27;
 
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
-        if (plugin.getConfig().getBoolean("gui-confirmation.background.enabled")) {
-            ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
-            assert background != null;
-            ItemMeta backgroundm = background.getItemMeta();
-            backgroundm.setDisplayName(" ");
-            background.setItemMeta(backgroundm);
-
-            ItemStack config;
-            if ((config = Config.get(plugin, "gui-confirmation.background").getItemStack()) != null) {
-                background = config;
-            }
+        if (MainConfig.GUI_CONFIRMATION_BACKGROUND_ENABLED.getValue()) {
+            ItemStack background = MainConfig.GUI_CONFIRMATION_BACKGROUND_DISPLAY.getValue().build(player);
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        ItemStack yes = XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
-        assert yes != null;
-        ItemMeta yesm = yes.getItemMeta();
-        yesm.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Confirm");
-        yes.setItemMeta(yesm);
-        ItemStack yesconfig;
-        if ((yesconfig = Config.get(plugin, "gui-confirmation.accept").getItemStack()) != null) {
-            yes = yesconfig;
-        }
-
-        ItemStack no = XMaterial.RED_STAINED_GLASS_PANE.parseItem();
-        assert no != null;
-        ItemMeta nom = no.getItemMeta();
-        nom.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + "Decline");
-        no.setItemMeta(nom);
-        ItemStack noconfig;
-        if ((noconfig = Config.get(plugin, "gui-confirmation.deny").getItemStack()) != null) {
-            no = noconfig;
-        }
+        ItemStack yes = MainConfig.GUI_CONFIRMATION_ACCEPT.getValue().build(player);
+        ItemStack no = MainConfig.GUI_CONFIRMATION_DENY.getValue().build(player);
 
         inventory.setItem(10, no);
         inventory.setItem(11, no);

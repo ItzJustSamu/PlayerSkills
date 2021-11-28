@@ -9,4 +9,5 @@ public interface FundingSource {
 
     boolean doTransaction(SPlayer sPlayer, int price, Player player);
 
+    String getName();
 }

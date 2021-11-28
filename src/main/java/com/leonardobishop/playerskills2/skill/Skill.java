@@ -1,7 +1,7 @@
 package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.config.SkillConfig;
 import com.leonardobishop.playerskills2.player.SPlayer;
@@ -66,8 +66,8 @@ public abstract class Skill implements Listener {
             int level = getLevel(sPlayer);
             int maxLevel = getMaxLevel();
             if (level >= maxLevel) {
-                original = original.replace("{next}", Config.get(plugin, "gui.placeholders.next-max", "--").getString())
-                        .replace("{skillprice}", Config.get(plugin, "gui.placeholders.skillprice-max", "--").getString());
+                original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
+                        .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}", getNextString(sPlayer))
                         .replace("{skillprice}", Integer.toString(getPriceOverride(level + 1)));

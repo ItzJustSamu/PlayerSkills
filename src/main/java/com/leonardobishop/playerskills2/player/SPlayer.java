@@ -1,7 +1,7 @@
 package com.leonardobishop.playerskills2.player;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -143,13 +143,13 @@ public class SPlayer {
     }
 
     public int getNextPointPrice() {
-        int base = Config.get(plugin, "points.price").getInt();
-        if (Config.get(plugin, "points.dynamic-price.enabled").getBoolean()) {
-            int points = getPoints();
+        int base = MainConfig.POINTS_PRICE.getValue();
+        if (MainConfig.POINTS_DYNAMIC_PRICE_ENABLED.getValue()) {
+            int playerPoints = getPoints();
             for (int i : getSkills().values()) {
-                points += i;
+                playerPoints += i;
             }
-            return base + (points * Config.get(plugin, "points.dynamic-price.price-increase-per-point").getInt());
+            return base + (playerPoints * MainConfig.POINTS_DYNAMIC_PRICE_PRICE_INCREASE_PER_POINT.getValue());
         } else {
             return base;
         }

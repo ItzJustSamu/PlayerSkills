@@ -2,7 +2,7 @@ package com.leonardobishop.playerskills2;
 
 import com.leonardobishop.playerskills2.command.SkillsAdminCommand;
 import com.leonardobishop.playerskills2.command.SkillsCommand;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.VaultFundingSource;
@@ -13,35 +13,43 @@ import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class PlayerSkills extends BasePlugin {
-    private final MessageConfig messageConfig = new MessageConfig(this);
-    private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
-    private FundingSource fundingSource;
-    private boolean verboseLogging;
+    public static final Map<String, Supplier<FundingSource>> FUNDING_SOURCE_MAP = new CaseInsensitiveStringHashMap<>();
 
-    public FundingSource getFundingSource() {
-        return fundingSource;
-    }
+    private final MessageConfig messageConfig = new MessageConfig(this);
+    private final MainConfig mainConfig = new MainConfig(this);
+    private final Map<String, Skill> skillRegistrar = new HashMap<>();
 
     public MessageConfig getMessageConfig() {
         return messageConfig;
+    }
+
+    public MainConfig getMainConfig() {
+        return mainConfig;
+    }
+
+    @Override
+    public void preLoad() {
+        FUNDING_SOURCE_MAP.put("XP", XPFundingSource::new);
+        FUNDING_SOURCE_MAP.put("VAULT", VaultFundingSource::new);
     }
 
     @Override
     public void load() {
         MessageUtils.setPrefix(MessageConfig.PREFIX::getValue);
         messageConfig.setup();
+        mainConfig.setup();
     }
 
     @Override
     public void enable() {
-        createConfig();
-
         registerSkill(new GluttonySkill(this));
         registerSkill(new StrengthSkill(this));
         registerSkill(new ResistanceSkill(this));
@@ -55,25 +63,11 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener(this));
+    }
 
-        verboseLogging = Config.get(this, "options.logging.verbose", false).getBoolean();
-        if (verboseLogging) {
-            logInfo("Verbose logging is enabled. If there is too much spam in the console from PlayerSkills2, you can disable this in the config.");
-        }
-
-        this.fundingSource = Optional.of(Config.get(this, "points.funding-source"))
-                .filter(value -> !value.isNull())
-                .map(Config.ConfigObject::getString)
-                .map(value -> {
-                    if (value.equalsIgnoreCase("VAULT")) {
-                        logInfo("Initialised with Vault as the skill point funding source.");
-                        return new VaultFundingSource(this);
-                    } else {
-                        logInfo("Initialised with the players XP as the skill point funding source.");
-                        return new XPFundingSource(this);
-                    }
-                })
-                .orElseGet(() -> new XPFundingSource(this));
+    @Override
+    public void postEnable() {
+        logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
     }
 
     @Override
@@ -102,22 +96,18 @@ public class PlayerSkills extends BasePlugin {
     }
 
     public boolean isVerboseLogging() {
-        return verboseLogging;
+        return MainConfig.OPTIONS_VERBOSE.getValue();
     }
 
-    public HashMap<String, Skill> getSkillRegistrar() {
+    public Map<String, Skill> getSkillRegistrar() {
         return skillRegistrar;
     }
 
     public void logInfo(String message) {
-        super.getLogger().info(message);
+        getLogger().info(message);
     }
 
     public void logError(String message) {
-        super.getLogger().severe(message);
-    }
-
-    private void createConfig() {
-        saveResource("config.yml", false);
+        getLogger().severe(message);
     }
 }

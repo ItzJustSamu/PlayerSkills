@@ -1,6 +1,5 @@
 package com.leonardobishop.playerskills2.fundingsource;
 
-import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -8,13 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultFundingSource implements FundingSource {
-
     private Economy economy;
 
-    public VaultFundingSource(PlayerSkills plugin) {
+    public VaultFundingSource() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            plugin.logError("Could not find a registered economy for Vault.");
             return;
         }
         economy = rsp.getProvider();
@@ -34,5 +31,8 @@ public class VaultFundingSource implements FundingSource {
         return false;
     }
 
-
+    @Override
+    public String getName() {
+        return "VAULT";
+    }
 }

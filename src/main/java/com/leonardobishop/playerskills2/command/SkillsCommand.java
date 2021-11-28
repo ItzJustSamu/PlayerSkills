@@ -2,7 +2,7 @@ package com.leonardobishop.playerskills2.command;
 
 import com.leonardobishop.playerskills2.Permissions;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.menu.SkillsMenu;
 import com.leonardobishop.playerskills2.player.SPlayer;
@@ -37,12 +37,10 @@ public class SkillsCommand extends Command {
         Player player = (Player) sender;
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
-        if (!Config.get(plugin, "options.menu-world-restriction").isNull()) {
-            List<String> listOfWorlds = Config.get(plugin, "options.menu-world-restriction").getStringList();
-            if (!listOfWorlds.contains(player.getWorld().getName())) {
-                MessageUtils.sendMessage(player, MessageConfig.MENU_WORLD_RESTRICTION.getValue());
-                return true;
-            }
+        List<String> listOfWorlds = MainConfig.OPTIONS_MENU_WORLD_RESTRICTION.getValue();
+        if (!listOfWorlds.isEmpty() && !listOfWorlds.contains(player.getWorld().getName())) {
+            MessageUtils.sendMessage(player, MessageConfig.MENU_WORLD_RESTRICTION.getValue());
+            return true;
         }
 
         new SkillsMenu(plugin, player, sPlayer).open(player);

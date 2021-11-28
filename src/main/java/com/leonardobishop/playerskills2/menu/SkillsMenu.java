@@ -1,18 +1,15 @@
 package com.leonardobishop.playerskills2.menu;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.Skill;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.HashMap;
 
 public class SkillsMenu implements Menu {
 
@@ -28,44 +25,25 @@ public class SkillsMenu implements Menu {
 
     @Override
     public Inventory getInventory() {
-        String title = Config.get(plugin, "gui.title").getColoredString();
-        int size = Config.get(plugin, "gui.size").getInt();
+        String title = MessageUtils.colorize(MainConfig.GUI_TITLE.getValue());
+        int size = MainConfig.GUI_SIZE.getValue();
 
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
-        if (plugin.getConfig().getBoolean("gui.background.enabled")) {
-            ItemStack background = XMaterial.GRAY_STAINED_GLASS_PANE.parseItem();
-            assert background != null;
-            ItemMeta backgroundm = background.getItemMeta();
-            backgroundm.setDisplayName(" ");
-            background.setItemMeta(backgroundm);
-
-            ItemStack config;
-            if ((config = Config.get(plugin, "gui.background").getItemStack()) != null) {
-                background = config;
-            }
+        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        HashMap<String, String> placeholders = new HashMap<>();
-        int price = sPlayer.getNextPointPrice();
-        placeholders.put("{price}", Integer.toString(price));
-        placeholders.put("{symbol}", plugin.getFundingSource().getSymbol(price));
-        placeholders.put("{points}", String.valueOf(sPlayer.getPoints()));
-
         for (Skill skill : plugin.getSkillRegistrar().values()) {
             inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
         }
 
-        for (String s : Config.get(plugin, "gui.other").getKeys()) {
-            int slot = Config.get(plugin, "gui.other." + s + ".slot").getInt();
-            ItemStack is = Config.get(plugin, "gui.other." + s).getItemStack(placeholders);
-
-            inventory.setItem(slot, is);
-        }
-
+        inventory.setItem(MainConfig.GUI_INFO_SLOT.getValue(), MainConfig.GUI_INFO_DISPLAY.getValue().build(player));
+        inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(player));
+        inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(player));
         return inventory;
     }
 
@@ -81,7 +59,7 @@ public class SkillsMenu implements Menu {
                         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2, 2);
                         this.open(player);
                     };
-                    if (Config.get(plugin, "gui-confirmation.enabled.purchase-skills").getBoolean()) {
+                    if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
                         ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                                 player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
                         confirmationMenu.open(player);
@@ -96,10 +74,10 @@ public class SkillsMenu implements Menu {
         }
 
 
-        if (slot == Config.get(plugin, "gui.other.points.slot").getInt()) {
+        if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             int price = sPlayer.getNextPointPrice();
             Runnable callback = () -> {
-                if (plugin.getFundingSource().doTransaction(sPlayer, price, player)) {
+                if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(sPlayer, price, player)) {
                     sPlayer.setPoints(sPlayer.getPoints() + 1);
                     XSound.UI_BUTTON_CLICK.play(player, 1, 1);
                     this.open(player);
@@ -107,20 +85,23 @@ public class SkillsMenu implements Menu {
                     XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
-            if (Config.get(plugin, "gui-confirmation.enabled.purchase-skill-points").getBoolean()) {
+            if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                         player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
             }
-        } else if (slot == Config.get(plugin, "gui.other.reset.slot").getInt()) {
+        } else if (slot == MainConfig.GUI_RESET_SLOT.getValue()) {
             Runnable callback = () -> {
-                if (sPlayer.getPoints() >= Config.get(plugin, "points.reset-price").getInt()) {
-                    sPlayer.setPoints(sPlayer.getPoints() - Config.get(plugin, "points.reset-price").getInt());
-                    for (String s : sPlayer.getSkills().keySet()) {
-                        for (int i = 1; i <= sPlayer.getLevel(s); i++) {
-                            sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkillRegistrar().get(s).getPriceOverride(i));
+                int resetPoint = MainConfig.POINTS_RESET_PRICE.getValue();
+                if (sPlayer.getPoints() >= resetPoint) {
+                    sPlayer.setPoints(sPlayer.getPoints() - resetPoint);
+                    if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
+                        for (String s : sPlayer.getSkills().keySet()) {
+                            for (int i = 1; i <= sPlayer.getLevel(s); i++) {
+                                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkillRegistrar().get(s).getPriceOverride(i));
+                            }
                         }
                     }
                     sPlayer.getSkills().clear();
@@ -130,7 +111,7 @@ public class SkillsMenu implements Menu {
                     XSound.ENTITY_ITEM_BREAK.play(player, 1, 0.6f);
                 }
             };
-            if (Config.get(plugin, "gui-confirmation.enabled.reset-skills").getBoolean()) {
+            if (MainConfig.GUI_CONFIRMATION_ENABLED_RESET_SKILLS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player,
                         player.getOpenInventory().getTopInventory().getItem(slot), callback, SkillsMenu.this);
                 confirmationMenu.open(player);
