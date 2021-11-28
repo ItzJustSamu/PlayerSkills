@@ -19,7 +19,14 @@ import java.util.Optional;
 
 public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object>, ItemBuilder> {
     public ItemBuilderConfigPath(@NotNull String path, @Nullable ItemBuilder def) {
-        super(path, def != null ? CommonStringReplacer.addDefaultReplacer(def) : null);
+        super(path, def != null ? addDefault(def) : null);
+    }
+
+    public static ItemBuilder addDefault(ItemBuilder builder) {
+        return builder
+                .addItemModifier(new HideAttributesModifier())
+                .addStringReplacer("colorize", CommonStringReplacer.COLORIZE)
+                .addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES);
     }
 
     @Override
@@ -52,10 +59,7 @@ public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object
         if (rawValue.containsKey("lore")) {
             itemBuilder.addItemModifier(new LoreModifier().setLore(CollectionUtils.createStringListFromObject(rawValue.get("lore"), false)));
         }
-        itemBuilder.addItemModifier(new HideAttributesModifier());
-        itemBuilder.addStringReplacer("colorize", CommonStringReplacer.COLORIZE);
-        itemBuilder.addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES);
-        return itemBuilder;
+        return addDefault(itemBuilder);
     }
 
     @Override
