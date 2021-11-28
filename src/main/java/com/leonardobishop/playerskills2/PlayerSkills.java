@@ -11,6 +11,8 @@ import com.leonardobishop.playerskills2.listener.PlayerListener;
 import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
+import com.leonardobishop.playerskills2.storage.FlatFileStorage;
+import com.leonardobishop.playerskills2.storage.PlayerStorage;
 import com.leonardobishop.playerskills2.util.Utils;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
@@ -23,6 +25,7 @@ import java.util.function.Supplier;
 
 public class PlayerSkills extends BasePlugin {
     public static final Map<String, Supplier<FundingSource>> FUNDING_SOURCE_MAP = new CaseInsensitiveStringHashMap<>();
+    public static final Map<String, Supplier<PlayerStorage>> PLAYER_STORAGE_MAP = new CaseInsensitiveStringHashMap<>();
 
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final MainConfig mainConfig = new MainConfig(this);
@@ -40,6 +43,7 @@ public class PlayerSkills extends BasePlugin {
     public void preLoad() {
         FUNDING_SOURCE_MAP.put("XP", XPFundingSource::new);
         FUNDING_SOURCE_MAP.put("VAULT", VaultFundingSource::new);
+        PLAYER_STORAGE_MAP.put("FLAT_FILE", FlatFileStorage::new);
     }
 
     @Override
@@ -63,18 +67,19 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
-        registerListener(new PlayerListener(this));
+        registerListener(new PlayerListener());
     }
 
     @Override
     public void postEnable() {
         Utils.logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
+        Utils.logInfo("Use " + MainConfig.OPTIONS_PLAYER_STORAGE.getValue().getName() + " as player storage.");
     }
 
     @Override
     public void disable() {
         for (SPlayer player : SPlayer.getPlayers().values()) {
-            SPlayer.save(this, player);
+            SPlayer.save(player);
         }
         skillRegistrar.values().forEach(skill -> {
             skill.disable();

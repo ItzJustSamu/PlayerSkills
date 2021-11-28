@@ -1,20 +1,17 @@
 package com.leonardobishop.playerskills2.player;
 
-import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.util.Utils;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class SPlayer {
     private static final HashMap<UUID, SPlayer> players = new HashMap<>();
 
     private final UUID player;
-    private final HashMap<String, Integer> skills;
+    private final Map<String, Integer> skills;
     private int points;
 
     public SPlayer(UUID player) {
@@ -22,38 +19,9 @@ public class SPlayer {
         this.skills = new HashMap<>();
     }
 
-    public static SPlayer load(PlayerSkills plugin, UUID uuid) {
-        File users = new File(plugin.getDataFolder() + File.separator + "users");
-        if (!users.isDirectory()) {
-            boolean success = users.mkdirs();
-            if (success) {
-                Utils.logInfo("New folder for users created.");
-            } else {
-                Utils.logError("Error occurred creating users folder.");
-            }
-        }
-
-        File user = new File(users + File.separator + uuid + ".yml");
-        SPlayer sPlayer = new SPlayer(uuid);
-        if (user.exists()) {
-            YamlConfiguration data = YamlConfiguration.loadConfiguration(user);
-            if (data.contains("skills")) {
-                for (String s : data.getConfigurationSection("skills").getKeys(false)) {
-                    int level = data.getInt("skills." + s);
-                    sPlayer.getSkills().put(s, level);
-                }
-            }
-            int points = data.getInt("points");
-            sPlayer.setPoints(points);
-            if (MainConfig.isVerboseLogging()) {
-                Utils.logInfo("Loaded SPlayer from disk for " + uuid + ".");
-            }
-        } else if (MainConfig.isVerboseLogging()) {
-            Utils.logInfo("No SPlayer was found for " + uuid + " on disk. Creating new config...");
-        }
-
+    public static void load(UUID uuid) {
+        SPlayer sPlayer = MainConfig.OPTIONS_PLAYER_STORAGE.getValue().load(uuid);
         players.put(uuid, sPlayer);
-        return sPlayer;
     }
 
     public static SPlayer get(UUID uuid) {
@@ -64,49 +32,14 @@ public class SPlayer {
         players.remove(uuid);
     }
 
-    public static void save(PlayerSkills plugin, SPlayer sPlayer) {
+    public static void save(SPlayer sPlayer) {
         if (sPlayer == null) {
             if (MainConfig.isVerboseLogging()) {
                 Utils.logInfo("Plugin tried to save an SPlayer for a null player.");
             }
             return;
         }
-        File users = new File(plugin.getDataFolder() + File.separator + "users");
-        if (!users.isDirectory()) {
-            boolean success = users.mkdirs();
-            if (success) {
-                Utils.logInfo("New folder for users created.");
-            } else {
-                Utils.logError("Error occurred creating users folder.");
-            }
-        }
-
-        File user = new File(users + File.separator + sPlayer.getPlayer() + ".yml");
-        if (!user.exists()) {
-            try {
-                user.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Utils.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
-                return;
-            }
-        }
-        YamlConfiguration data = YamlConfiguration.loadConfiguration(user);
-        data.set("skills", null);
-        for (String s : sPlayer.getSkills().keySet()) {
-            data.set("skills." + s, sPlayer.getLevel(s));
-        }
-        data.set("points", sPlayer.getPoints());
-
-        try {
-            data.save(user);
-            if (MainConfig.isVerboseLogging()) {
-                Utils.logInfo("Saved SPlayer for " + sPlayer.getPlayer() + ".");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Utils.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
-        }
+        MainConfig.OPTIONS_PLAYER_STORAGE.getValue().save(sPlayer);
     }
 
     public static HashMap<UUID, SPlayer> getPlayers() {
@@ -117,7 +50,7 @@ public class SPlayer {
         return player;
     }
 
-    public HashMap<String, Integer> getSkills() {
+    public Map<String, Integer> getSkills() {
         return skills;
     }
 

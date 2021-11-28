@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Utils {
@@ -28,5 +29,9 @@ public final class Utils {
 
     public static void logError(String message) {
         logger.severe(message);
+    }
+
+    public static void logError(String message, Throwable throwable) {
+        logger.log(Level.SEVERE, message, throwable);
     }
 }

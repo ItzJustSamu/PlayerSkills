@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.XPFundingSource;
+import com.leonardobishop.playerskills2.storage.FlatFileStorage;
+import com.leonardobishop.playerskills2.storage.PlayerStorage;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import com.leonardobishop.playerskills2.util.path.ItemBuilderConfigPath;
 import com.leonardobishop.playerskills2.util.path.StringListConfigPath;
@@ -25,7 +27,24 @@ public class MainConfig extends PathableConfig {
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
+    public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(
+            new AdvancedConfigPath<String, PlayerStorage>("options.player-storage", new FlatFileStorage()) {
+                @Override
+                public @Nullable String getFromConfig(@NotNull Config config) {
+                    return config.getInstance(getPath(), String.class);
+                }
 
+                @Override
+                public @Nullable PlayerStorage convert(@NotNull String rawValue) {
+                    return PlayerSkills.PLAYER_STORAGE_MAP.getOrDefault(rawValue, FlatFileStorage::new).get();
+                }
+
+                @Override
+                public @Nullable String convertToRaw(@NotNull PlayerStorage value) {
+                    return value.getName();
+                }
+            }
+    );
     public static final StringConfigPath GUI_TITLE = new StringConfigPath("gui.title", "&6Skills");
     public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 27);
     public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);
