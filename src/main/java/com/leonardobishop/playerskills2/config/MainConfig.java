@@ -24,6 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
+import static com.leonardobishop.playerskills2.util.CommonStringReplacer.addDefaultReplacer;
+
 public class MainConfig extends PathableConfig {
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
@@ -146,11 +148,5 @@ public class MainConfig extends PathableConfig {
 
     public static boolean isVerboseLogging() {
         return OPTIONS_VERBOSE.getValue();
-    }
-
-    private static ItemBuilder addDefaultReplacer(ItemBuilder builder) {
-        return builder
-                .addStringReplacer("colorize", CommonStringReplacer.COLORIZE)
-                .addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES);
     }
 }

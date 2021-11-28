@@ -5,6 +5,7 @@ import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.config.SkillConfig;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.util.CommonStringReplacer;
 import com.leonardobishop.playerskills2.util.path.IntegerMapConfigPath;
 import com.leonardobishop.playerskills2.util.path.ItemBuilderConfigPath;
 import com.leonardobishop.playerskills2.util.path.StringListConfigPath;
@@ -56,7 +57,7 @@ public abstract class Skill implements Listener {
         this.pointPriceOverridesConfig = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
         pointPriceOverridesConfig.setConfig(config);
         getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(config));
-        ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
+        ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath("display", CommonStringReplacer.addDefaultReplacer(getDefaultItem()));
         itemBuilderConfigPath.setConfig(config);
         config.save();
 
