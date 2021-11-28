@@ -77,13 +77,13 @@ public class ResistanceSkill extends Skill {
     public String getPreviousString(SPlayer player) {
         int resistanceLevel = getLevel(player);
         double damage = 100 - (resistanceLevel * damageDrop.getValue());
-        return getPercentageFormat().format(damage) + "%";
+        return getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int resistanceLevel = getLevel(player) + 1;
         double damage = 100 - (resistanceLevel * damageDrop.getValue());
-        return getPercentageFormat().format(damage) + "%";
+        return getPercentageFormat().format(damage);
     }
 }
