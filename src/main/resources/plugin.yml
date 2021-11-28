@@ -4,5 +4,5 @@ version: ${project.version}
 main: com.leonardobishop.playerskills2.PlayerSkills
 author: lmbishop
 prefix: PlayerSkills2
-softdepend: [Vault, ProtocolLib]
+softdepend: [ Vault ]
 api-version: 1.13
