@@ -2,12 +2,12 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,6 +24,7 @@ import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 public class CriticalsSkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 4D);
     private final ConfigPath<Double> criticalMultiplier = Paths.doublePath("critical-multiplier", 1.5D);
+    private final ConfigPath<String> criticalMessage = Paths.stringPath("critical-message", "&a*** CRITICAL HIT ***");
 
     public CriticalsSkill(PlayerSkills plugin) {
         super(plugin, "Criticals", "criticals", 3, 14);
@@ -53,8 +55,9 @@ public class CriticalsSkill extends Skill {
         double chance = criticalLevel * percentIncrease.getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
-            if (!Config.get(super.getPlugin(), "messages.critical").getColoredString().equals("")) {
-                player.sendMessage(Config.get(super.getPlugin(), "messages.critical").getColoredString());
+            String message = criticalMessage.getValue();
+            if (!message.equals("")) {
+                MessageUtils.sendMessage(player, message, "");
             }
             event.setDamage(event.getDamage() * criticalMultiplier.getValue());
         }
@@ -63,6 +66,11 @@ public class CriticalsSkill extends Skill {
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Arrays.asList(percentIncrease, criticalMultiplier);
+    }
+
+    @Override
+    public List<ConfigPath<?>> getMessageConfigPaths() {
+        return Collections.singletonList(criticalMessage);
     }
 
     @Override

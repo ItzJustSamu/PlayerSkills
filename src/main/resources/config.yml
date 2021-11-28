@@ -94,8 +94,3 @@ options:
 # Configure messages
 messages:
   xp-symbol: "XP"
-  critical: "&a*** CRITICAL HIT ***"
-  dodge: "&a*** ATTACK DODGED ***"
-  bleeding-enemy: "&a*** ENEMY BLEEDING ***"
-  bleeding-self: "&c*** YOU ARE BLEEDING ***"
-  menu-world-restriction: "&cYou cannot modify your skills in your current location."

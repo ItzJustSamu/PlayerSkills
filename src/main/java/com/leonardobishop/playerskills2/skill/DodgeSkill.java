@@ -2,12 +2,12 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.Player;
@@ -22,6 +22,7 @@ import static com.leonardobishop.playerskills2.util.Utils.getPercentageFormat;
 
 public class DodgeSkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 2D);
+    private final ConfigPath<String> dodgeMessage = Paths.stringPath("dodge-message", "&a*** ATTACK DODGED ***");
 
     public DodgeSkill(PlayerSkills plugin) {
         super(plugin, "Dodge", "dodge", 6, 13);
@@ -52,8 +53,9 @@ public class DodgeSkill extends Skill {
         double chance = dodgeLevel * percentIncrease.getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
-            if (!Config.get(super.getPlugin(), "messages.dodge").getColoredString().equals("")) {
-                player.sendMessage(Config.get(super.getPlugin(), "messages.dodge").getColoredString());
+            String message = dodgeMessage.getValue();
+            if (!message.equals("")) {
+                MessageUtils.sendMessage(player, message, "");
             }
             event.setCancelled(true);
         }
@@ -62,6 +64,11 @@ public class DodgeSkill extends Skill {
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Collections.singletonList(percentIncrease);
+    }
+
+    @Override
+    public List<ConfigPath<?>> getMessageConfigPaths() {
+        return Collections.singletonList(dodgeMessage);
     }
 
     @Override

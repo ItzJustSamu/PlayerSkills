@@ -3,6 +3,7 @@ package com.leonardobishop.playerskills2;
 import com.leonardobishop.playerskills2.command.SkillsAdminCommand;
 import com.leonardobishop.playerskills2.command.SkillsCommand;
 import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.VaultFundingSource;
 import com.leonardobishop.playerskills2.fundingsource.XPFundingSource;
@@ -11,20 +12,30 @@ import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
-import org.bukkit.Bukkit;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 public class PlayerSkills extends BasePlugin {
-
+    private final MessageConfig messageConfig = new MessageConfig(this);
     private final HashMap<String, Skill> skillRegistrar = new HashMap<>();
     private FundingSource fundingSource;
     private boolean verboseLogging;
 
     public FundingSource getFundingSource() {
         return fundingSource;
+    }
+
+    public MessageConfig getMessageConfig() {
+        return messageConfig;
+    }
+
+    @Override
+    public void load() {
+        MessageUtils.setPrefix(MessageConfig.PREFIX::getValue);
+        messageConfig.setup();
     }
 
     @Override
@@ -59,10 +70,10 @@ public class PlayerSkills extends BasePlugin {
                         return new VaultFundingSource(this);
                     } else {
                         logInfo("Initialised with the players XP as the skill point funding source.");
-                        return new XPFundingSource(this);
+                        return new XPFundingSource();
                     }
                 })
-                .orElseGet(() -> new XPFundingSource(this));
+                .orElseGet(XPFundingSource::new);
     }
 
     @Override
@@ -81,10 +92,9 @@ public class PlayerSkills extends BasePlugin {
         if (isSkillDisabled(skill)) {
             return;
         }
-        skill.setup();
         skillRegistrar.put(skill.getConfigName(), skill);
+        skill.setup();
         skill.enable();
-        Bukkit.getPluginManager().registerEvents(skill, this);
     }
 
     public boolean isSkillDisabled(Skill skill) {

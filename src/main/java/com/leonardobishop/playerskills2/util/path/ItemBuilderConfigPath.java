@@ -1,11 +1,11 @@
 package com.leonardobishop.playerskills2.util.path;
 
+import com.leonardobishop.playerskills2.util.CommonStringReplacer;
 import com.leonardobishop.playerskills2.util.modifier.HideAttributesModifier;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.AmountModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.AdvancedConfigPath;
 import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,8 @@ public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object
             itemBuilder.addItemModifier(new NameModifier().setName(String.valueOf(rawValue.get("name"))));
         }
         itemBuilder.addItemModifier(new HideAttributesModifier());
-        itemBuilder.addStringReplacer("colorize", (original, uuid) -> MessageUtils.colorize(original));
+        itemBuilder.addStringReplacer("colorize", CommonStringReplacer.COLORIZE);
+        itemBuilder.addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES);
         return itemBuilder;
     }
 

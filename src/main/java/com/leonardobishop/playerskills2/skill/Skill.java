@@ -2,6 +2,7 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.config.SkillConfig;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.util.path.IntegerMapConfigPath;
@@ -11,6 +12,7 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.StickyConfigPath;
 import me.hsgamer.hscore.config.path.Paths;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -59,13 +61,6 @@ public abstract class Skill implements Listener {
         config.save();
 
         this.displayItem = itemBuilderConfigPath.getValue();
-        displayItem.addStringReplacer("player-properties", (original, uuid) -> {
-            SPlayer sPlayer = SPlayer.get(uuid);
-            int price = sPlayer.getNextPointPrice(plugin);
-            return original.replace("{price}", Integer.toString(price))
-                    .replace("{symbol}", plugin.getFundingSource().getSymbol(price))
-                    .replace("{points}", Integer.toString(sPlayer.getPoints()));
-        });
         displayItem.addStringReplacer("skill-properties", (original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
@@ -83,9 +78,21 @@ public abstract class Skill implements Listener {
                     .replace("{max}", Integer.toString(maxLevel));
             return original;
         });
+
+        List<ConfigPath<?>> messageConfigPaths = getMessageConfigPaths();
+        if (!messageConfigPaths.isEmpty()) {
+            MessageConfig messageConfig = plugin.getMessageConfig();
+            messageConfigPaths.forEach(configPath -> configPath.setConfig(messageConfig));
+            messageConfig.save();
+        }
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     public abstract List<ConfigPath<?>> getAdditionalConfigPaths();
+
+    public List<ConfigPath<?>> getMessageConfigPaths() {
+        return Collections.emptyList();
+    }
 
     public abstract ItemBuilder getDefaultItem();
 

@@ -3,8 +3,10 @@ package com.leonardobishop.playerskills2.command;
 import com.leonardobishop.playerskills2.Permissions;
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.Config;
+import com.leonardobishop.playerskills2.config.MessageConfig;
 import com.leonardobishop.playerskills2.menu.SkillsMenu;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,8 +39,8 @@ public class SkillsCommand extends Command {
 
         if (!Config.get(plugin, "options.menu-world-restriction").isNull()) {
             List<String> listOfWorlds = Config.get(plugin, "options.menu-world-restriction").getStringList();
-            if (!listOfWorlds.contains(player.getLocation().getWorld().getName())) {
-                player.sendMessage(Config.get(plugin, "messages.menu-world-restriction").getColoredString());
+            if (!listOfWorlds.contains(player.getWorld().getName())) {
+                MessageUtils.sendMessage(player, MessageConfig.MENU_WORLD_RESTRICTION.getValue());
                 return true;
             }
         }

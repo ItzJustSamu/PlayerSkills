@@ -142,7 +142,7 @@ public class SPlayer {
         this.points = points;
     }
 
-    public int getNextPointPrice(PlayerSkills plugin) {
+    public int getNextPointPrice() {
         int base = Config.get(plugin, "points.price").getInt();
         if (Config.get(plugin, "points.dynamic-price.enabled").getBoolean()) {
             int points = getPoints();

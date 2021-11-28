@@ -1,9 +1,9 @@
 package com.leonardobishop.playerskills2.config;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import com.leonardobishop.playerskills2.util.path.ItemBuilderConfigPath;
 import com.leonardobishop.playerskills2.util.path.StringListConfigPath;
-import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;

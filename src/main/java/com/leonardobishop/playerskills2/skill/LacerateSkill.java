@@ -2,12 +2,12 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
-import com.leonardobishop.playerskills2.config.Config;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.ConfigPath;
 import me.hsgamer.hscore.config.path.Paths;
 import org.bukkit.entity.LivingEntity;
@@ -32,6 +32,8 @@ public class LacerateSkill extends Skill {
     private final ConfigPath<Long> bleedInterval = Paths.longPath("bleed-interval", 50L);
     private final ConfigPath<Integer> bleedDamage = Paths.integerPath("bleed-damage", 2);
     private final ConfigPath<Boolean> applyToNonPlayers = Paths.booleanPath("apply-to-non-players", false);
+    private final ConfigPath<String> bleedingEnemy = Paths.stringPath("bleeding-enemy-message", "&a*** ENEMY BLEEDING ***");
+    private final ConfigPath<String> bleedingSelf = Paths.stringPath("bleeding-self-message", "&c*** YOU ARE BLEEDING ***");
 
     private final HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
 
@@ -68,11 +70,13 @@ public class LacerateSkill extends Skill {
 
             bleed(victim);
 
-            if (!Config.get(super.getPlugin(), "messages.bleeding-enemy").getColoredString().equals("")) {
-                player.sendMessage(Config.get(super.getPlugin(), "messages.bleeding-enemy").getColoredString());
+            String message = bleedingEnemy.getValue();
+            if (!message.equals("")) {
+                MessageUtils.sendMessage(player, message, "");
             }
-            if (!Config.get(super.getPlugin(), "messages.bleeding-self").getColoredString().equals("")) {
-                victim.sendMessage(Config.get(super.getPlugin(), "messages.bleeding-self").getColoredString());
+            String victimMesssage = bleedingSelf.getValue();
+            if (!victimMesssage.equals("")) {
+                MessageUtils.sendMessage(victim, victimMesssage, "");
             }
         }
     }
@@ -130,6 +134,11 @@ public class LacerateSkill extends Skill {
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Arrays.asList(percentIncrease, bleedCycles, bleedInterval, bleedDamage, applyToNonPlayers);
+    }
+
+    @Override
+    public List<ConfigPath<?>> getMessageConfigPaths() {
+        return Arrays.asList(bleedingEnemy, bleedingSelf);
     }
 
     @Override
