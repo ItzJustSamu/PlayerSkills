@@ -6,7 +6,6 @@ import com.leonardobishop.playerskills2.fundingsource.FundingSource;
 import com.leonardobishop.playerskills2.fundingsource.XPFundingSource;
 import com.leonardobishop.playerskills2.storage.FlatFileStorage;
 import com.leonardobishop.playerskills2.storage.PlayerStorage;
-import com.leonardobishop.playerskills2.util.CommonStringReplacer;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import com.leonardobishop.playerskills2.util.path.ItemBuilderConfigPath;
 import com.leonardobishop.playerskills2.util.path.StringListConfigPath;
@@ -23,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-
-import static com.leonardobishop.playerskills2.util.CommonStringReplacer.addDefaultReplacer;
 
 public class MainConfig extends PathableConfig {
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
@@ -52,38 +49,36 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 27);
     public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);
     public static final ConfigPath<ItemBuilder> GUI_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.background.display",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&r"))
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
-                    .addStringReplacer("colorize", CommonStringReplacer.COLORIZE)
-                    .addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES))
     ));
     public static final StringConfigPath GUI_PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath("gui.placeholders.skill-price-max", "--");
     public static final StringConfigPath GUI_PLACEHOLDERS_NEXT_MAX = new StringConfigPath("gui.placeholders.next-max", "--");
     public static final IntegerConfigPath GUI_INFO_SLOT = new IntegerConfigPath("gui.info.slot", 3);
     public static final ConfigPath<ItemBuilder> GUI_INFO_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.info.display",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cInformation"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
                             "&cSkill points &7can be bought using XP or money.",
                             "&7These points can be used to upgrade &cskills.",
                             "&7Each skill has its own individual perk."
-                    )))
+                    ))
     ));
     public static final IntegerConfigPath GUI_POINTS_SLOT = new IntegerConfigPath("gui.points.slot", 4);
     public static final ConfigPath<ItemBuilder> GUI_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.points.display",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cSkill Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
                     .addItemModifier(new LoreModifier().setLore(
                             "&7You have &e{points} &7points.",
                             "&eLeft-Click &7to purchase a skill point for &e{price} {symbol}&7."
-                    )))
+                    ))
     ));
     public static final IntegerConfigPath GUI_RESET_SLOT = new IntegerConfigPath("gui.reset.slot", 5);
     public static final ConfigPath<ItemBuilder> GUI_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.reset.display",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cReset"))
                     .addItemModifier(new XMaterialModifier(XMaterial.TNT))
                     .addItemModifier(new LoreModifier().setLore(
@@ -92,7 +87,7 @@ public class MainConfig extends PathableConfig {
                             "&7Other skill points invested in existing skills will be refunded.",
                             "",
                             "&cThis action is irreversible."
-                    )))
+                    ))
     ));
 
     public static final BooleanConfigPath GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS = new BooleanConfigPath("gui-confirmation.enabled.purchase-skills", false);
@@ -101,21 +96,21 @@ public class MainConfig extends PathableConfig {
     public static final StringConfigPath GUI_CONFIRMATION_TITLE = new StringConfigPath("gui-confirmation.title", "Are you sure?");
     public static final BooleanConfigPath GUI_CONFIRMATION_BACKGROUND_ENABLED = new BooleanConfigPath("gui-confirmation.background.enabled", true);
     public static final ConfigPath<ItemBuilder> GUI_CONFIRMATION_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui-confirmation.background.display",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&r"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE)))
+                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
     public static final ConfigPath<ItemBuilder> GUI_CONFIRMATION_ACCEPT = new StickyConfigPath<>(new ItemBuilderConfigPath("gui-confirmation.accept",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&a&lConfirm"))
                     .addItemModifier(new XMaterialModifier(XMaterial.LIME_STAINED_GLASS_PANE))
-                    .addItemModifier(new LoreModifier().setLore("&7Confirm action.")))
+                    .addItemModifier(new LoreModifier().setLore("&7Confirm action."))
     ));
     public static final ConfigPath<ItemBuilder> GUI_CONFIRMATION_DENY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui-confirmation.deny",
-            addDefaultReplacer(new ItemBuilder()
+            new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&c&lDecline"))
                     .addItemModifier(new XMaterialModifier(XMaterial.RED_STAINED_GLASS_PANE))
-                    .addItemModifier(new LoreModifier().setLore("&7Decline and return to the previous menu.")))
+                    .addItemModifier(new LoreModifier().setLore("&7Decline and return to the previous menu."))
     ));
 
     public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 1);

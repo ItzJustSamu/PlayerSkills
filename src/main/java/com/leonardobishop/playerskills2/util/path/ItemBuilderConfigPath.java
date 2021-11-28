@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object>, ItemBuilder> {
     public ItemBuilderConfigPath(@NotNull String path, @Nullable ItemBuilder def) {
-        super(path, def);
+        super(path, def != null ? CommonStringReplacer.addDefaultReplacer(def) : null);
     }
 
     @Override
