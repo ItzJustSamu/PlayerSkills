@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object>, ItemBuilder> {
     public ItemBuilderConfigPath(@NotNull String path, @Nullable ItemBuilder def) {
@@ -23,7 +24,9 @@ public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object
 
     @Override
     public @Nullable Map<String, Object> getFromConfig(@NotNull Config config) {
-        return config.getNormalizedValues(getPath(), false);
+        return Optional.of(config.getNormalizedValues(getPath(), false))
+                .filter(map -> !map.isEmpty())
+                .orElse(null);
     }
 
     @Override
