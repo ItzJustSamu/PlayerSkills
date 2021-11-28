@@ -2,6 +2,7 @@ package com.leonardobishop.playerskills2.player;
 
 import com.leonardobishop.playerskills2.PlayerSkills;
 import com.leonardobishop.playerskills2.config.MainConfig;
+import com.leonardobishop.playerskills2.util.Utils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -10,14 +11,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class SPlayer {
-
-    // ******************************
-    // STATIC
-    // ******************************
     private static final HashMap<UUID, SPlayer> players = new HashMap<>();
-    // ******************************
-    // INSTANCE
-    // ******************************
+
     private final UUID player;
     private final HashMap<String, Integer> skills;
     private int points;
@@ -32,9 +27,9 @@ public class SPlayer {
         if (!users.isDirectory()) {
             boolean success = users.mkdirs();
             if (success) {
-                plugin.logInfo("New folder for users created.");
+                Utils.logInfo("New folder for users created.");
             } else {
-                plugin.logError("Error occurred creating users folder.");
+                Utils.logError("Error occurred creating users folder.");
             }
         }
 
@@ -50,11 +45,11 @@ public class SPlayer {
             }
             int points = data.getInt("points");
             sPlayer.setPoints(points);
-            if (plugin.isVerboseLogging()) {
-                plugin.logInfo("Loaded SPlayer from disk for " + uuid + ".");
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logInfo("Loaded SPlayer from disk for " + uuid + ".");
             }
-        } else if (plugin.isVerboseLogging()) {
-            plugin.logInfo("No SPlayer was found for " + uuid + " on disk. Creating new config...");
+        } else if (MainConfig.isVerboseLogging()) {
+            Utils.logInfo("No SPlayer was found for " + uuid + " on disk. Creating new config...");
         }
 
         players.put(uuid, sPlayer);
@@ -71,8 +66,8 @@ public class SPlayer {
 
     public static void save(PlayerSkills plugin, SPlayer sPlayer) {
         if (sPlayer == null) {
-            if (plugin.isVerboseLogging()) {
-                plugin.logInfo("Plugin tried to save an SPlayer for a null player.");
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logInfo("Plugin tried to save an SPlayer for a null player.");
             }
             return;
         }
@@ -80,9 +75,9 @@ public class SPlayer {
         if (!users.isDirectory()) {
             boolean success = users.mkdirs();
             if (success) {
-                plugin.logInfo("New folder for users created.");
+                Utils.logInfo("New folder for users created.");
             } else {
-                plugin.logError("Error occurred creating users folder.");
+                Utils.logError("Error occurred creating users folder.");
             }
         }
 
@@ -92,7 +87,7 @@ public class SPlayer {
                 user.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                plugin.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
+                Utils.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
                 return;
             }
         }
@@ -105,12 +100,12 @@ public class SPlayer {
 
         try {
             data.save(user);
-            if (plugin.isVerboseLogging()) {
-                plugin.logInfo("Saved SPlayer for " + sPlayer.getPlayer() + ".");
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logInfo("Saved SPlayer for " + sPlayer.getPlayer() + ".");
             }
         } catch (IOException e) {
             e.printStackTrace();
-            plugin.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
+            Utils.logError("Error occurred creating user save for " + sPlayer.getPlayer() + ". Aborting.");
         }
     }
 

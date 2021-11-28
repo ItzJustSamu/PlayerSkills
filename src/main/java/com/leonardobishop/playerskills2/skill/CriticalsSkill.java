@@ -2,7 +2,9 @@ package com.leonardobishop.playerskills2.skill;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.leonardobishop.playerskills2.PlayerSkills;
+import com.leonardobishop.playerskills2.config.MainConfig;
 import com.leonardobishop.playerskills2.player.SPlayer;
+import com.leonardobishop.playerskills2.util.Utils;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
@@ -44,8 +46,8 @@ public class CriticalsSkill extends Skill {
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
         if (sPlayer == null) {
-            if (super.getPlugin().isVerboseLogging()) {
-                super.getPlugin().logError("Failed event. SPlayer for " + player.getUniqueId() + " is null.");
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logError("Failed event. SPlayer for " + player.getUniqueId() + " is null.");
             }
             return;
         }

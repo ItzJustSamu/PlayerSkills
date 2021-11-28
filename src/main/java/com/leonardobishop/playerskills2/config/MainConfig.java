@@ -121,4 +121,8 @@ public class MainConfig extends PathableConfig {
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
     }
+
+    public static boolean isVerboseLogging() {
+        return OPTIONS_VERBOSE.getValue();
+    }
 }

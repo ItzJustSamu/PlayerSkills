@@ -11,6 +11,7 @@ import com.leonardobishop.playerskills2.listener.PlayerListener;
 import com.leonardobishop.playerskills2.menu.MenuController;
 import com.leonardobishop.playerskills2.player.SPlayer;
 import com.leonardobishop.playerskills2.skill.*;
+import com.leonardobishop.playerskills2.util.Utils;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
@@ -67,7 +68,7 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void postEnable() {
-        logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
+        Utils.logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
     }
 
     @Override
@@ -92,22 +93,10 @@ public class PlayerSkills extends BasePlugin {
     }
 
     public boolean isSkillDisabled(Skill skill) {
-        return getConfig().contains("disabled-skills") && getConfig().getStringList("disabled-skills").contains(skill.getConfigName());
-    }
-
-    public boolean isVerboseLogging() {
-        return MainConfig.OPTIONS_VERBOSE.getValue();
+        return MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getConfigName());
     }
 
     public Map<String, Skill> getSkillRegistrar() {
         return skillRegistrar;
-    }
-
-    public void logInfo(String message) {
-        getLogger().info(message);
-    }
-
-    public void logError(String message) {
-        getLogger().severe(message);
     }
 }
