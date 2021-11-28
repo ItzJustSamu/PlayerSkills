@@ -21,12 +21,12 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
 public class MainConfig extends PathableConfig {
-    public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
+    public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", new ArrayList<>());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
-    public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
+    public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", new ArrayList<>());
     public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(
             new AdvancedConfigPath<String, PlayerStorage>("options.player-storage", new FlatFileStorage()) {
                 @Override
