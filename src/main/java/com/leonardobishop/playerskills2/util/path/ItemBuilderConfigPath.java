@@ -5,7 +5,9 @@ import com.leonardobishop.playerskills2.util.modifier.HideAttributesModifier;
 import com.leonardobishop.playerskills2.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.AmountModifier;
+import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.AdvancedConfigPath;
 import me.hsgamer.hscore.config.Config;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +45,9 @@ public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object
         }
         if (rawValue.containsKey("name")) {
             itemBuilder.addItemModifier(new NameModifier().setName(String.valueOf(rawValue.get("name"))));
+        }
+        if (rawValue.containsKey("lore")) {
+            itemBuilder.addItemModifier(new LoreModifier().setLore(CollectionUtils.createStringListFromObject(rawValue.get("lore"), false)));
         }
         itemBuilder.addItemModifier(new HideAttributesModifier());
         itemBuilder.addStringReplacer("colorize", CommonStringReplacer.COLORIZE);
