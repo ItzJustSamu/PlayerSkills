@@ -12,7 +12,8 @@ public final class CommonStringReplacer {
         int price = sPlayer.getNextPointPrice();
         return original.replace("{price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
-                .replace("{points}", Integer.toString(sPlayer.getPoints()));
+                .replace("{points}", Integer.toString(sPlayer.getPoints()))
+                .replace("{reset-points}", Integer.toString(MainConfig.POINTS_RESET_PRICE.getValue()));
     };
 
     private CommonStringReplacer() {

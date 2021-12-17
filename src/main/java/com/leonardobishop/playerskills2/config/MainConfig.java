@@ -83,7 +83,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.TNT))
                     .addItemModifier(new LoreModifier().setLore(
                             "&eLeft-Click &7to completely reset your skills.",
-                            "&7This costs &e1 &7skill point.",
+                            "&7This costs &e{reset-points} &7skill point.",
                             "&7Other skill points invested in existing skills will be refunded.",
                             "",
                             "&cThis action is irreversible."

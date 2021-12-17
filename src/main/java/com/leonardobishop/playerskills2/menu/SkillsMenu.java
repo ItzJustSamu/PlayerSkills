@@ -52,7 +52,7 @@ public class SkillsMenu implements Menu {
         for (Skill skill : plugin.getSkillRegistrar().values()) {
             if (slot == skill.getGuiSlot() && (skill.getLevel(sPlayer) < skill.getMaxLevel())) {
                 int price = skill.getPriceOverride(skill.getLevel(sPlayer) + 1);
-                if ((sPlayer.getPoints() >= price)) {
+                if (sPlayer.getPoints() >= price) {
                     Runnable callback = () -> {
                         sPlayer.setLevel(skill.getConfigName(), skill.getLevel(sPlayer) + 1);
                         sPlayer.setPoints(sPlayer.getPoints() - price);
