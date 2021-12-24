@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class SkillsMenu implements Menu {
 
@@ -24,7 +25,7 @@ public class SkillsMenu implements Menu {
     }
 
     @Override
-    public Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         String title = MessageUtils.colorize(MainConfig.GUI_TITLE.getValue());
         int size = MainConfig.GUI_SIZE.getValue();
 
