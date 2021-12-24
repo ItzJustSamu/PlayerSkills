@@ -8,6 +8,7 @@ import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.*;
 import me.hsgamer.hscore.config.path.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.IntegerConfigPath;
+import me.hsgamer.hscore.config.path.LongConfigPath;
 import me.hsgamer.hscore.config.path.StringConfigPath;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.fundingsource.FundingSource;
@@ -45,6 +46,9 @@ public class MainConfig extends PathableConfig {
                 }
             }
     );
+    public static final LongConfigPath OPTIONS_AUTO_SAVE_TICKS = new LongConfigPath("options.auto-save.ticks", 1000L);
+    public static final BooleanConfigPath OPTIONS_AUTO_SAVE_ASYNC = new BooleanConfigPath("options.auto-save.async", true);
+
     public static final StringConfigPath GUI_TITLE = new StringConfigPath("gui.title", "&6Skills");
     public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 27);
     public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);

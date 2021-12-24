@@ -19,7 +19,9 @@ import me.hsgamer.playerskills2.storage.PlayerStorage;
 import me.hsgamer.playerskills2.util.Utils;
 import org.bukkit.event.HandlerList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -74,6 +76,25 @@ public class PlayerSkills extends BasePlugin {
     public void postEnable() {
         Utils.logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
         Utils.logInfo("Use " + MainConfig.OPTIONS_PLAYER_STORAGE.getValue().getName() + " as player storage.");
+        this.startAutoSaveTask();
+    }
+
+    private void startAutoSaveTask() {
+        long ticks = MainConfig.OPTIONS_AUTO_SAVE_TICKS.getValue();
+        if (ticks >= 0) {
+            boolean async = MainConfig.OPTIONS_AUTO_SAVE_ASYNC.getValue();
+            Runnable runnable = () -> {
+                List<SPlayer> list = new ArrayList<>(SPlayer.getPlayers().values());
+                for (SPlayer player : list) {
+                    SPlayer.save(player);
+                }
+            };
+            if (async) {
+                getServer().getScheduler().runTaskTimerAsynchronously(this, runnable, ticks, ticks);
+            } else {
+                getServer().getScheduler().runTaskTimer(this, runnable, ticks, ticks);
+            }
+        }
     }
 
     @Override
