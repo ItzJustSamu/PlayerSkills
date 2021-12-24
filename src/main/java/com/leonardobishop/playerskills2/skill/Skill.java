@@ -45,7 +45,7 @@ public abstract class Skill implements Listener {
         this.config = new SkillConfig(this);
     }
 
-    public void setup() {
+    public final void setup() {
         config.setup();
         this.maxLevelConfig = Paths.integerPath("max-level", defaultMaxLevel);
         maxLevelConfig.setConfig(config);
