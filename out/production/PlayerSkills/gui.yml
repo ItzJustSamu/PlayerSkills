@@ -1,0 +1,130 @@
+gui:
+  title: '&9Your skills'
+  size: 3
+  reset-enabled: true
+  display:
+    strength-normal:
+      material: 'IRON_SWORD'
+      name: '&2Strength: &e%strength%'
+      slot: 11
+      lore:
+      - '&9Increase damage by &e%strengthincrement%'
+      - ''
+      - '%strengthprogress%'
+      - ''
+    criticals-normal:
+      material: 'BLAZE_POWDER'
+      name: '&2Criticals: &e%criticals%'
+      slot: 12
+      lore:
+      - '&9Increase critical damage by &e%criticalsincrement%'
+      - ''
+      - '%criticalsprogress%'
+      - ''
+    resistance-normal:
+      material: 'IRON_CHESTPLATE'
+      name: '&2Resistance: &e%resistance%'
+      slot: 13
+      lore:
+      - '&9Decrease damage from all attacks by &e%resistanceincrement%'
+      - ''
+      - '%resistanceprogress%'
+      - ''
+    archery-normal:
+      material: 'BOW'
+      name: '&2Archery: &e%archery%'
+      slot: 14
+      lore:
+      - '&9Increase arrow damage by &e%archeryincrement%'
+      - ''
+      - '%archeryprogress%'
+      - ''
+    health-normal:
+      material: 'APPLE'
+      name: '&2Health: &e%health%'
+      slot: 15
+      lore:
+      - '&9Increase health points by &e%healthincrement%'
+      - ''
+      - '%healthprogress%'
+      - ''
+    reset-strength:
+      material: 'BARRIER'
+      name: '&cReset this skill'
+      slot: 20
+      lore:
+      - '&7Reset this skill to'
+      - '&7level 1 and have all skill'
+      - '&7points spent on this skill'
+      - '&7reset.'
+    reset-criticals:
+      material: 'BARRIER'
+      name: '&cReset this skill'
+      slot: 21
+      lore:
+      - '&7Reset this skill to'
+      - '&7level 1 and have all skill'
+      - '&7points spent on this skill'
+      - '&7reset.'
+    reset-resistance:
+      material: 'BARRIER'
+      name: '&cReset this skill'
+      slot: 22
+      lore:
+      - '&7Reset this skill to'
+      - '&7level 1 and have all skill'
+      - '&7points spent on this skill'
+      - '&7reset.'
+    reset-archery:
+      material: 'BARRIER'
+      name: '&cReset this skill'
+      slot: 23
+      lore:
+      - '&7Reset this skill to'
+      - '&7level 1 and have all skill'
+      - '&7points spent on this skill'
+      - '&7reset.'
+    reset-health:
+      material: 'BARRIER'
+      name: '&cReset this skill'
+      slot: 24
+      lore:
+      - '&7Reset this skill to'
+      - '&7level 1 and have all skill'
+      - '&7points spent on this skill'
+      - '&7reset.'
+    reset-all:
+      material: 'TNT'
+      name: '&c&lReset everything'
+      slot: 5
+      lore:
+      - '&7Reset EVERYTHING'
+      - '&7You will NOT be refunded.'
+    stats:
+      material: 'PAPER'
+      name: '&2%username%''s stats'
+      slot: 3
+      lore:
+      - '&9Expierence progress: &eL%expierencelevel%'
+      - '&e%expierencebar%'
+      - ''
+      - '&9Strength points spend: &e%strength-points-spend%'
+      - '&9Criticals points spend: &e%criticals-points-spend%'
+      - '&9Resistance points spend: &e%resistance-points-spend%'
+      - '&9Archery points spend: &e%archery-points-spend%'
+      - '&9Health points spend: &e%health-points-spend%'
+      - ''
+      - '&9Total points/spent: &e%totalspent%'
+    points-purchase:
+      material: 'BOOK'
+      name: '&2Skill Points: &e%points%'
+      slot: 4
+      lore:
+      - '&eRight Click &7- Buy 1 for &e%pointsprice% &7level(s).'
+      - ''
+      - '&7These are your skill points.'
+      - '&7You can use these skill points'
+      - '&7to spend them on individual skills.'
+      - '&7You can spend your experience levels'
+      - '&7for skill points.'
+      right-click: true

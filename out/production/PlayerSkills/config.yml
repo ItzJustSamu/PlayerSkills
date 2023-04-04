@@ -1,0 +1,43 @@
+check-update: false
+holograms:
+  use: false
+  location: null
+  lines:
+    - "-- &c%player_name% &fSkills Stat --"
+    - " "
+    - "Strength level is: &a%strength_lvl%"
+    - "Criticals level is: &a%criticals_lvl%"
+    - "Archery level is: &a%archery_lvl%"
+    - "Health level is: &a%health_lvl%"
+    - "Resistance level is: &a%resistance_lvl%"
+points:
+  restriction: false
+  restriction-per: 10
+xp:
+  price: 1
+  add-total-to-price: true
+  add-total-to-price-multiplier: 1
+permissions:
+  use: true
+  level-perms: true
+skills:
+  strength:
+    increment: 8
+    max-level: 8
+  criticals:
+    increment: 5
+    max-level: 10
+  resistance:
+    increment: 8
+    max-level: 8
+  archery:
+    increment: 5
+    max-level: 10
+  health:
+    increment: 2
+    max-level: 6
+admin-notification: false
+worlds:
+  restricted: false
+  allowed-worlds:
+  - world
