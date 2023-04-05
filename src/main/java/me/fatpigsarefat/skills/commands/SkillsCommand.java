@@ -1,42 +1,31 @@
-/*    */ package me.fatpigsarefat.skills.commands;
-/*    */ import me.fatpigsarefat.skills.listeners.InventoryClick;
+package me.fatpigsarefat.skills.commands;
+
 import me.fatpigsarefat.skills.PlayerSkills;
-/*    */ import me.fatpigsarefat.skills.helper.MessageHelper;
-/*    */
-/*    */
+import me.fatpigsarefat.skills.helper.MessageHelper;
+import me.fatpigsarefat.skills.listeners.InventoryClick;
 import org.bukkit.ChatColor;
-/*    */ import org.bukkit.command.Command;
-/*    */ import org.bukkit.command.CommandExecutor;
-/*    */ import org.bukkit.command.CommandSender;
-/*    */ import org.bukkit.command.TabCompleter;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
-/*    */
-/*    */ public class SkillsCommand implements CommandExecutor, TabCompleter {
-/*    */   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-/* 13 */     MessageHelper messageHelper = new MessageHelper();
-/* 14 */     if (!cmd.getName().equalsIgnoreCase("me/fatpigsarefat/skills") || !(sender instanceof Player)) {
-/* 15 */       return false;
-/*    */     }
-/* 17 */     Player player = (Player)sender;
-/* 18 */     if (PlayerSkills.instance.getConfig().getBoolean("worlds.restricted") && !PlayerSkills.instance.getConfig().getStringList("worlds.allowed-worlds").contains(player.getLocation().getWorld().getName())) {
-/* 19 */       player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageHelper.getMessage("deny_message", new String[0])));
-/* 20 */       return true;
-/*    */     } 
-/* 22 */     InventoryClick.reconstructInventory(player, true);
-/* 23 */     return true;
-/*    */   }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
+public class SkillsCommand implements CommandExecutor {
+    public SkillsCommand() {
     }
-    /*    */ }
 
-
-/* Location:              C:\Users\jessl\Downloads\PlayerSkills.jar!\me\fatpigsarefat\skills\commands\SkillsCommand.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
- */
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        MessageHelper messageHelper = new MessageHelper();
+        if (cmd.getName().equalsIgnoreCase("skills") && sender instanceof Player) {
+            Player player = (Player)sender;
+            if (PlayerSkills.instance.getConfig().getBoolean("worlds.restricted") && !PlayerSkills.instance.getConfig().getStringList("worlds.allowed-worlds").contains(player.getLocation().getWorld().getName())) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageHelper.getMessage("deny_message", new String[0])));
+                return true;
+            } else {
+                InventoryClick.reconstructInventory(player, true);
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+}

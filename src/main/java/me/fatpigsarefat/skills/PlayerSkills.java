@@ -1,5 +1,7 @@
 package me.fatpigsarefat.skills;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import me.fatpigsarefat.skills.commands.SkillsAdminCommand;
 import me.fatpigsarefat.skills.commands.SkillsCommand;
 import me.fatpigsarefat.skills.listeners.EntityDamage;
@@ -18,16 +20,10 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.HashMap;
 
 public class PlayerSkills extends JavaPlugin {
     private boolean availableUpdate = false;
@@ -36,8 +32,95 @@ public class PlayerSkills extends JavaPlugin {
     public static FileManager fileManager;
     public static SkillManager skillManager;
     public static HologramManager hologramManager;
-    public static HashMap<Skill, Integer> skillMultipliers = new HashMap<>();
-    public static HashMap<Player, PotionEffect> potionEffect = new HashMap<>();
+    public static HashMap<Skill, Integer> skillMultipliers = new HashMap();
+    public static HashMap<Player, PotionEffect> potionEffect = new HashMap();
+    public static boolean allowReset = true;
+
+    public PlayerSkills() {
+    }
+
+    public void onEnable() {
+        instance = this;
+        fileManager = new FileManager(this);
+        fileManager.AddConfig("config");
+        fileManager.AddConfig("messages");
+        fileManager.AddConfig("gui");
+        fileManager.AddConfig("data");
+        skillManager = new SkillManager();
+        if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
+            try {
+                CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(SkillsTrait.class).withName("playerskills"));
+                this.getLogger().info("Successfully hooked into Citizens.");
+            } catch (NoClassDefFoundError | NullPointerException var4) {
+                this.getLogger().info("An error occured when trying to register a trait. Your Citizens version might not be supported.");
+            }
+        } else {
+            this.getLogger().info("Citizens not found. NPCs will not be available.");
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
+            try {
+                hologramManager = new HologramManager();
+                useHolograms = fileManager.getConfig("config").get().getBoolean("holograms.use");
+                this.getLogger().info("Successfully hooked into HolographicDisplays.");
+            } catch (NoClassDefFoundError | NullPointerException var3) {
+                this.getLogger().info("An error occured when trying to register. Your HolographicDisplays version might not be supported.");
+            }
+        } else {
+            this.getLogger().info("HolographicDisplays not found. Holograms will not be available.");
+        }
+
+        Bukkit.getPluginManager().registerEvents(new InventoryClick(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDamage(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new UpgradeSkill(), this);
+        Bukkit.getPluginManager().registerEvents(new ResetSkill(), this);
+        Bukkit.getPluginCommand("skills").setExecutor(new SkillsCommand());
+        Bukkit.getPluginCommand("skillsadmin").setExecutor(new SkillsAdminCommand());
+        this.checkIfHealth();
+        Iterator var1 = fileManager.getConfig("config").get().getConfigurationSection("skills").getKeys(false).iterator();
+
+        while(var1.hasNext()) {
+            String s = (String)var1.next();
+            skillMultipliers.put(Skill.getSkillByName(s), this.getConfig().getInt("skills." + s + ".increment"));
+        }
+
+        allowReset = fileManager.getConfig("gui").get().getBoolean("gui.reset-enabled");
+        this.checkUpdates((Player)null);
+    }
+
+    public void checkIfHealth() {
+        BukkitScheduler healthCheck = this.getServer().getScheduler();
+        healthCheck.scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getHealth() > player.getMaxHealth()) {
+                        player.setHealth(player.getMaxHealth());
+                    }
+                }
+            }
+        }, 10L, 10L);
+    }
+
+    public void checkUpdates(Player player) {
+        if (fileManager.getConfig("config").get().getBoolean("check-update")) {
+            (new UpdateChecker(this, 59383)).getVersion((version) -> {
+                this.availableUpdate = !this.getDescription().getVersion().equalsIgnoreCase(version);
+                String string = "[PlayerSkillsReborn] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at bit.ly/3oIG0RR" : "Looks like you have the latest version installed!");
+                if (player != null) {
+                    if (player.hasPermission("admin")) {
+                        player.sendMessage(string);
+                    }
+                } else {
+                    Bukkit.getConsoleSender().sendMessage(string);
+                }
+
+            });
+        }
+
+    }
 
     public static PlayerSkills getInstance() {
         return instance;
@@ -61,140 +144,5 @@ public class PlayerSkills extends JavaPlugin {
 
     public static HashMap<Player, PotionEffect> getPotionEffect() {
         return potionEffect;
-    }
-
-    public static boolean allowReset = true;
-
-    public void onEnable() {
-        instance = this;
-        fileManager = new FileManager(this);
-        fileManager.AddConfig("config");
-        fileManager.AddConfig("messages");
-        fileManager.AddConfig("gui");
-        fileManager.AddConfig("data");
-        skillManager = new SkillManager();
-
-        if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
-            try {
-                CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(SkillsTrait.class).withName("playerskills"));
-                getLogger().info("Successfully hooked into Citizens.");
-            } catch (NullPointerException | NoClassDefFoundError ex) {
-                getLogger().info("An error occured when trying to register a trait. Your Citizens version might not be supported.");
-            }
-        } else {
-            getLogger().info("Citizens not found. NPCs will not be available.");
-        }
-
-        if (Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
-            try {
-                hologramManager = new HologramManager();
-                useHolograms = fileManager.getConfig("config").get().getBoolean("holograms.use");
-                /*  72 */
-                getLogger().info("Successfully hooked into HolographicDisplays.");
-                /*     */
-            }
-            /*  74 */ catch (NullPointerException | NoClassDefFoundError ex) {
-                /*  75 */
-                getLogger().info("An error occured when trying to register. Your HolographicDisplays version might not be supported.");
-                /*     */
-            }
-            /*     */
-        } else {
-            /*     */
-            /*  79 */
-            getLogger().info("HolographicDisplays not found. Holograms will not be available.");
-            /*     */
-        }
-        /*     */
-        /*  82 */
-        Bukkit.getPluginManager().registerEvents((Listener) new InventoryClick(), (Plugin) this);
-        /*  83 */
-        Bukkit.getPluginManager().registerEvents((Listener) new EntityDamageByEntity(), (Plugin) this);
-        /*  84 */
-        Bukkit.getPluginManager().registerEvents((Listener) new EntityDamage(), (Plugin) this);
-        /*  85 */
-        Bukkit.getPluginManager().registerEvents((Listener) new PlayerListener(), (Plugin) this);
-        /*  86 */
-        Bukkit.getPluginManager().registerEvents((Listener) new UpgradeSkill(), (Plugin) this);
-        /*  87 */
-        Bukkit.getPluginManager().registerEvents((Listener) new ResetSkill(), (Plugin) this);
-        /*  88 */
-        Bukkit.getPluginCommand("me/fatpigsarefat/skills").setExecutor((CommandExecutor) new SkillsCommand());
-        /*  89 */
-        Bukkit.getPluginCommand("skillsadmin").setExecutor((CommandExecutor) new SkillsAdminCommand());
-        /*  90 */
-        checkIfHealth();
-        /*  91 */
-        for (String s : fileManager.getConfig("config").get().getConfigurationSection("me/fatpigsarefat/skills").getKeys(false)) {
-            /*  92 */
-            skillMultipliers.put(Skill.getSkillByName(s), Integer.valueOf(getConfig().getInt("skills." + s + ".increment")));
-            /*     */
-        }
-        /*  94 */
-        allowReset = fileManager.getConfig("gui").get().getBoolean("gui.reset-enabled");
-        /*  95 */
-        checkUpdates((Player) null);
-        /*     */
-    }
-
-    /*     */
-    /*     */
-    public void checkIfHealth() {
-        BukkitScheduler healthCheck = getServer().getScheduler();
-        healthCheck.scheduleSyncRepeatingTask((Plugin) this, new Runnable() {
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    int level = PlayerSkills.getSkillManager().getSkillLevel(player, Skill.HEALTH) - 1;
-                    int additionalEffects = 0;
-                    PotionEffect hb = null;
-                    for (PotionEffect effect : player.getActivePotionEffects()) {
-                        if (effect.getType().toString().equals("PotionEffectType[21, HEALTH_BOOST]")) {
-                            hb = effect;
-                            additionalEffects += 4 * (effect.getAmplifier() + 1);
-                        }
-                    }
-                    if (PlayerSkills.fileManager.getConfig("config").get().getBoolean("worlds.restricted")
-                            && !PlayerSkills.fileManager.getConfig("config").get().getStringList("worlds.allowed-worlds").contains(player.getLocation().getWorld().getName())) {
-                        if (player.getMaxHealth() != (20 + additionalEffects)) {
-                            player.setMaxHealth(20.0D);
-                            player.sendMessage("max health set");
-                        }
-                        continue;
-                    }
-                    if (player.getMaxHealth() != (20 + level + additionalEffects)) {
-                        player.setMaxHealth((20 + level + additionalEffects));
-                        if (player.hasPotionEffect(PotionEffectType.HEALTH_BOOST)) {
-                            PlayerSkills.potionEffect.put(player, hb);
-                            player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-                            continue;
-                        }
-                        if (PlayerSkills.potionEffect.containsKey(player)) {
-                            player.addPotionEffect(PlayerSkills.potionEffect.get(player));
-                            PlayerSkills.potionEffect.remove(player);
-                        }
-                    }
-                }
-            }
-        }, 10L, 10L);
-    }
-
-    public void checkUpdates(Player player) {
-        if (fileManager.getConfig("config").get().getBoolean("check-update")) {
-            (new UpdateChecker(this, 59383)).getVersion(version -> {
-                boolean availableUpdate = !getDescription().getVersion().equalsIgnoreCase(version);
-                sendMessage(player, availableUpdate);
-            });
-        }
-    }
-
-    private void sendMessage(Player player, boolean availableUpdate) {
-        String message = "[PlayerSkillsReborn] " + (availableUpdate
-                ? ("Found a new available version! " + ChatColor.DARK_GREEN + "Download at bit.ly/3oIG0RR")
-                : "Looks like you have the latest version installed!");
-        if (player != null && player.hasPermission("admin")) {
-            player.sendMessage(message);
-        } else {
-            Bukkit.getConsoleSender().sendMessage(message);
-        }
     }
 }

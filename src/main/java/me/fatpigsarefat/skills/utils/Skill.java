@@ -1,37 +1,29 @@
-/*    */ package me.fatpigsarefat.skills.utils;
-/*    */ 
-/*    */ public enum Skill
-/*    */ {
-/*  5 */   STRENGTH,
-/*  6 */   CRITICALS,
-/*  7 */   RESISTANCE,
-/*  8 */   ARCHERY,
-/*  9 */   HEALTH;
-/*    */   
-/*    */   public static Skill getSkillByName(String s) {
-/* 12 */     switch (s) {
-/*    */       case "strength":
-/* 14 */         return STRENGTH;
-/*    */       
-/*    */       case "criticals":
-/* 17 */         return CRITICALS;
-/*    */       
-/*    */       case "resistance":
-/* 20 */         return RESISTANCE;
-/*    */       
-/*    */       case "archery":
-/* 23 */         return ARCHERY;
-/*    */       
-/*    */       case "health":
-/* 26 */         return HEALTH;
-/*    */     } 
-/*    */     
-/* 29 */     return null;
-/*    */   }
-/*    */ }
+package me.fatpigsarefat.skills.utils;
 
+public enum Skill {
+    STRENGTH,
+    CRITICALS,
+    RESISTANCE,
+    ARCHERY,
+    HEALTH;
 
-/* Location:              C:\Users\jessl\Downloads\PlayerSkills.jar!\me\fatpigsarefat\skill\\utils\Skill.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
- */
+    private Skill() {
+    }
+
+    public static Skill getSkillByName(String s) {
+        switch (s) {
+            case "strength":
+                return STRENGTH;
+            case "criticals":
+                return CRITICALS;
+            case "resistance":
+                return RESISTANCE;
+            case "archery":
+                return ARCHERY;
+            case "health":
+                return HEALTH;
+            default:
+                return null;
+        }
+    }
+}
