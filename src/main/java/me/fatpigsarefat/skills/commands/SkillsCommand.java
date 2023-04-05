@@ -8,10 +8,13 @@ import org.bukkit.ChatColor;
 /*    */ import org.bukkit.command.Command;
 /*    */ import org.bukkit.command.CommandExecutor;
 /*    */ import org.bukkit.command.CommandSender;
-/*    */ import org.bukkit.entity.Player;
+/*    */ import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /*    */
-/*    */ public class SkillsCommand implements CommandExecutor {
+/*    */ public class SkillsCommand implements CommandExecutor, TabCompleter {
 /*    */   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 /* 13 */     MessageHelper messageHelper = new MessageHelper();
 /* 14 */     if (!cmd.getName().equalsIgnoreCase("me/fatpigsarefat/skills") || !(sender instanceof Player)) {
@@ -25,7 +28,12 @@ import org.bukkit.ChatColor;
 /* 22 */     InventoryClick.reconstructInventory(player, true);
 /* 23 */     return true;
 /*    */   }
-/*    */ }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return null;
+    }
+    /*    */ }
 
 
 /* Location:              C:\Users\jessl\Downloads\PlayerSkills.jar!\me\fatpigsarefat\skills\commands\SkillsCommand.class

@@ -5,6 +5,7 @@ me\fatpigsarefat\skills\helper\MessageHelper.class
 me\fatpigsarefat\skills\managers\ConfigurationManager.class
 me\fatpigsarefat\skills\utils\LocationUtil.class
 me\fatpigsarefat\skills\commands\SkillsCommand.class
+me\fatpigsarefat\skills\managers\HologramManager.class
 me\fatpigsarefat\skills\managers\SkillManager.class
 me\fatpigsarefat\skills\events\UpgradeSkillEvent.class
 me\fatpigsarefat\skills\listeners\ResetSkill.class
