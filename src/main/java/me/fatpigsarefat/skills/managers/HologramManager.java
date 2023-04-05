@@ -1,18 +1,18 @@
 package me.fatpigsarefat.skills.managers;
 
+import me.fatpigsarefat.skills.PlayerSkills;
+import me.fatpigsarefat.skills.utils.LocationUtil;
+import me.fatpigsarefat.skills.utils.Skill;
 import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
 import me.filoghost.holographicdisplays.api.hologram.Hologram;
-import me.filoghost.holographicdisplays.api.hologram.line.HologramLine;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.UUID;
-import me.fatpigsarefat.skills.PlayerSkills;
-import me.fatpigsarefat.skills.utils.LocationUtil;
-import me.fatpigsarefat.skills.utils.Skill;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public class HologramManager {
     private HashMap<UUID, Hologram> holograms = new HashMap();
@@ -34,9 +34,8 @@ public class HologramManager {
 
     public void show(Player player) {
         if (this.holoLocation != null) {
-            Hologram hologram = HologramsAPI.createHologram(PlayerSkills.getInstance(), this.holoLocation);
-            hologram.getVisibilityManager().setVisibleByDefault(false);
-            hologram.getVisibilityManager().showTo(player);
+            Hologram hologram = (Hologram) HolographicDisplaysAPI.get(PlayerSkills.getInstance());
+            hologram.getVisibilitySettings().isVisibleTo(player);
             this.holograms.put(player.getUniqueId(), hologram);
             this.update(player);
         }
@@ -45,7 +44,7 @@ public class HologramManager {
 
     public void remove(Player player) {
         if (this.holograms.containsKey(player.getUniqueId())) {
-            ((Hologram)this.holograms.get(player.getUniqueId())).getVisibilityManager().resetVisibility(player);
+            ((Hologram)this.holograms.get(player.getUniqueId())).getVisibilitySettings().isVisibleTo(player);
             this.holograms.remove(player.getUniqueId());
         }
 
@@ -60,13 +59,13 @@ public class HologramManager {
     public void update(Player player) {
         if (this.holograms.containsKey(player.getUniqueId())) {
             Hologram hologram = (Hologram)this.holograms.get(player.getUniqueId());
-            hologram.clearLines();
+            hologram.getLines();
             Iterator var3 = this.config.get().getStringList("holograms.lines").iterator();
 
             while(var3.hasNext()) {
                 String line = (String)var3.next();
                 String linePlaceholder = line.replace("%player_name%", player.getName()).replace("&", "§").replace("%strength_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.STRENGTH) + "").replace("%criticals_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.CRITICALS) + "").replace("%archery_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.ARCHERY) + "").replace("%health_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.HEALTH) + "").replace("%resistance_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.RESISTANCE) + "");
-                hologram.appendTextLine(linePlaceholder);
+                hologram.getLines();
             }
         }
 
