@@ -14,9 +14,7 @@
 /*    */   @EventHandler(priority = EventPriority.MONITOR)
 /*    */   public void onPlayerJoin(PlayerJoinEvent e) {
 /* 16 */     PlayerSkills.getInstance().checkUpdates(e.getPlayer());
-/* 17 */     if (PlayerSkills.useHolograms) {
-/* 18 */       PlayerSkills.getHologramManager().show(e.getPlayer());
-/*    */     }
+/*    */
 /*    */   }
 /*    */   
 /*    */   @EventHandler(priority = EventPriority.MONITOR)
@@ -24,9 +22,7 @@
 /* 24 */     if (PlayerSkills.potionEffect.containsKey(e.getPlayer())) {
 /* 25 */       PlayerSkills.potionEffect.remove(e.getPlayer());
 /*    */     }
-/* 27 */     if (PlayerSkills.useHolograms) {
-/* 28 */       PlayerSkills.getHologramManager().remove(e.getPlayer());
-/*    */     }
+/*    */
 /*    */   }
 /*    */   
 /*    */   @EventHandler(priority = EventPriority.MONITOR)

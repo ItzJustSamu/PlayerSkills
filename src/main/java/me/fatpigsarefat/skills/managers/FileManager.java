@@ -1,12 +1,12 @@
 /*     */ package me.fatpigsarefat.skills.managers;
-/*     */ import java.io.File;
-/*     */ import java.io.IOException;
-/*     */ import java.io.InputStreamReader;
-/*     */ import java.io.Reader;
-/*     */ import java.util.HashMap;
-/*     */ import org.bukkit.configuration.Configuration;
-/*     */ import org.bukkit.configuration.file.YamlConfiguration;
-/*     */ import org.bukkit.plugin.java.JavaPlugin;
+/*     */
+
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.*;
+import java.util.HashMap;
 /*     */ 
 /*     */ public class FileManager {
 /*     */   private JavaPlugin plugin;

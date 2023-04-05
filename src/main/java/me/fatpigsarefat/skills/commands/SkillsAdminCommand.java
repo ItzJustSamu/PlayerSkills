@@ -1,19 +1,15 @@
 /*     */ package me.fatpigsarefat.skills.commands;
-/*     */ import me.fatpigsarefat.skills.helper.MessageHelper;
-import me.fatpigsarefat.skills.managers.SkillManager;
+/*     */
+
 import me.fatpigsarefat.skills.PlayerSkills;
-/*     */
-/*     */
-/*     */ import me.fatpigsarefat.skills.utils.LocationUtil;
-/*     */ import me.fatpigsarefat.skills.utils.Skill;
-/*     */
+import me.fatpigsarefat.skills.helper.MessageHelper;
+import me.fatpigsarefat.skills.managers.SkillManager;
+import me.fatpigsarefat.skills.utils.Skill;
 import org.bukkit.Bukkit;
-/*     */ import org.bukkit.Location;
-/*     */ import org.bukkit.OfflinePlayer;
-/*     */ import org.bukkit.command.Command;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-/*     */ import org.bukkit.entity.Player;
 
 /*     */
 /*     */ public class SkillsAdminCommand implements CommandExecutor {
@@ -36,40 +32,12 @@ import org.bukkit.command.CommandSender;
 /*     */     } 
 /*  31 */     if (length == 2 && args[0].equalsIgnoreCase("reload")) {
 /*  32 */       PlayerSkills.getFileManager().reloadConfig(args[1]);
-/*     */       
-/*  34 */       if (args[1].equals("config")) {
-/*  35 */         PlayerSkills.useHolograms = PlayerSkills.getFileManager().getConfig("config").get().getBoolean("holograms.use");
-/*     */         
-/*  37 */         for (Player player : Bukkit.getOnlinePlayers()) {
-/*  38 */           if (PlayerSkills.useHolograms) {
-/*  39 */             PlayerSkills.getHologramManager().clearUpdate(player); continue;
-/*     */           } 
-/*  41 */           PlayerSkills.getHologramManager().remove(player);
-/*     */         } 
-/*     */       } 
+/*     */
 /*     */       
 /*  45 */       sender.sendMessage(messages.getMessage("config_reload", new String[] { args[1] }));
 /*  46 */       return true;
 /*     */     } 
-/*     */     
-/*  49 */     if (args[0].equalsIgnoreCase("sethologram")) {
-/*  50 */       if (PlayerSkills.useHolograms) {
-/*  51 */         Location holoLoc = ((Player)sender).getLocation();
-/*  52 */         holoLoc.setY((holoLoc.getBlockY() + 2));
-/*  53 */         PlayerSkills.getFileManager().getConfig("config").set("holograms.location", LocationUtil.toString(holoLoc));
-/*  54 */         PlayerSkills.getFileManager().getConfig("config").save();
-/*     */         
-/*  56 */         for (Player pl : Bukkit.getOnlinePlayers()) {
-/*  57 */           PlayerSkills.getHologramManager().clearUpdate(pl);
-/*     */         }
-/*     */         
-/*  60 */         sender.sendMessage(messages.getMessage("hologram_set", new String[] { LocationUtil.toString(holoLoc) }));
-/*     */       } else {
-/*  62 */         sender.sendMessage(messages.getMessage("hologram_disabled", new String[0]));
-/*     */       } 
-/*  64 */       return true;
-/*     */     } 
-/*     */     
+/*     */
 /*  67 */     if (length == 3 && args[0].equalsIgnoreCase("givepoints")) {
 /*  68 */       OfflinePlayer ofp = Bukkit.getOfflinePlayer(args[1]);
 /*  69 */       if (!ofp.hasPlayedBefore()) {
