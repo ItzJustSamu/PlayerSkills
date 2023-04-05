@@ -1,0 +1,15 @@
+name: PlayerSkillsReborn
+version: 1.0
+description: Skills
+author: [fatpigsarefat, oRIOn_Tx]
+main: me.fatpigsarefat.skills.PlayerSkills
+softdepend: [Citizens, HolographicDisplays]
+commands:
+  skills:
+    description: View skills
+    usage: /skills
+    aliases: [skill]
+  skillsadmin:
+    description: Skills admin
+    usage: /skillsadmin
+    aliases: [skilladmin]
