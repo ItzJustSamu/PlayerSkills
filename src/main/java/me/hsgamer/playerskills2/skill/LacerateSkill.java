@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
@@ -18,13 +20,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BooleanSupplier;
 
 import static me.hsgamer.playerskills2.util.Utils.getPercentageFormat;
 
@@ -37,7 +40,7 @@ public class LacerateSkill extends Skill {
     private final ConfigPath<String> bleedingEnemy = Paths.stringPath("bleeding-enemy-message", "&a*** ENEMY BLEEDING ***");
     private final ConfigPath<String> bleedingSelf = Paths.stringPath("bleeding-self-message", "&c*** YOU ARE BLEEDING ***");
 
-    private final HashMap<LivingEntity, BukkitTask> cutEntities = new HashMap<>();
+    private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
         super(plugin, "Lacerate", "lacerate", 4, 23);
@@ -87,50 +90,42 @@ public class LacerateSkill extends Skill {
         if (cutEntities.containsKey(player)) {
             return;
         }
-        BukkitTask bt = new BukkitRunnable() {
+        BooleanSupplier runnable = new BooleanSupplier() {
             int times = 0;
 
             @Override
-            public void run() {
+            public boolean getAsBoolean() {
                 player.damage(bleedDamage.getValue(), null);
                 times++;
                 if (times >= bleedCycles.getValue()) {
                     cutEntities.remove(player);
-                    try {
-                        this.cancel();
-                    } catch (Exception ignored) {
-                        // cancelled check throws error in 1.8
-                    }
+                    return false;
                 }
+                return true;
             }
-        }.runTaskTimer(getPlugin(), bleedInterval.getValue(), bleedInterval.getValue());
-        cutEntities.put(player, bt);
+        };
+        Task task = Scheduler.CURRENT.runEntityTaskTimer(getPlugin(), player, runnable, bleedInterval.getValue(), bleedInterval.getValue(), false);
+        cutEntities.put(player, task);
+    }
+
+    private void cancelTask(LivingEntity livingEntity) {
+        Optional.ofNullable(cutEntities.get(livingEntity)).ifPresent(task -> {
+            try {
+                task.cancel();
+            } catch (Exception ignored) {
+                // IGNORED
+            }
+        });
     }
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        if (cutEntities.containsKey(event.getEntity())) {
-            BukkitTask bt = cutEntities.get(event.getEntity());
-            try {
-                bt.cancel();
-            } catch (Exception ignored) {
-                // cancelled check throws error in 1.8
-            }
-            cutEntities.remove(event.getEntity());
-        }
+        cancelTask(event.getEntity());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        if (cutEntities.containsKey(event.getPlayer())) {
-            BukkitTask bt = cutEntities.get(event.getPlayer());
-            try {
-                bt.cancel();
-            } catch (Exception ignored) {
-                // cancelled check throws error in 1.8
-            }
-            cutEntities.remove(event.getPlayer());
-        }
+        cancelTask(event.getPlayer());
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.playerskills2.PlayerSkills;
@@ -17,8 +19,6 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class HealthSkill extends Skill {
     private final ConfigPath<Integer> extraHealthPerLevel = Paths.integerPath("extra-health-per-level", 1);
     private final ConfigPath<Boolean> compatibilityMode = Paths.booleanPath("compatibility-mode", false);
     private final Map<UUID, Integer> knownMaxHealth = new IdentityHashMap<>();
-    private BukkitTask task;
+    private Task task;
 
     public HealthSkill(PlayerSkills plugin) {
         super(plugin, "Health", "health", 5, 22);
@@ -34,36 +34,33 @@ public class HealthSkill extends Skill {
 
     @Override
     public void enable() {
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    UUID uuid = player.getUniqueId();
-                    SPlayer sPlayer = SPlayer.get(uuid);
-                    if (sPlayer == null) {
-                        if (MainConfig.isVerboseLogging()) {
-                            Utils.logError("Failed event. SPlayer for " + uuid + " is null.");
-                        }
-                        continue;
+        Runnable runnable = () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                UUID uuid = player.getUniqueId();
+                SPlayer sPlayer = SPlayer.get(uuid);
+                if (sPlayer == null) {
+                    if (MainConfig.isVerboseLogging()) {
+                        Utils.logError("Failed event. SPlayer for " + uuid + " is null.");
                     }
-                    if (isWorldNotAllowed(player)) {
-                        clearPlayer(player);
-                        return;
-                    }
-                    int hpNeeded = (getLevel(sPlayer) * (extraHealthPerLevel.getValue() * 2));
-                    if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
-                        clearPlayer(player);
-                        if (hpNeeded > 0) {
-                            knownMaxHealth.put(player.getUniqueId(), hpNeeded);
-                            clearModifier(player);
-                            addNewHealth(player, hpNeeded);
-                        }
+                    continue;
+                }
+                if (isWorldNotAllowed(player)) {
+                    clearPlayer(player);
+                    return;
+                }
+                int hpNeeded = (getLevel(sPlayer) * (extraHealthPerLevel.getValue() * 2));
+                if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
+                    clearPlayer(player);
+                    if (hpNeeded > 0) {
+                        knownMaxHealth.put(player.getUniqueId(), hpNeeded);
+                        clearModifier(player);
+                        addNewHealth(player, hpNeeded);
                     }
                 }
             }
         };
         long tick = compatibilityMode.getValue() ? 1L : 20L;
-        task = runnable.runTaskTimer(getPlugin(), tick, tick);
+        task = Scheduler.CURRENT.runTaskTimer(getPlugin(), runnable, tick, tick, false);
     }
 
     @Override

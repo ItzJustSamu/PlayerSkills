@@ -1,6 +1,7 @@
 package me.hsgamer.playerskills2;
 
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
 import me.hsgamer.playerskills2.command.SkillsAdminCommand;
@@ -91,11 +92,7 @@ public class PlayerSkills extends BasePlugin {
                     SPlayer.save(player);
                 }
             };
-            if (async) {
-                getServer().getScheduler().runTaskTimerAsynchronously(this, runnable, ticks, ticks);
-            } else {
-                getServer().getScheduler().runTaskTimer(this, runnable, ticks, ticks);
-            }
+            Scheduler.CURRENT.runTaskTimer(this, runnable, ticks, ticks, async);
         }
     }
 

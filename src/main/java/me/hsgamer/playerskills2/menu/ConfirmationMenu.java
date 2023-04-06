@@ -1,5 +1,6 @@
 package me.hsgamer.playerskills2.menu;
 
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.config.MainConfig;
@@ -76,7 +77,7 @@ public class ConfirmationMenu implements Menu {
     @Override
     public void onClose() {
         if (superMenu != null) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> superMenu.open(player));
+            Scheduler.CURRENT.runEntityTask(plugin, player, () -> superMenu.open(player), false);
         }
     }
 
