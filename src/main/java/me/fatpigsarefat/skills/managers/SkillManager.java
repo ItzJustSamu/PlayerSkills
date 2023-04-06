@@ -59,7 +59,6 @@ public class SkillManager {
     }
 
     public int getPointPrice(Player player) {
-        int xpPrice = true;
         int xpPrice = this.config.get().getInt("xp.price");
         if (this.config.get().getBoolean("xp.add-total-to-price")) {
             xpPrice += this.getTotalPointsSpent(player) * this.config.get().getInt("xp.add-total-to-price-multiplier");

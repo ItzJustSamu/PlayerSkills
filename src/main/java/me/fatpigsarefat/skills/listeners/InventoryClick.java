@@ -95,11 +95,6 @@ public class InventoryClick implements Listener {
         SkillManager sm = PlayerSkills.getSkillManager();
         ConfigurationManager cm = new ConfigurationManager();
         Inventory inv = Bukkit.createInventory((InventoryHolder)null, gui.get().getInt("gui.size") * 9, ChatColor.translateAlternateColorCodes('&', gui.get().getString("gui.title")));
-        int strength = true;
-        int criticals = true;
-        int resistance = true;
-        int archery = true;
-        int health = true;
         int strength = sm.getSkillLevel(player, Skill.STRENGTH);
         int criticals = sm.getSkillLevel(player, Skill.CRITICALS);
         int resistance = sm.getSkillLevel(player, Skill.RESISTANCE);

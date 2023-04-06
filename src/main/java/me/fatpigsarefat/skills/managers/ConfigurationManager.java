@@ -20,21 +20,19 @@ public class ConfigurationManager {
 
     public ItemStack getItemStack(String s, Player player) {
         String pathRoot = "gui.display." + s + ".";
-        String name = ChatColor.translateAlternateColorCodes('&', (String)Objects.requireNonNull(this.gui.get().getString(pathRoot + "name")));
+        String name = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.gui.get().getString(pathRoot + "name")));
         name = this.placeholder(name, player);
-        ArrayList<String> lore = new ArrayList();
+        ArrayList<String> lore = new ArrayList<>();
         if (this.gui.get().contains(pathRoot + "lore")) {
-            Iterator var6 = this.gui.get().getStringList(pathRoot + "lore").iterator();
 
-            while(var6.hasNext()) {
-                String key = (String)var6.next();
+            for (String key : this.gui.get().getStringList(pathRoot + "lore")) {
                 key = ChatColor.translateAlternateColorCodes('&', key);
                 key = this.placeholder(key, player);
                 lore.add(key);
             }
         }
 
-        ItemStack itemToGive = new ItemStack((Material)Objects.requireNonNull(Material.getMaterial((String)Objects.requireNonNull(this.gui.get().getString(pathRoot + "material")))));
+        ItemStack itemToGive = new ItemStack(Objects.requireNonNull(Material.getMaterial((String)Objects.requireNonNull(this.gui.get().getString(pathRoot + "material")))));
         ItemMeta itemToGiveMeta = itemToGive.getItemMeta();
         itemToGiveMeta.setDisplayName(name);
         itemToGiveMeta.setLore(lore);
@@ -44,11 +42,6 @@ public class ConfigurationManager {
 
     private String placeholder(String s, Player player) {
         SkillManager sm = PlayerSkills.getSkillManager();
-        int strength = true;
-        int criticals = true;
-        int resistance = true;
-        int archery = true;
-        int health = true;
         int strength = sm.getSkillLevel(player, Skill.STRENGTH);
         int criticals = sm.getSkillLevel(player, Skill.CRITICALS);
         int resistance = sm.getSkillLevel(player, Skill.RESISTANCE);
@@ -116,7 +109,6 @@ public class ConfigurationManager {
             s = s.replace("%healthprogress%", ChatColor.GREEN.toString() + xpPrice + "HP " + ChatColor.GRAY + " >>>   " + ChatColor.GREEN + healthSkillAfter + "HP");
         }
 
-        int xpPrice = true;
         xpPrice = this.config.get().getInt("xp.price");
         if (this.config.get().getBoolean("xp.add-total-to-price")) {
             xpPrice += sm.getTotalPointsSpent(player) * this.config.get().getInt("xp.add-total-to-price-multiplier");
