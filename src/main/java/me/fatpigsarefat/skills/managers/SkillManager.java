@@ -6,15 +6,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public class SkillManager {
-    private FileManager.Config data = PlayerSkills.getFileManager().getConfig("data");
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
+    private final FileManager.Config data = PlayerSkills.getFileManager().getConfig("data");
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
 
     public SkillManager() {
     }
 
     public int getSkillLevel(Player player, Skill skill) {
-        return this.data.get().contains(player.getUniqueId() + "." + skill.toString()) ? this.data.get().getInt(player.getUniqueId() + "." + skill.toString()) : 1;
+        return this.data.get().contains(player.getUniqueId() + "." + skill.toString()) ? this.data.get().getInt(player.getUniqueId() + "." + skill) : 1;
     }
 
     public int getSkillPoints(Player player) {
@@ -28,8 +30,7 @@ public class SkillManager {
         int resistance = this.getSkillLevel(player, Skill.RESISTANCE) - 1;
         int archery = this.getSkillLevel(player, Skill.ARCHERY) - 1;
         int health = this.getSkillLevel(player, Skill.HEALTH) - 1;
-        int total = points + damage + criticals + resistance + archery + health;
-        return total;
+        return points + damage + criticals + resistance + archery + health;
     }
 
     public void setSkillPoints(Player player, int points) {
@@ -46,7 +47,7 @@ public class SkillManager {
         if (!player.hasPlayedBefore()) {
             return 1;
         } else {
-            return this.data.get().contains(player.getUniqueId() + "." + skill.toString()) ? this.data.get().getInt(player.getUniqueId() + "." + skill.toString()) : 1;
+            return this.data.get().contains(player.getUniqueId() + "." + skill.toString()) ? this.data.get().getInt(player.getUniqueId() + "." + skill) : 1;
         }
     }
 
@@ -68,12 +69,10 @@ public class SkillManager {
     }
 
     public void resetAll(Player player) {
-        this.setSkillPoints((Player)player, 0);
-        this.setSkillLevel((Player)player, Skill.HEALTH, 1);
-        this.setSkillLevel((Player)player, Skill.ARCHERY, 1);
-        this.setSkillLevel((Player)player, Skill.RESISTANCE, 1);
-        this.setSkillLevel((Player)player, Skill.CRITICALS, 1);
-        this.setSkillLevel((Player)player, Skill.STRENGTH, 1);
+        this.setSkillPoints(player, 0);
+        for (Skill skill : Arrays.asList(Skill.HEALTH, Skill.ARCHERY, Skill.RESISTANCE, Skill.CRITICALS, Skill.STRENGTH)) {
+            this.setSkillLevel(player, skill, 1);
+        }
     }
 
     public void buySkillPoint(Player player) {
@@ -92,8 +91,7 @@ public class SkillManager {
             int resistance = this.getSkillLevel(player, Skill.RESISTANCE) - 1;
             int archery = this.getSkillLevel(player, Skill.ARCHERY) - 1;
             int health = this.getSkillLevel(player, Skill.HEALTH) - 1;
-            int total = points + damage + criticals + resistance + archery + health;
-            return total;
+            return points + damage + criticals + resistance + archery + health;
         }
     }
 

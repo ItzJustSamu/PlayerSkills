@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FileManager {
-    private JavaPlugin plugin;
-    private HashMap<String, Config> configs = new HashMap();
+    private final JavaPlugin plugin;
+    private final HashMap<String, Config> configs = new HashMap<>();
 
     public FileManager(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -25,24 +26,21 @@ public class FileManager {
     }
 
     public Config getConfig(String name) {
-        return this.configs.containsKey(name) ? (Config)this.configs.get(name) : null;
+        return this.configs.getOrDefault(name, null);
     }
 
     public Config saveConfig(String name, boolean copyDefaults) {
         return this.getConfig(name).copyDefaults(copyDefaults).save();
     }
 
-    public boolean reloadConfig(String name) {
+    public void reloadConfig(String name) {
         if (this.getConfig(name) != null) {
             this.getConfig(name).reload();
-            return true;
-        } else {
-            return false;
         }
     }
 
     public class Config {
-        private String name;
+        private final String name;
         private File file;
         private YamlConfiguration config;
 
@@ -60,10 +58,8 @@ public class FileManager {
                     var2.printStackTrace();
                 }
 
-                return this;
-            } else {
-                return this;
             }
+            return this;
         }
 
         public YamlConfiguration get() {
@@ -80,7 +76,7 @@ public class FileManager {
             return this;
         }
 
-        public Config reload() {
+        public void reload() {
             if (this.file == null) {
                 this.file = new File(FileManager.this.plugin.getDataFolder(), this.name);
             }
@@ -88,16 +84,12 @@ public class FileManager {
             this.config = YamlConfiguration.loadConfiguration(this.file);
 
             try {
-                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), "UTF8");
-                if (defConfigStream != null) {
-                    YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-                    this.config.setDefaults(defConfig);
-                }
-            } catch (UnsupportedEncodingException var3) {
-            } catch (NullPointerException var4) {
+                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), StandardCharsets.UTF_8);
+                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+                this.config.setDefaults(defConfig);
+            } catch (NullPointerException ignored) {
             }
 
-            return this;
         }
 
         public Config copyDefaults(boolean force) {
@@ -105,9 +97,8 @@ public class FileManager {
             return this;
         }
 
-        public Config set(String key, Object value) {
+        public void set(String key, Object value) {
             this.get().set(key, value);
-            return this;
         }
 
         public Object get(String key) {

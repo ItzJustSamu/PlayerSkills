@@ -9,8 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class UpdateChecker {
-    private JavaPlugin plugin;
-    private int resourceId;
+    private final JavaPlugin plugin;
+    private final int resourceId;
 
     public UpdateChecker(JavaPlugin plugin, int resourceId) {
         this.plugin = plugin;
@@ -35,16 +35,14 @@ public class UpdateChecker {
                         var5 = var30;
                         throw var30;
                     } finally {
-                        if (scanner != null) {
-                            if (var5 != null) {
-                                try {
-                                    scanner.close();
-                                } catch (Throwable var29) {
-                                    var5.addSuppressed(var29);
-                                }
-                            } else {
+                        if (var5 != null) {
+                            try {
                                 scanner.close();
+                            } catch (Throwable var29) {
+                                var5.addSuppressed(var29);
                             }
+                        } else {
+                            scanner.close();
                         }
 
                     }

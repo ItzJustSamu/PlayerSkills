@@ -7,10 +7,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class ResetSkillEvent extends Event {
-    private Player player;
-    private SkillManager skillManager;
-    private Skill skill;
-    private static HandlerList handlers = new HandlerList();
+    private final Player player;
+    private final SkillManager skillManager;
+    private final Skill skill;
+    private static final HandlerList handlers = new HandlerList();
 
     public ResetSkillEvent(Player player, SkillManager skillManager, Skill skill) {
         this.player = player;

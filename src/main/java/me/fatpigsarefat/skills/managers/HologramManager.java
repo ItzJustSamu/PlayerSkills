@@ -15,8 +15,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class HologramManager {
-    private HashMap<UUID, Hologram> holograms = new HashMap();
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
+    private final HashMap<UUID, Hologram> holograms = new HashMap<>();
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
     private Location holoLocation;
 
     public HologramManager() {
@@ -58,12 +58,10 @@ public class HologramManager {
 
     public void update(Player player) {
         if (this.holograms.containsKey(player.getUniqueId())) {
-            Hologram hologram = (Hologram)this.holograms.get(player.getUniqueId());
+            Hologram hologram = this.holograms.get(player.getUniqueId());
             hologram.getLines();
-            Iterator var3 = this.config.get().getStringList("holograms.lines").iterator();
 
-            while(var3.hasNext()) {
-                String line = (String)var3.next();
+            for (String line : this.config.get().getStringList("holograms.lines")) {
                 String linePlaceholder = line.replace("%player_name%", player.getName()).replace("&", "§").replace("%strength_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.STRENGTH) + "").replace("%criticals_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.CRITICALS) + "").replace("%archery_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.ARCHERY) + "").replace("%health_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.HEALTH) + "").replace("%resistance_lvl%", PlayerSkills.getSkillManager().getSkillLevel(player, Skill.RESISTANCE) + "");
                 hologram.getLines();
             }

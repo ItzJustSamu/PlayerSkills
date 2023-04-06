@@ -18,11 +18,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryClick implements Listener {
-    private MessageHelper messageHelper = new MessageHelper();
+    private final MessageHelper messageHelper = new MessageHelper();
 
     public InventoryClick() {
     }
@@ -31,7 +30,7 @@ public class InventoryClick implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
         FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
-        if (e.getClickedInventory() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', (String)Objects.requireNonNull(gui.get().getString("gui.title"))))) {
+        if (e.getClickedInventory() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(gui.get().getString("gui.title"))))) {
             e.setCancelled(true);
             Player player = (Player)e.getWhoClicked();
             SkillManager sm = PlayerSkills.getSkillManager();
@@ -94,7 +93,7 @@ public class InventoryClick implements Listener {
         FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
         SkillManager sm = PlayerSkills.getSkillManager();
         ConfigurationManager cm = new ConfigurationManager();
-        Inventory inv = Bukkit.createInventory((InventoryHolder)null, gui.get().getInt("gui.size") * 9, ChatColor.translateAlternateColorCodes('&', gui.get().getString("gui.title")));
+        Inventory inv = Bukkit.createInventory(null, gui.get().getInt("gui.size") * 9, ChatColor.translateAlternateColorCodes('&', gui.get().getString("gui.title")));
         int strength = sm.getSkillLevel(player, Skill.STRENGTH);
         int criticals = sm.getSkillLevel(player, Skill.CRITICALS);
         int resistance = sm.getSkillLevel(player, Skill.RESISTANCE);

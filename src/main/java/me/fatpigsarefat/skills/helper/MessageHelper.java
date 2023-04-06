@@ -10,7 +10,7 @@ import me.fatpigsarefat.skills.PlayerSkills;
 import me.fatpigsarefat.skills.managers.FileManager;
 
 public class MessageHelper {
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("messages");
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("messages");
 
     public MessageHelper() {
     }
@@ -22,15 +22,13 @@ public class MessageHelper {
     public String getMessage(String key, String[] args) {
         String message = this.getPrefix() + this.config.get().getString(key);
         message = message.replace("&", "§");
-        if (args == null) {
-            return message;
-        } else {
-            for(int i = 0; i < args.length; ++i) {
+        if (args != null) {
+            for (int i = 0; i < args.length; ++i) {
                 message = message.replace("{" + i + "}", args[i]);
             }
 
-            return message;
         }
+        return message;
     }
 
     public List<String> getMessageList(String key) {

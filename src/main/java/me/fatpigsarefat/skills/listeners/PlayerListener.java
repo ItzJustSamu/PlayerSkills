@@ -28,9 +28,7 @@ public class PlayerListener implements Listener {
             priority = EventPriority.MONITOR
     )
     public void onPlayerLeave(PlayerQuitEvent e) {
-        if (PlayerSkills.potionEffect.containsKey(e.getPlayer())) {
-            PlayerSkills.potionEffect.remove(e.getPlayer());
-        }
+        PlayerSkills.potionEffect.remove(e.getPlayer());
 
         if (PlayerSkills.useHolograms) {
             PlayerSkills.getHologramManager().remove(e.getPlayer());
@@ -43,9 +41,7 @@ public class PlayerListener implements Listener {
     )
     public void onPlayerLeave(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        if (PlayerSkills.potionEffect.containsKey(p)) {
-            PlayerSkills.potionEffect.remove(p);
-        }
+        PlayerSkills.potionEffect.remove(p);
 
     }
 }

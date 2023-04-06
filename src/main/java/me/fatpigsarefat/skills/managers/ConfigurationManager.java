@@ -1,7 +1,6 @@
 package me.fatpigsarefat.skills.managers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 import me.fatpigsarefat.skills.PlayerSkills;
 import me.fatpigsarefat.skills.utils.Skill;
@@ -12,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ConfigurationManager {
-    private FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
+    private final FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
 
     public ConfigurationManager() {
     }
@@ -32,7 +31,7 @@ public class ConfigurationManager {
             }
         }
 
-        ItemStack itemToGive = new ItemStack(Objects.requireNonNull(Material.getMaterial((String)Objects.requireNonNull(this.gui.get().getString(pathRoot + "material")))));
+        ItemStack itemToGive = new ItemStack(Objects.requireNonNull(Material.getMaterial(Objects.requireNonNull(this.gui.get().getString(pathRoot + "material")))));
         ItemMeta itemToGiveMeta = itemToGive.getItemMeta();
         itemToGiveMeta.setDisplayName(name);
         itemToGiveMeta.setLore(lore);
@@ -51,9 +50,9 @@ public class ConfigurationManager {
         int healthSkillAfter;
         if (s.contains("strength")) {
             s = s.replace("%strength%", "[" + strength + "/" + sm.getMaximumLevel(Skill.STRENGTH) + "]");
-            s = s.replace("%strengthincrement%", ((Integer)PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH)).toString());
-            xpPrice = (sm.getSkillLevel(player, Skill.STRENGTH) - 1) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH) + 100;
-            healthSkillAfter = sm.getSkillLevel(player, Skill.STRENGTH) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH) + 100;
+            s = s.replace("%strengthincrement%", PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH).toString());
+            xpPrice = (sm.getSkillLevel(player, Skill.STRENGTH) - 1) * PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH) + 100;
+            healthSkillAfter = sm.getSkillLevel(player, Skill.STRENGTH) * PlayerSkills.getSkillMultipliers().get(Skill.STRENGTH) + 100;
             if (sm.getSkillLevel(player, Skill.STRENGTH) >= sm.getMaximumLevel(Skill.STRENGTH)) {
                 healthSkillAfter = xpPrice;
             }
@@ -63,9 +62,9 @@ public class ConfigurationManager {
 
         if (s.contains("criticals")) {
             s = s.replace("%criticals%", "[" + criticals + "/" + sm.getMaximumLevel(Skill.CRITICALS) + "]");
-            s = s.replace("%criticalsincrement%", ((Integer)PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS)).toString());
-            xpPrice = (sm.getSkillLevel(player, Skill.CRITICALS) - 1) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS) + 150;
-            healthSkillAfter = sm.getSkillLevel(player, Skill.CRITICALS) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS) + 150;
+            s = s.replace("%criticalsincrement%", PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS).toString());
+            xpPrice = (sm.getSkillLevel(player, Skill.CRITICALS) - 1) * PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS) + 150;
+            healthSkillAfter = sm.getSkillLevel(player, Skill.CRITICALS) * PlayerSkills.getSkillMultipliers().get(Skill.CRITICALS) + 150;
             if (sm.getSkillLevel(player, Skill.CRITICALS) >= sm.getMaximumLevel(Skill.CRITICALS)) {
                 healthSkillAfter = xpPrice;
             }
@@ -75,9 +74,9 @@ public class ConfigurationManager {
 
         if (s.contains("resistance")) {
             s = s.replace("%resistance%", "[" + resistance + "/" + sm.getMaximumLevel(Skill.RESISTANCE) + "]");
-            s = s.replace("%resistanceincrement%", ((Integer)PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE)).toString());
-            xpPrice = (sm.getSkillLevel(player, Skill.RESISTANCE) - 1) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE);
-            healthSkillAfter = sm.getSkillLevel(player, Skill.RESISTANCE) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE);
+            s = s.replace("%resistanceincrement%", PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE).toString());
+            xpPrice = (sm.getSkillLevel(player, Skill.RESISTANCE) - 1) * PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE);
+            healthSkillAfter = sm.getSkillLevel(player, Skill.RESISTANCE) * PlayerSkills.getSkillMultipliers().get(Skill.RESISTANCE);
             if (sm.getSkillLevel(player, Skill.RESISTANCE) >= sm.getMaximumLevel(Skill.RESISTANCE)) {
                 healthSkillAfter = xpPrice;
             }
@@ -87,9 +86,9 @@ public class ConfigurationManager {
 
         if (s.contains("archery")) {
             s = s.replace("%archery%", "[" + archery + "/" + sm.getMaximumLevel(Skill.ARCHERY) + "]");
-            s = s.replace("%archeryincrement%", ((Integer)PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY)).toString());
-            xpPrice = (sm.getSkillLevel(player, Skill.ARCHERY) - 1) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY) + 100;
-            healthSkillAfter = sm.getSkillLevel(player, Skill.ARCHERY) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY) + 100;
+            s = s.replace("%archeryincrement%", PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY).toString());
+            xpPrice = (sm.getSkillLevel(player, Skill.ARCHERY) - 1) * PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY) + 100;
+            healthSkillAfter = sm.getSkillLevel(player, Skill.ARCHERY) * PlayerSkills.getSkillMultipliers().get(Skill.ARCHERY) + 100;
             if (sm.getSkillLevel(player, Skill.ARCHERY) >= sm.getMaximumLevel(Skill.ARCHERY)) {
                 healthSkillAfter = xpPrice;
             }
@@ -99,9 +98,9 @@ public class ConfigurationManager {
 
         if (s.contains("health")) {
             s = s.replace("%health%", "[" + health + "/" + sm.getMaximumLevel(Skill.HEALTH) + "]");
-            s = s.replace("%healthincrement%", ((Integer)PlayerSkills.getSkillMultipliers().get(Skill.HEALTH)).toString());
-            xpPrice = (sm.getSkillLevel(player, Skill.HEALTH) - 1) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.HEALTH) + 20;
-            healthSkillAfter = sm.getSkillLevel(player, Skill.HEALTH) * (Integer)PlayerSkills.getSkillMultipliers().get(Skill.HEALTH) + 20;
+            s = s.replace("%healthincrement%", PlayerSkills.getSkillMultipliers().get(Skill.HEALTH).toString());
+            xpPrice = (sm.getSkillLevel(player, Skill.HEALTH) - 1) * PlayerSkills.getSkillMultipliers().get(Skill.HEALTH) + 20;
+            healthSkillAfter = sm.getSkillLevel(player, Skill.HEALTH) * PlayerSkills.getSkillMultipliers().get(Skill.HEALTH) + 20;
             if (sm.getSkillLevel(player, Skill.HEALTH) >= sm.getMaximumLevel(Skill.HEALTH)) {
                 healthSkillAfter = xpPrice;
             }
@@ -115,31 +114,31 @@ public class ConfigurationManager {
         }
 
         s = s.replace("%pointsprice%", xpPrice + "XP");
-        s = s.replace("%points%", sm.getSkillPoints(player) + "");
+        s = s.replace("%points%", String.valueOf(sm.getSkillPoints(player)));
         s = s.replace("%username%", player.getName());
-        s = s.replace("%expierencelevel%", player.getLevel() + "");
+        s = s.replace("%expierencelevel%", String.valueOf(player.getLevel()));
         if (s.contains("expierence")) {
-            String expierenceBar = "";
+            StringBuilder expierenceBar = new StringBuilder();
 
             for(double f = 0.0; f <= (double)player.getExp(); f += 0.03) {
-                expierenceBar = expierenceBar + ChatColor.GREEN + "|";
+                expierenceBar.append(ChatColor.GREEN).append("|");
             }
 
-            int toAdd = 30 - ChatColor.stripColor(expierenceBar).length();
+            int toAdd = 30 - ChatColor.stripColor(expierenceBar.toString()).length();
 
             for(int i = 0; i <= toAdd; ++i) {
-                expierenceBar = expierenceBar + ChatColor.GRAY + "|";
+                expierenceBar.append(ChatColor.GRAY).append("|");
             }
 
-            s = s.replace("%expierencebar%", expierenceBar);
+            s = s.replace("%expierencebar%", expierenceBar.toString());
         }
 
-        s = s.replace("%totalspent%", sm.getTotalPointsSpent(player) + "");
-        s = s.replace("%strength-points-spend%", strength - 1 + "");
-        s = s.replace("%criticals-points-spend%", criticals - 1 + "");
-        s = s.replace("%resistance-points-spend%", resistance - 1 + "");
-        s = s.replace("%archery-points-spend%", archery - 1 + "");
-        s = s.replace("%health-points-spend%", health - 1 + "");
+        s = s.replace("%totalspent%", String.valueOf(sm.getTotalPointsSpent(player)));
+        s = s.replace("%strength-points-spend%", String.valueOf(strength - 1));
+        s = s.replace("%criticals-points-spend%", String.valueOf(criticals - 1));
+        s = s.replace("%resistance-points-spend%", String.valueOf(resistance - 1));
+        s = s.replace("%archery-points-spend%", String.valueOf(archery - 1));
+        s = s.replace("%health-points-spend%", String.valueOf(health - 1));
         return s;
     }
 }

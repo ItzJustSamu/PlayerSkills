@@ -62,7 +62,6 @@ public class SkillsAdminCommand implements CommandExecutor {
                     ofp = Bukkit.getOfflinePlayer(args[1]);
                     if (!ofp.hasPlayedBefore()) {
                         sender.sendMessage(messages.getMessage("player_no_found", new String[0]));
-                        return true;
                     } else {
                         try {
                             Integer.parseInt(args[2]);
@@ -73,8 +72,8 @@ public class SkillsAdminCommand implements CommandExecutor {
 
                         sm.setSkillPoints(ofp, sm.getSkillPoints(ofp) + Integer.parseInt(args[2]));
                         sender.sendMessage(messages.getMessage("successful_add_points", new String[]{args[1], args[2]}));
-                        return true;
                     }
+                    return true;
                 } else if (length != 4 && !args[0].equalsIgnoreCase("setlevel")) {
                     sender.sendMessage(messages.getMessage("invalied_args", new String[0]));
                     return true;
@@ -97,14 +96,14 @@ public class SkillsAdminCommand implements CommandExecutor {
                             }
 
                             if (Integer.parseInt(args[3]) > sm.getMaximumLevel(skill)) {
-                                sender.sendMessage(messages.getMessage("max_lvl_skill", new String[]{skill.toString().toLowerCase(), sm.getMaximumLevel(skill) + ""}));
+                                sender.sendMessage(messages.getMessage("max_lvl_skill", new String[]{skill.toString().toLowerCase(), String.valueOf(sm.getMaximumLevel(skill))}));
                                 return true;
                             } else if (Integer.parseInt(args[3]) < 1) {
                                 sender.sendMessage(messages.getMessage("min_lvl_skill", new String[0]));
                                 return true;
                             } else {
                                 sm.setSkillLevel(ofp, skill, Integer.parseInt(args[3]));
-                                sender.sendMessage(messages.getMessage("successful_set_skill_lvl", new String[]{args[1], sm.getSkillLevel(ofp, skill) + "", skill.toString().toLowerCase()}));
+                                sender.sendMessage(messages.getMessage("successful_set_skill_lvl", new String[]{args[1], String.valueOf(sm.getSkillLevel(ofp, skill)), skill.toString().toLowerCase()}));
                                 return true;
                             }
                         }
@@ -113,13 +112,11 @@ public class SkillsAdminCommand implements CommandExecutor {
             } else {
                 if (PlayerSkills.useHolograms) {
                     Location holoLoc = ((Player)sender).getLocation();
-                    holoLoc.setY((double)(holoLoc.getBlockY() + 2));
+                    holoLoc.setY(holoLoc.getBlockY() + 2);
                     PlayerSkills.getFileManager().getConfig("config").set("holograms.location", LocationUtil.toString(holoLoc));
                     PlayerSkills.getFileManager().getConfig("config").save();
-                    Iterator var9 = Bukkit.getOnlinePlayers().iterator();
 
-                    while(var9.hasNext()) {
-                        Player pl = (Player)var9.next();
+                    for (Player pl : Bukkit.getOnlinePlayers()) {
                         PlayerSkills.getHologramManager().clearUpdate(pl);
                     }
 

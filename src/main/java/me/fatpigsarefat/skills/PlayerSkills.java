@@ -1,15 +1,8 @@
 package me.fatpigsarefat.skills;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import me.fatpigsarefat.skills.commands.SkillsAdminCommand;
 import me.fatpigsarefat.skills.commands.SkillsCommand;
-import me.fatpigsarefat.skills.listeners.EntityDamage;
-import me.fatpigsarefat.skills.listeners.EntityDamageByEntity;
-import me.fatpigsarefat.skills.listeners.InventoryClick;
-import me.fatpigsarefat.skills.listeners.PlayerListener;
-import me.fatpigsarefat.skills.listeners.ResetSkill;
-import me.fatpigsarefat.skills.listeners.UpgradeSkill;
+import me.fatpigsarefat.skills.listeners.*;
 import me.fatpigsarefat.skills.managers.FileManager;
 import me.fatpigsarefat.skills.managers.HologramManager;
 import me.fatpigsarefat.skills.managers.SkillManager;
@@ -25,6 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.HashMap;
+
 public class PlayerSkills extends JavaPlugin {
     private boolean availableUpdate = false;
     public static boolean useHolograms = false;
@@ -32,8 +27,8 @@ public class PlayerSkills extends JavaPlugin {
     public static FileManager fileManager;
     public static SkillManager skillManager;
     public static HologramManager hologramManager;
-    public static HashMap<Skill, Integer> skillMultipliers = new HashMap();
-    public static HashMap<Player, PotionEffect> potionEffect = new HashMap();
+    public static HashMap<Skill, Integer> skillMultipliers = new HashMap<>();
+    public static HashMap<Player, PotionEffect> potionEffect = new HashMap<>();
     public static boolean allowReset = true;
 
     public PlayerSkills() {
@@ -79,26 +74,21 @@ public class PlayerSkills extends JavaPlugin {
         Bukkit.getPluginCommand("skills").setExecutor(new SkillsCommand());
         Bukkit.getPluginCommand("skillsadmin").setExecutor(new SkillsAdminCommand());
         this.checkIfHealth();
-        Iterator var1 = fileManager.getConfig("config").get().getConfigurationSection("skills").getKeys(false).iterator();
 
-        while(var1.hasNext()) {
-            String s = (String)var1.next();
+        for (String s : fileManager.getConfig("config").get().getConfigurationSection("skills").getKeys(false)) {
             skillMultipliers.put(Skill.getSkillByName(s), this.getConfig().getInt("skills." + s + ".increment"));
         }
 
         allowReset = fileManager.getConfig("gui").get().getBoolean("gui.reset-enabled");
-        this.checkUpdates((Player)null);
+        this.checkUpdates(null);
     }
 
     public void checkIfHealth() {
         BukkitScheduler healthCheck = this.getServer().getScheduler();
-        healthCheck.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getHealth() > player.getMaxHealth()) {
-                        player.setHealth(player.getMaxHealth());
-                    }
+        healthCheck.scheduleSyncRepeatingTask(this, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getHealth() > player.getMaxHealth()) {
+                    player.setHealth(player.getMaxHealth());
                 }
             }
         }, 10L, 10L);
