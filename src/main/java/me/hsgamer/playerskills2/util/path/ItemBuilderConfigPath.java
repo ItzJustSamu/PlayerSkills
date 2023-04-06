@@ -2,14 +2,15 @@ package me.hsgamer.playerskills2.util.path;
 
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.AmountModifier;
+import me.hsgamer.hscore.bukkit.item.modifier.ItemFlagModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import me.hsgamer.playerskills2.util.CommonStringReplacer;
-import me.hsgamer.playerskills2.util.modifier.HideAttributesModifier;
 import me.hsgamer.playerskills2.util.modifier.XMaterialModifier;
+import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +25,7 @@ public class ItemBuilderConfigPath extends AdvancedConfigPath<Map<String, Object
 
     public static ItemBuilder addDefault(ItemBuilder builder) {
         return builder
-                .addItemModifier(new HideAttributesModifier())
+                .addItemModifier(new ItemFlagModifier().setFlag(ItemFlag.values()))
                 .addStringReplacer("colorize", CommonStringReplacer.COLORIZE)
                 .addStringReplacer("player-properties", CommonStringReplacer.PLAYER_PROPERTIES);
     }
