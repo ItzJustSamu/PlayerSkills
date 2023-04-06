@@ -1,6 +1,6 @@
 package me.hsgamer.playerskills2.menu;
 
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.config.MainConfig;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class ConfirmationMenu implements Menu {
 
     @Override
     public @NotNull Inventory getInventory() {
-        String title = MessageUtils.colorize(MainConfig.GUI_CONFIRMATION_TITLE.getValue());
+        String title = ColorUtils.colorize(MainConfig.GUI_CONFIRMATION_TITLE.getValue());
         int size = 27;
 
         Inventory inventory = Bukkit.createInventory(this, size, title);

@@ -19,10 +19,7 @@ import me.hsgamer.playerskills2.storage.PlayerStorage;
 import me.hsgamer.playerskills2.util.Utils;
 import org.bukkit.event.HandlerList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class PlayerSkills extends BasePlugin {
@@ -77,6 +74,11 @@ public class PlayerSkills extends BasePlugin {
         Utils.logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
         Utils.logInfo("Use " + MainConfig.OPTIONS_PLAYER_STORAGE.getValue().getName() + " as player storage.");
         this.startAutoSaveTask();
+    }
+
+    @Override
+    protected List<Class<?>> getPermissionClasses() {
+        return Collections.singletonList(Permissions.class);
     }
 
     private void startAutoSaveTask() {

@@ -1,12 +1,12 @@
 package me.hsgamer.playerskills2.util;
 
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.interfaces.StringReplacer;
 import me.hsgamer.playerskills2.config.MainConfig;
 import me.hsgamer.playerskills2.player.SPlayer;
 
 public final class CommonStringReplacer {
-    public static final StringReplacer COLORIZE = (original, uuid) -> MessageUtils.colorize(original);
+    public static final StringReplacer COLORIZE = (original, uuid) -> ColorUtils.colorize(original);
     public static final StringReplacer PLAYER_PROPERTIES = (original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int price = sPlayer.getNextPointPrice();

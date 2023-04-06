@@ -11,7 +11,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>3.19</core.version>
+        <core.version>4.2.19</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -95,42 +95,42 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.4.0</version>
+            <version>9.3.1</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-baseplugin</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-baseplugin</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-utils</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-utils</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-config</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-config</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-item</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-item</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-config-path</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-config-path</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-common</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-common</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

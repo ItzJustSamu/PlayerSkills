@@ -1,7 +1,7 @@
 package me.hsgamer.playerskills2.menu;
 
 import com.cryptomorin.xseries.XSound;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.config.MainConfig;
 import me.hsgamer.playerskills2.player.SPlayer;
@@ -26,7 +26,7 @@ public class SkillsMenu implements Menu {
 
     @Override
     public @NotNull Inventory getInventory() {
-        String title = MessageUtils.colorize(MainConfig.GUI_TITLE.getValue());
+        String title = ColorUtils.colorize(MainConfig.GUI_TITLE.getValue());
         int size = MainConfig.GUI_SIZE.getValue();
 
         Inventory inventory = Bukkit.createInventory(this, size, title);

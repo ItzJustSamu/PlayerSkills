@@ -1,9 +1,9 @@
 package me.hsgamer.playerskills2.skill;
 
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
-import me.hsgamer.hscore.config.ConfigPath;
-import me.hsgamer.hscore.config.StickyConfigPath;
-import me.hsgamer.hscore.config.path.Paths;
+import me.hsgamer.hscore.config.path.ConfigPath;
+import me.hsgamer.hscore.config.path.StickyConfigPath;
+import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.config.MainConfig;
 import me.hsgamer.playerskills2.config.MessageConfig;

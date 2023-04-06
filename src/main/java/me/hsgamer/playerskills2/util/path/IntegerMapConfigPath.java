@@ -1,7 +1,7 @@
 package me.hsgamer.playerskills2.util.path;
 
-import me.hsgamer.hscore.config.AdvancedConfigPath;
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
