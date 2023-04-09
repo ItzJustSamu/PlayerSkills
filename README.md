@@ -7,3 +7,6 @@ The original resource seems to be dead/inactive
 
 Link:
 https://www.spigotmc.org/resources/▶-playerskills-reborn-◀-upgrade-skills-citizens-support-holograms-suport-with-source-code.59383/
+
+my link:
+https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/
