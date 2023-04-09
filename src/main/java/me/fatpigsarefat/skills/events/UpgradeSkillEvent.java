@@ -7,10 +7,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class UpgradeSkillEvent extends Event {
-    private final Player player;
-    private final SkillManager skillManager;
-    private final Skill skill;
-    private static final HandlerList handlers = new HandlerList();
+    private Player player;
+
+    private SkillManager skillManager;
+
+    private Skill skill;
 
     public UpgradeSkillEvent(Player player, SkillManager skillManager, Skill skill) {
         this.player = player;
@@ -37,4 +38,6 @@ public class UpgradeSkillEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
+    private static final HandlerList handlers = new HandlerList();
 }

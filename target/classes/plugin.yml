@@ -1,9 +1,9 @@
-name: PlayerSkillsReborn
-version: 1.7.12
+name: PlayerSkills
+version: 1.1
 description: Skills
-author: [fatpigsarefat, oRIOn_Tx]
+authors: [fatpigsarefat, oRIOn_Tx, ItzJustSamu, Abdelaziz1586]
 main: me.fatpigsarefat.skills.PlayerSkills
-softdepend: [Citizens, HolographicDisplays]
+softdepend: [Citizens, HolographicDisplays, ProtocolLib]
 commands:
   skills:
     description: View skills

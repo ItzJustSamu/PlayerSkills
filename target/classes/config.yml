@@ -40,9 +40,9 @@ admin-notification: true
 worlds:
   restricted: false
   allowed-worlds:
-  - world
-  - second_world
-  - third_world
-  - howmanyworldscanyouhave
-  - TOOMANYWORLDS
-  - meow
+    - world
+    - second_world
+    - third_world
+    - howmanyworldscanyouhave
+    - TOOMANYWORLDS
+    - meow

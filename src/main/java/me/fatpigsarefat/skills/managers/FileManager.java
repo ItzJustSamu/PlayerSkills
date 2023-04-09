@@ -5,43 +5,49 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FileManager {
-    private final JavaPlugin plugin;
-    private final HashMap<String, Config> configs = new HashMap<>();
+    private JavaPlugin plugin;
+
+    private HashMap<String, Config> configs;
 
     public FileManager(JavaPlugin plugin) {
+        this.configs = new HashMap<>();
         this.plugin = plugin;
     }
 
     public void AddConfig(String name) {
-        if (!this.configs.containsKey(name)) {
+        if (!this.configs.containsKey(name))
             this.configs.put(name, (new Config(name)).copyDefaults(true).save());
-        }
-
     }
 
     public Config getConfig(String name) {
-        return this.configs.getOrDefault(name, null);
+        if (this.configs.containsKey(name))
+            return this.configs.get(name);
+        return null;
     }
 
     public Config saveConfig(String name, boolean copyDefaults) {
-        return this.getConfig(name).copyDefaults(copyDefaults).save();
+        return getConfig(name).copyDefaults(copyDefaults).save();
     }
 
-    public void reloadConfig(String name) {
-        if (this.getConfig(name) != null) {
-            this.getConfig(name).reload();
+    public boolean reloadConfig(String name) {
+        if (getConfig(name) != null) {
+            getConfig(name).reload();
+            return true;
         }
+        return false;
     }
 
     public class Config {
-        private final String name;
+        private String name;
+
         private File file;
+
         private YamlConfiguration config;
 
         public Config(String name) {
@@ -49,24 +55,20 @@ public class FileManager {
         }
 
         public Config save() {
-            if (this.config != null && this.file != null) {
-                try {
-                    if (this.config.getConfigurationSection("").getKeys(true).size() != 0) {
-                        this.config.save(this.file);
-                    }
-                } catch (IOException var2) {
-                    var2.printStackTrace();
-                }
-
+            if (this.config == null || this.file == null)
+                return this;
+            try {
+                if (this.config.getConfigurationSection("").getKeys(true).size() != 0)
+                    this.config.save(this.file);
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
             return this;
         }
 
         public YamlConfiguration get() {
-            if (this.config == null) {
-                this.reload();
-            }
-
+            if (this.config == null)
+                reload();
             return this.config;
         }
 
@@ -76,33 +78,34 @@ public class FileManager {
             return this;
         }
 
-        public void reload() {
-            if (this.file == null) {
+        public Config reload() {
+            if (this.file == null)
                 this.file = new File(FileManager.this.plugin.getDataFolder(), this.name);
-            }
-
             this.config = YamlConfiguration.loadConfiguration(this.file);
-
             try {
-                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), StandardCharsets.UTF_8);
-                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-                this.config.setDefaults(defConfig);
-            } catch (NullPointerException ignored) {
-            }
+                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), "UTF8");
+                if (defConfigStream != null) {
+                    YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+                    this.config.setDefaults((Configuration)defConfig);
+                }
+            } catch (UnsupportedEncodingException unsupportedEncodingException) {
 
-        }
-
-        public Config copyDefaults(boolean force) {
-            this.get().options().copyDefaults(force);
+            } catch (NullPointerException nullPointerException) {}
             return this;
         }
 
-        public void set(String key, Object value) {
-            this.get().set(key, value);
+        public Config copyDefaults(boolean force) {
+            get().options().copyDefaults(force);
+            return this;
+        }
+
+        public Config set(String key, Object value) {
+            get().set(key, value);
+            return this;
         }
 
         public Object get(String key) {
-            return this.get().get(key);
+            return get().get(key);
         }
     }
 }

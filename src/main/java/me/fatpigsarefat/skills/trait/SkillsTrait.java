@@ -22,24 +22,17 @@ public class SkillsTrait extends Trait {
                 event.getClicker().sendMessage(messageHelper.getMessage("no_permissions_message", new String[0]));
             }
         }
-
     }
 
-    public void load(DataKey key) {
-    }
+    public void load(DataKey key) {}
 
-    public void save(DataKey key) {
-    }
+    public void save(DataKey key) {}
 
-    public void onAttach() {
-    }
+    public void onAttach() {}
 
-    public void onDespawn() {
-    }
+    public void onDespawn() {}
 
-    public void onSpawn() {
-    }
+    public void onSpawn() {}
 
-    public void onRemove() {
-    }
+    public void onRemove() {}
 }

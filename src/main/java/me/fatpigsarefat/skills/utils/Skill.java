@@ -1,14 +1,7 @@
 package me.fatpigsarefat.skills.utils;
 
 public enum Skill {
-    STRENGTH,
-    CRITICALS,
-    RESISTANCE,
-    ARCHERY,
-    HEALTH;
-
-    private Skill() {
-    }
+    STRENGTH, CRITICALS, RESISTANCE, ARCHERY, HEALTH;
 
     public static Skill getSkillByName(String s) {
         switch (s) {
@@ -22,8 +15,7 @@ public enum Skill {
                 return ARCHERY;
             case "health":
                 return HEALTH;
-            default:
-                return null;
         }
+        return null;
     }
 }

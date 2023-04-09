@@ -18,6 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PlayerSkills extends JavaPlugin {
@@ -35,36 +38,48 @@ public class PlayerSkills extends JavaPlugin {
     }
 
     public void onEnable() {
+        // Load configs
         instance = this;
         fileManager = new FileManager(this);
         fileManager.AddConfig("config");
         fileManager.AddConfig("messages");
         fileManager.AddConfig("gui");
         fileManager.AddConfig("data");
-        skillManager = new SkillManager();
-        if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
+
+        // Connect to MySQL
+        if (fileManager.getConfig("config").get().getBoolean("mysql-enabled")) {
             try {
-                CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(SkillsTrait.class).withName("playerskills"));
-                this.getLogger().info("Successfully hooked into Citizens.");
-            } catch (NoClassDefFoundError | NullPointerException var4) {
-                this.getLogger().info("An error occured when trying to register a trait. Your Citizens version might not be supported.");
+                Connection conn = DriverManager.getConnection(
+                        "jdbc:mysql://" + fileManager.getConfig("config").get().getString("mysql-host") + ":" + fileManager.getConfig("config").get().getInt("mysql-port") + "/" + fileManager.getConfig("config").get().getString("mysql-database"),
+                        fileManager.getConfig("config").get().getString("mysql-username"),
+                        fileManager.getConfig("config").get().getString("mysql-password")
+                );
+                getLogger().info("Successfully connected to MySQL database.");
+                // TODO: Implement database operations
+            } catch (SQLException e) {
+                getLogger().severe("Failed to connect to MySQL database: " + e.getMessage());
+                getLogger().severe("Please set 'mysql-enabled' to 'false' or change MySQL details in the config.yml file.");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
             }
-        } else {
-            this.getLogger().info("Citizens not found. NPCs will not be available.");
         }
 
+        // Set up managers
+        skillManager = new SkillManager();
+        hologramManager = null;
         if (Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
             try {
                 hologramManager = new HologramManager();
                 useHolograms = fileManager.getConfig("config").get().getBoolean("holograms.use");
-                this.getLogger().info("Successfully hooked into HolographicDisplays.");
+                getLogger().info("Successfully hooked into HolographicDisplays.");
             } catch (NoClassDefFoundError | NullPointerException var3) {
-                this.getLogger().info("An error occured when trying to register. Your HolographicDisplays version might not be supported.");
+                getLogger().info("An error occured when trying to register. Your HolographicDisplays version might not be supported.");
             }
         } else {
-            this.getLogger().info("HolographicDisplays not found. Holograms will not be available.");
+            getLogger().info("HolographicDisplays not found. Holograms will not be available.");
         }
 
+        // Register listeners and commands
         Bukkit.getPluginManager().registerEvents(new InventoryClick(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamage(), this);
@@ -73,14 +88,20 @@ public class PlayerSkills extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ResetSkill(), this);
         Bukkit.getPluginCommand("skills").setExecutor(new SkillsCommand());
         Bukkit.getPluginCommand("skillsadmin").setExecutor(new SkillsAdminCommand());
-        this.checkIfHealth();
 
-        for (String s : fileManager.getConfig("config").get().getConfigurationSection("skills").getKeys(false)) {
-            skillMultipliers.put(Skill.getSkillByName(s), this.getConfig().getInt("skills." + s + ".increment"));
+        // Load skill multipliers
+        for (String skillName : fileManager.getConfig("config").get().getConfigurationSection("skills").getKeys(false)) {
+            skillMultipliers.put(Skill.getSkillByName(skillName), fileManager.getConfig("config").get().getInt("skills." + skillName + ".increment"));
         }
 
+        // Set reset state
         allowReset = fileManager.getConfig("gui").get().getBoolean("gui.reset-enabled");
-        this.checkUpdates(null);
+
+        // Start health check
+        checkIfHealth();
+
+        // Check for updates
+        checkUpdates(null);
     }
 
     public void checkIfHealth() {
@@ -96,9 +117,9 @@ public class PlayerSkills extends JavaPlugin {
 
     public void checkUpdates(Player player) {
         if (fileManager.getConfig("config").get().getBoolean("check-update")) {
-            (new UpdateChecker(this, 59383)).getVersion((version) -> {
+            (new UpdateChecker(this, 109080)).getVersion((version) -> {
                 this.availableUpdate = !this.getDescription().getVersion().equalsIgnoreCase(version);
-                String string = "[PlayerSkillsReborn] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at bit.ly/3oIG0RR" : "Looks like you have the latest version installed!");
+                String string = "[PlayerSkills] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/" : "Looks like you have the latest version installed!");
                 if (player != null) {
                     if (player.hasPermission("admin")) {
                         player.sendMessage(string);

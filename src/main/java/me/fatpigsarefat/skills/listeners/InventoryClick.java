@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
@@ -21,72 +22,64 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryClick implements Listener {
-    private final MessageHelper messageHelper = new MessageHelper();
-
-    public InventoryClick() {
-    }
+    private MessageHelper messageHelper = new MessageHelper();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
         FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
-        if (e.getClickedInventory() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(gui.get().getString("gui.title"))))) {
+        if (e.getClickedInventory() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', Objects.<String>requireNonNull(gui.get().getString("gui.title"))))) {
+            InventoryAction a;
             e.setCancelled(true);
             Player player = (Player)e.getWhoClicked();
             SkillManager sm = PlayerSkills.getSkillManager();
-            InventoryAction a;
             if (gui.get().getBoolean("gui.display.points-purchase.right-click")) {
                 a = InventoryAction.PICKUP_HALF;
             } else {
                 a = InventoryAction.PICKUP_ALL;
             }
-
             if (e.getSlot() == gui.get().getInt("gui.display.points-purchase.slot") && e.getAction().equals(a)) {
-                if (player.getLevel() >= sm.getPointPrice(player)) {
+                if (player.getLevel() >= sm.getPointPrice(player))
                     if (config.get().getBoolean("points.restriction")) {
                         if (sm.getTotalPointsSpent(player) != config.get().getInt("points.restriction-per")) {
                             sm.buySkillPoint(player);
                             reconstructInventory(player, false);
                         } else {
-                            player.sendMessage(this.messageHelper.getMessage("points_limit", new String[]{config.get().getString("points.restriction-per")}));
+                            player.sendMessage(this.messageHelper.getMessage("points_limit", new String[] { config.get().getString("points.restriction-per") }));
                         }
                     } else {
                         sm.buySkillPoint(player);
                         reconstructInventory(player, false);
                     }
-                }
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-all.slot")) {
-                if (!PlayerSkills.allowReset) {
+                if (!PlayerSkills.allowReset)
                     return;
-                }
-
                 sm.resetAll(player);
                 reconstructInventory(player, false);
-                player.playSound(player.getLocation(), Sound.EXPLODE, 100.0F, 100.0F);
+                player.playSound(player.getLocation(), Sound.EXPLODE, 60.0F, 100.0F);
                 player.sendMessage(this.messageHelper.getMessage("skill_full_reset", new String[0]));
             } else if (e.getSlot() == gui.get().getInt("gui.display.strength-normal.slot")) {
-                this.updateSkill(sm, player, Skill.STRENGTH);
+                updateSkill(sm, player, Skill.STRENGTH);
             } else if (e.getSlot() == gui.get().getInt("gui.display.criticals-normal.slot")) {
-                this.updateSkill(sm, player, Skill.CRITICALS);
+                updateSkill(sm, player, Skill.CRITICALS);
             } else if (e.getSlot() == gui.get().getInt("gui.display.resistance-normal.slot")) {
-                this.updateSkill(sm, player, Skill.RESISTANCE);
+                updateSkill(sm, player, Skill.RESISTANCE);
             } else if (e.getSlot() == gui.get().getInt("gui.display.archery-normal.slot")) {
-                this.updateSkill(sm, player, Skill.ARCHERY);
+                updateSkill(sm, player, Skill.ARCHERY);
             } else if (e.getSlot() == gui.get().getInt("gui.display.health-normal.slot")) {
-                this.updateSkill(sm, player, Skill.HEALTH);
+                updateSkill(sm, player, Skill.HEALTH);
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-strength.slot")) {
-                this.resetSkill(sm, player, Skill.STRENGTH);
+                resetSkill(sm, player, Skill.STRENGTH);
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-criticals.slot")) {
-                this.resetSkill(sm, player, Skill.CRITICALS);
+                resetSkill(sm, player, Skill.CRITICALS);
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-resistance.slot")) {
-                this.resetSkill(sm, player, Skill.RESISTANCE);
+                resetSkill(sm, player, Skill.RESISTANCE);
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-archery.slot")) {
-                this.resetSkill(sm, player, Skill.ARCHERY);
+                resetSkill(sm, player, Skill.ARCHERY);
             } else if (e.getSlot() == gui.get().getInt("gui.display.reset-health.slot")) {
-                this.resetSkill(sm, player, Skill.HEALTH);
+                resetSkill(sm, player, Skill.HEALTH);
             }
         }
-
     }
 
     public static void reconstructInventory(Player player, boolean completeUpdate) {
@@ -94,18 +87,22 @@ public class InventoryClick implements Listener {
         SkillManager sm = PlayerSkills.getSkillManager();
         ConfigurationManager cm = new ConfigurationManager();
         Inventory inv = Bukkit.createInventory(null, gui.get().getInt("gui.size") * 9, ChatColor.translateAlternateColorCodes('&', gui.get().getString("gui.title")));
-        int strength = sm.getSkillLevel(player, Skill.STRENGTH);
-        int criticals = sm.getSkillLevel(player, Skill.CRITICALS);
-        int resistance = sm.getSkillLevel(player, Skill.RESISTANCE);
-        int archery = sm.getSkillLevel(player, Skill.ARCHERY);
-        int health = sm.getSkillLevel(player, Skill.HEALTH);
+        int strength = 1;
+        int criticals = 1;
+        int resistance = 1;
+        int archery = 1;
+        int health = 1;
+        strength = sm.getSkillLevel(player, Skill.STRENGTH);
+        criticals = sm.getSkillLevel(player, Skill.CRITICALS);
+        resistance = sm.getSkillLevel(player, Skill.RESISTANCE);
+        archery = sm.getSkillLevel(player, Skill.ARCHERY);
+        health = sm.getSkillLevel(player, Skill.HEALTH);
         ItemStack skillpointsIs = new ItemStack(cm.getItemStack("points-purchase", player));
         if (sm.getSkillPoints(player) > 0) {
             skillpointsIs.setAmount(sm.getSkillPoints(player));
         } else {
             skillpointsIs.setAmount(1);
         }
-
         ItemStack playerstatsIs = cm.getItemStack("stats", player);
         playerstatsIs.setAmount(1);
         ItemStack strengthIs = cm.getItemStack("strength-normal", player);
@@ -145,22 +142,20 @@ public class InventoryClick implements Listener {
             inv.setItem(gui.get().getInt("gui.display.reset-health.slot"), rh);
             inv.setItem(gui.get().getInt("gui.display.reset-all.slot", 5), barrier2Is);
         }
-
         if (!completeUpdate) {
             player.getOpenInventory().getTopInventory().setContents(inv.getContents());
         } else {
             player.closeInventory();
             player.openInventory(inv);
         }
-
         player.updateInventory();
     }
 
     public void updateSkill(SkillManager sm, Player player, Skill skill) {
-        Bukkit.getPluginManager().callEvent(new UpgradeSkillEvent(player, sm, skill));
+        Bukkit.getPluginManager().callEvent((Event)new UpgradeSkillEvent(player, sm, skill));
     }
 
     public void resetSkill(SkillManager sm, Player player, Skill skill) {
-        Bukkit.getPluginManager().callEvent(new ResetSkillEvent(player, sm, skill));
+        Bukkit.getPluginManager().callEvent((Event)new ResetSkillEvent(player, sm, skill));
     }
 }
