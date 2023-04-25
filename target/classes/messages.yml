@@ -21,8 +21,9 @@ hologram_disabled: "Holograms `§cDisabled§f` in config or `§cHolographic Disp
 points_limit: "You can't buy more skill points, because limit is §e{0}"
 config_reload: "You successful reload config: §e{0}"
 skill_help:
+- "§7====================================="
 - "§7>> §ePlayerSkills Admin Help"
 - "§e/skillsadmin givepoints §c<player> <amount> §f- give players skill points"
-- "§e/skillsadmin sethologram §f- set location for hologram stat"
 - "§e/skillsadmin setlevel §c<player> <skill> <amount> §f- set players skill level"
 - "§e/skillsadmin reload §c<config, data, messages, gui> §f- reload config"
+- "§7======================================"

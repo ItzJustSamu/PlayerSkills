@@ -62,7 +62,5 @@ public class UpgradeSkill implements Listener {
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 100.0F, 100.0F);
             player.sendMessage(messageHelper.getMessage("skill_upgrade", new String[] { skill.name().toLowerCase() }));
         }
-        if (PlayerSkills.useHolograms)
-            PlayerSkills.getHologramManager().update(player);
     }
 }

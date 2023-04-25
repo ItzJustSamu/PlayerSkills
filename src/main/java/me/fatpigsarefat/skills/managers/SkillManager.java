@@ -7,19 +7,19 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SkillManager {
-    private FileManager.Config data = PlayerSkills.getFileManager().getConfig("data");
+    private final FileManager.Config data = PlayerSkills.getFileManager().getConfig("data");
 
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
 
     public int getSkillLevel(Player player, Skill skill) {
         if (this.data.get().contains(player.getUniqueId() + "." + skill.toString()))
-            return this.data.get().getInt(player.getUniqueId() + "." + skill.toString());
+            return this.data.get().getInt(player.getUniqueId() + "." + skill);
         return 1;
     }
 
     public int getSkillPoints(Player player) {
-        if (this.data.get().contains(player.getUniqueId() + ".points"))
-            return this.data.get().getInt(player.getUniqueId() + ".points");
+        if (this.data.get().contains(player.getUniqueId() + "points"))
+            return this.data.get().getInt(player.getUniqueId() + "points");
         return 0;
     }
 
@@ -30,17 +30,16 @@ public class SkillManager {
         int resistance = getSkillLevel(player, Skill.RESISTANCE) - 1;
         int archery = getSkillLevel(player, Skill.ARCHERY) - 1;
         int health = getSkillLevel(player, Skill.HEALTH) - 1;
-        int total = points + damage + criticals + resistance + archery + health;
-        return total;
+        return points + damage + criticals + resistance + archery + health;
     }
 
     public void setSkillPoints(Player player, int points) {
-        this.data.set(player.getUniqueId() + ".points", Integer.valueOf(points));
+        this.data.set(player.getUniqueId() + ".points", points);
         this.data.save();
     }
 
     public void setSkillLevel(Player player, Skill skill, int level) {
-        this.data.set(player.getUniqueId() + "." + skill.toString(), Integer.valueOf(level));
+        this.data.set(player.getUniqueId() + "." + skill.toString(), level);
         this.data.save();
     }
 
@@ -48,7 +47,7 @@ public class SkillManager {
         if (!player.hasPlayedBefore())
             return 1;
         if (this.data.get().contains(player.getUniqueId() + "." + skill.toString()))
-            return this.data.get().getInt(player.getUniqueId() + "." + skill.toString());
+            return this.data.get().getInt(player.getUniqueId() + "." + skill);
         return 1;
     }
 
@@ -61,9 +60,9 @@ public class SkillManager {
     }
 
     public int getPointPrice(Player player) {
-        int xpPrice = 1;
+        var xpPrice = 1;
         xpPrice = this.config.get().getInt("xp.price");
-        if (this.config.get().getBoolean("xp.add-total-to-price"))
+        if (this.config.get().getBoolean("xp.total"))
             xpPrice += getTotalPointsSpent(player) * this.config.get().getInt("xp.add-total-to-price-multiplier");
         return xpPrice;
     }
@@ -83,26 +82,13 @@ public class SkillManager {
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 60.0F, 100.0F);
     }
 
-    public int getTotalPointsSpent(OfflinePlayer player) {
-        if (!player.hasPlayedBefore())
-            return 0;
-        int points = getSkillPoints(player);
-        int damage = getSkillLevel(player, Skill.STRENGTH) - 1;
-        int criticals = getSkillLevel(player, Skill.CRITICALS) - 1;
-        int resistance = getSkillLevel(player, Skill.RESISTANCE) - 1;
-        int archery = getSkillLevel(player, Skill.ARCHERY) - 1;
-        int health = getSkillLevel(player, Skill.HEALTH) - 1;
-        int total = points + damage + criticals + resistance + archery + health;
-        return total;
-    }
-
     public void setSkillPoints(OfflinePlayer player, int points) {
-        this.data.set(player.getUniqueId() + ".points", Integer.valueOf(points));
+        this.data.set(player.getUniqueId() + ".points", points);
         this.data.save();
     }
 
     public void setSkillLevel(OfflinePlayer player, Skill skill, int level) {
-        this.data.set(player.getUniqueId() + "." + skill.toString(), Integer.valueOf(level));
+        this.data.set(player.getUniqueId() + "." + skill.toString(), level);
         this.data.save();
     }
 

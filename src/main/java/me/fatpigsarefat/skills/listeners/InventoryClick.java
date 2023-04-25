@@ -22,7 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryClick implements Listener {
-    private MessageHelper messageHelper = new MessageHelper();
+    private final MessageHelper messageHelper = new MessageHelper();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {

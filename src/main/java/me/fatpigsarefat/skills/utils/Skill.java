@@ -4,18 +4,13 @@ public enum Skill {
     STRENGTH, CRITICALS, RESISTANCE, ARCHERY, HEALTH;
 
     public static Skill getSkillByName(String s) {
-        switch (s) {
-            case "strength":
-                return STRENGTH;
-            case "criticals":
-                return CRITICALS;
-            case "resistance":
-                return RESISTANCE;
-            case "archery":
-                return ARCHERY;
-            case "health":
-                return HEALTH;
-        }
-        return null;
+        return switch (s) {
+            case "strength" -> STRENGTH;
+            case "criticals" -> CRITICALS;
+            case "resistance" -> RESISTANCE;
+            case "archery" -> ARCHERY;
+            case "health" -> HEALTH;
+            default -> null;
+        };
     }
 }

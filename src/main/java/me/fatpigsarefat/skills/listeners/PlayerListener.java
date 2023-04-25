@@ -13,22 +13,16 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         PlayerSkills.getInstance().checkUpdates(e.getPlayer());
-        if (PlayerSkills.useHolograms)
-            PlayerSkills.getHologramManager().show(e.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLeave(PlayerQuitEvent e) {
-        if (PlayerSkills.potionEffect.containsKey(e.getPlayer()))
-            PlayerSkills.potionEffect.remove(e.getPlayer());
-        if (PlayerSkills.useHolograms)
-            PlayerSkills.getHologramManager().remove(e.getPlayer());
+        PlayerSkills.potionEffect.remove(e.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLeave(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        if (PlayerSkills.potionEffect.containsKey(p))
-            PlayerSkills.potionEffect.remove(p);
+        PlayerSkills.potionEffect.remove(p);
     }
 }

@@ -2,15 +2,12 @@ package me.fatpigsarefat.skills;
 
 import me.fatpigsarefat.skills.commands.SkillsAdminCommand;
 import me.fatpigsarefat.skills.commands.SkillsCommand;
+import me.fatpigsarefat.skills.expansion.PlayerSkillsExpansion;
 import me.fatpigsarefat.skills.listeners.*;
 import me.fatpigsarefat.skills.managers.FileManager;
-import me.fatpigsarefat.skills.managers.HologramManager;
 import me.fatpigsarefat.skills.managers.SkillManager;
-import me.fatpigsarefat.skills.trait.SkillsTrait;
 import me.fatpigsarefat.skills.utils.Skill;
 import me.fatpigsarefat.skills.utils.UpdateChecker;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,11 +22,9 @@ import java.util.HashMap;
 
 public class PlayerSkills extends JavaPlugin {
     private boolean availableUpdate = false;
-    public static boolean useHolograms = false;
     public static PlayerSkills instance;
     public static FileManager fileManager;
     public static SkillManager skillManager;
-    public static HologramManager hologramManager;
     public static HashMap<Skill, Integer> skillMultipliers = new HashMap<>();
     public static HashMap<Player, PotionEffect> potionEffect = new HashMap<>();
     public static boolean allowReset = true;
@@ -54,7 +49,7 @@ public class PlayerSkills extends JavaPlugin {
                         fileManager.getConfig("config").get().getString("mysql-username"),
                         fileManager.getConfig("config").get().getString("mysql-password")
                 );
-                getLogger().info("Successfully connected to MySQL database.");
+                getLogger().info("Mysql doesn't work yet!");
                 // TODO: Implement database operations
             } catch (SQLException e) {
                 getLogger().severe("Failed to connect to MySQL database: " + e.getMessage());
@@ -64,16 +59,15 @@ public class PlayerSkills extends JavaPlugin {
             }
         }
 
+        new PlayerSkillsExpansion().register();
+
         // Set up managers
         skillManager = new SkillManager();
-        hologramManager = null;
         if (Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
             try {
-                hologramManager = new HologramManager();
-                useHolograms = fileManager.getConfig("config").get().getBoolean("holograms.use");
                 getLogger().info("Successfully hooked into HolographicDisplays.");
             } catch (NoClassDefFoundError | NullPointerException var3) {
-                getLogger().info("An error occured when trying to register. Your HolographicDisplays version might not be supported.");
+                getLogger().info("An error occurred when trying to register. Your HolographicDisplays version might not be supported.");
             }
         } else {
             getLogger().info("HolographicDisplays not found. Holograms will not be available.");
@@ -119,7 +113,7 @@ public class PlayerSkills extends JavaPlugin {
         if (fileManager.getConfig("config").get().getBoolean("check-update")) {
             (new UpdateChecker(this, 109080)).getVersion((version) -> {
                 this.availableUpdate = !this.getDescription().getVersion().equalsIgnoreCase(version);
-                String string = "[PlayerSkills] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/" : "Looks like you have the latest version installed!");
+                String string = "[PlayerSkills] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at https://www.spigotmc.org/resources/▶-playerskills-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/" : "Looks like you have the latest version installed!");
                 if (player != null) {
                     if (player.hasPermission("admin")) {
                         player.sendMessage(string);
@@ -145,9 +139,6 @@ public class PlayerSkills extends JavaPlugin {
         return skillManager;
     }
 
-    public static HologramManager getHologramManager() {
-        return hologramManager;
-    }
 
     public static HashMap<Skill, Integer> getSkillMultipliers() {
         return skillMultipliers;

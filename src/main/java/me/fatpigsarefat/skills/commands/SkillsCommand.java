@@ -12,9 +12,8 @@ import org.bukkit.entity.Player;
 public class SkillsCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         MessageHelper messageHelper = new MessageHelper();
-        if (!cmd.getName().equalsIgnoreCase("skills") || !(sender instanceof Player))
+        if (!cmd.getName().equalsIgnoreCase("skills") || !(sender instanceof Player player))
             return false;
-        Player player = (Player)sender;
         if (PlayerSkills.instance.getConfig().getBoolean("worlds.restricted") && !PlayerSkills.instance.getConfig().getStringList("worlds.allowed-worlds").contains(player.getLocation().getWorld().getName())) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', messageHelper.getMessage("deny_message", new String[0])));
             return true;

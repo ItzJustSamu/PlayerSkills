@@ -1,9 +1,9 @@
 name: PlayerSkills
-version: 1.1
+version: v2
 description: Skills
 authors: [fatpigsarefat, oRIOn_Tx, ItzJustSamu, Abdelaziz1586]
 main: me.fatpigsarefat.skills.PlayerSkills
-softdepend: [Citizens, HolographicDisplays, ProtocolLib]
+softdepend: [Citizens, HolographicDisplays, ProtocolLib, PlaceholderAPI]
 commands:
   skills:
     description: View skills

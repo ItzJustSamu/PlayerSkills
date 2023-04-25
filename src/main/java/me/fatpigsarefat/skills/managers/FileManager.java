@@ -4,16 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import org.bukkit.configuration.Configuration;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FileManager {
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
-    private HashMap<String, Config> configs;
+    private final HashMap<String, Config> configs;
 
     public FileManager(JavaPlugin plugin) {
         this.configs = new HashMap<>();
@@ -44,7 +44,7 @@ public class FileManager {
     }
 
     public class Config {
-        private String name;
+        private final String name;
 
         private File file;
 
@@ -78,20 +78,17 @@ public class FileManager {
             return this;
         }
 
-        public Config reload() {
+        public void reload() {
             if (this.file == null)
                 this.file = new File(FileManager.this.plugin.getDataFolder(), this.name);
             this.config = YamlConfiguration.loadConfiguration(this.file);
             try {
-                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), "UTF8");
-                if (defConfigStream != null) {
-                    YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-                    this.config.setDefaults((Configuration)defConfig);
-                }
-            } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                Reader defConfigStream = new InputStreamReader(FileManager.this.plugin.getResource(this.name), StandardCharsets.UTF_8);
+                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+                this.config.setDefaults(defConfig);
+            } catch (NullPointerException ignored) {
 
-            } catch (NullPointerException nullPointerException) {}
-            return this;
+            }
         }
 
         public Config copyDefaults(boolean force) {
@@ -99,9 +96,8 @@ public class FileManager {
             return this;
         }
 
-        public Config set(String key, Object value) {
+        public void set(String key, Object value) {
             get().set(key, value);
-            return this;
         }
 
         public Object get(String key) {

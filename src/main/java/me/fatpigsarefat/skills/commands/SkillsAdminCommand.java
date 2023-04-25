@@ -3,15 +3,12 @@ package me.fatpigsarefat.skills.commands;
 import me.fatpigsarefat.skills.PlayerSkills;
 import me.fatpigsarefat.skills.helper.MessageHelper;
 import me.fatpigsarefat.skills.managers.SkillManager;
-import me.fatpigsarefat.skills.utils.LocationUtil;
 import me.fatpigsarefat.skills.utils.Skill;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class SkillsAdminCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -29,37 +26,9 @@ public class SkillsAdminCommand implements CommandExecutor {
                 sender.sendMessage(s);
             return true;
         }
-        if (length == 2 && args[0].equalsIgnoreCase("reload")) {
-            PlayerSkills.getFileManager().reloadConfig(args[1]);
-            if (args[1].equals("config")) {
-                PlayerSkills.useHolograms = PlayerSkills.getFileManager().getConfig("config").get().getBoolean("holograms.use");
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (PlayerSkills.useHolograms) {
-                        PlayerSkills.getHologramManager().clearUpdate(player);
-                        continue;
-                    }
-                    PlayerSkills.getHologramManager().remove(player);
-                }
-            }
-            sender.sendMessage(messages.getMessage("config_reload", new String[] { args[1] }));
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("sethologram")) {
-            if (PlayerSkills.useHolograms) {
-                Location holoLoc = ((Player)sender).getLocation();
-                holoLoc.setY((holoLoc.getBlockY() + 2));
-                PlayerSkills.getFileManager().getConfig("config").set("holograms.location", LocationUtil.toString(holoLoc));
-                PlayerSkills.getFileManager().getConfig("config").save();
-                for (Player pl : Bukkit.getOnlinePlayers())
-                    PlayerSkills.getHologramManager().clearUpdate(pl);
-                sender.sendMessage(messages.getMessage("hologram_set", new String[] { LocationUtil.toString(holoLoc) }));
-            } else {
-                sender.sendMessage(messages.getMessage("hologram_disabled", new String[0]));
-            }
-            return true;
-        }
+
         if (length == 3 && args[0].equalsIgnoreCase("givepoints")) {
-            OfflinePlayer ofp = Bukkit.getOfflinePlayer(args[1]);
+            OfflinePlayer ofp = Bukkit.getPlayer(args[1]);
             if (!ofp.hasPlayedBefore()) {
                 sender.sendMessage(messages.getMessage("player_no_found", new String[0]));
                 return true;
@@ -75,7 +44,7 @@ public class SkillsAdminCommand implements CommandExecutor {
             return true;
         }
         if (length == 4 || args[0].equalsIgnoreCase("setlevel")) {
-            OfflinePlayer ofp = Bukkit.getOfflinePlayer(args[1]);
+            OfflinePlayer ofp = Bukkit.getPlayer(args[1]);
             if (!ofp.hasPlayedBefore()) {
                 sender.sendMessage(messages.getMessage("player_no_found", new String[0]));
                 return true;
@@ -92,7 +61,7 @@ public class SkillsAdminCommand implements CommandExecutor {
                 return true;
             }
             if (Integer.parseInt(args[3]) > sm.getMaximumLevel(skill)) {
-                sender.sendMessage(messages.getMessage("max_lvl_skill", new String[] { skill.toString().toLowerCase(), sm.getMaximumLevel(skill) + "" }));
+                sender.sendMessage(messages.getMessage("max_lvl_skill", new String[] { skill.toString().toLowerCase(), String.valueOf(sm.getMaximumLevel(skill))}));
                 return true;
             }
             if (Integer.parseInt(args[3]) < 1) {
@@ -100,10 +69,10 @@ public class SkillsAdminCommand implements CommandExecutor {
                 return true;
             }
             sm.setSkillLevel(ofp, skill, Integer.parseInt(args[3]));
-            sender.sendMessage(messages.getMessage("successful_set_skill_lvl", new String[] { args[1], sm.getSkillLevel(ofp, skill) + "", skill.toString().toLowerCase() }));
+            sender.sendMessage(messages.getMessage("successful_set_skill_lvl", new String[] { args[1], String.valueOf(sm.getSkillLevel(ofp, skill)), skill.toString().toLowerCase() }));
             return true;
         }
-        sender.sendMessage(messages.getMessage("invalied_args", new String[0]));
+        sender.sendMessage(messages.getMessage("invalid_args", new String[0]));
         return true;
     }
 }

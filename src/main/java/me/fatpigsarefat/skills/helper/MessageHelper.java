@@ -5,7 +5,7 @@ import me.fatpigsarefat.skills.PlayerSkills;
 import me.fatpigsarefat.skills.managers.FileManager;
 
 public class MessageHelper {
-    private FileManager.Config config = PlayerSkills.getFileManager().getConfig("messages");
+    private final FileManager.Config config = PlayerSkills.getFileManager().getConfig("messages");
 
     private String getPrefix() {
         return this.config.get().getString("prefix") + " ";

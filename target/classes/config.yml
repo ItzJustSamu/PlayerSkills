@@ -1,15 +1,4 @@
 check-update: true
-holograms:
-  use: false
-  location: null
-  lines:
-    - "-- &c%player_name% &fSkills Stat --"
-    - " "
-    - "Strength level is: &a%strength_lvl%"
-    - "Criticals level is: &a%criticals_lvl%"
-    - "Archery level is: &a%archery_lvl%"
-    - "Health level is: &a%health_lvl%"
-    - "Resistance level is: &a%resistance_lvl%"
 points:
   restriction: false
   restriction-per: 10
@@ -22,27 +11,23 @@ permissions:
   level-perms: false
 skills:
   strength:
-    increment: 8
-    max-level: 8
+    increment: 5
+    max-level: 10
   criticals:
     increment: 5
     max-level: 10
   resistance:
-    increment: 8
-    max-level: 8
+    increment: 5
+    max-level: 10
   archery:
     increment: 5
     max-level: 10
   health:
-    increment: 2
-    max-level: 6
+    increment: 5
+    max-level: 10
 admin-notification: true
 worlds:
   restricted: false
   allowed-worlds:
     - world
-    - second_world
-    - third_world
-    - howmanyworldscanyouhave
-    - TOOMANYWORLDS
-    - meow
+    - lobby
