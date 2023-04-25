@@ -18,8 +18,8 @@ public class SkillManager {
     }
 
     public int getSkillPoints(Player player) {
-        if (this.data.get().contains(player.getUniqueId() + "points"))
-            return this.data.get().getInt(player.getUniqueId() + "points");
+        if (this.data.get().contains(player.getUniqueId() + ".points"))
+            return this.data.get().getInt(player.getUniqueId() + ".points");
         return 0;
     }
 
@@ -62,7 +62,7 @@ public class SkillManager {
     public int getPointPrice(Player player) {
         var xpPrice = 1;
         xpPrice = this.config.get().getInt("xp.price");
-        if (this.config.get().getBoolean("xp.total"))
+        if (this.config.get().getBoolean("xp.add-total-to-price"))
             xpPrice += getTotalPointsSpent(player) * this.config.get().getInt("xp.add-total-to-price-multiplier");
         return xpPrice;
     }
