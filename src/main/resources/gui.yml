@@ -105,7 +105,7 @@ gui:
       name: '&2%username%''s stats'
       slot: 3
       lore:
-        - '&9Expierence progress: &eL%expierencelevel%'
+        - '&9Experience progress: &eL%expierencelevel%'
         - '&e%expierencebar%'
         - ''
         - '&9Strength points spend: &e%strength-points-spend%'
