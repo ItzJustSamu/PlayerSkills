@@ -10,9 +10,15 @@ My Updated Copy:
 https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/
 
 
-    </repositories>
-        <repository>
-            <id>playerskills-reborn-repo</id>
-            <url>https://raw.github.com/ItzJustSamu/PlayerSkills-Reborn/master/repo/</url>
-        </repository>
-    </repositories>
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
+    <dependency>
+	    <groupId>com.github.ItzJustSamu</groupId>
+	    <artifactId>PlayerSkills</artifactId>
+	    <version>Tag</version>
+	</dependency>
