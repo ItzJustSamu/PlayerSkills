@@ -10,7 +10,7 @@ My Updated Copy:
 https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/
 
 
-<repositories>
+        <repositories>
 		<repository>
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
