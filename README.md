@@ -16,8 +16,8 @@ https://www.spigotmc.org/resources/▶-playerskills-extended-◀-upgrade-skills-
 		    <url>https://jitpack.io</url>
 		</repository>
 	</repositories>
-
-    <dependency>
+        
+        <dependency>
 	    <groupId>com.github.ItzJustSamu</groupId>
 	    <artifactId>PlayerSkills</artifactId>
 	    <version>Tag</version>
