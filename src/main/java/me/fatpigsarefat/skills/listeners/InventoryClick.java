@@ -28,16 +28,20 @@ public class InventoryClick implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         FileManager.Config gui = PlayerSkills.getFileManager().getConfig("gui");
         FileManager.Config config = PlayerSkills.getFileManager().getConfig("config");
-        if (e.getClickedInventory() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', Objects.<String>requireNonNull(gui.get().getString("gui.title"))))) {
-            InventoryAction a;
+        if (e.getClick() != null && e.getView().getTitle().equals(ChatColor.translateAlternateColorCodes('&', Objects.<String>requireNonNull(gui.get().getString("gui.title"))))) {
+            InventoryAction a = e.getAction();
             e.setCancelled(true);
-            Player player = (Player)e.getWhoClicked();
+            Player player = (Player) e.getWhoClicked();
             SkillManager sm = PlayerSkills.getSkillManager();
             if (gui.get().getBoolean("gui.display.points-purchase.right-click")) {
-                a = InventoryAction.PICKUP_HALF;
-            } else {
                 a = InventoryAction.PICKUP_ALL;
             }
+            if (a == InventoryAction.MOVE_TO_OTHER_INVENTORY || a == InventoryAction.COLLECT_TO_CURSOR || a == InventoryAction.HOTBAR_SWAP || a == InventoryAction.HOTBAR_MOVE_AND_READD || a == InventoryAction.PLACE_ALL || a == InventoryAction.PLACE_ONE || a == InventoryAction.PLACE_SOME || a == InventoryAction.SWAP_WITH_CURSOR) {
+                e.setCancelled(true);
+                player.updateInventory();
+                player.setItemOnCursor(null);
+            }
+
             if (e.getSlot() == gui.get().getInt("gui.display.points-purchase.slot") && e.getAction().equals(a)) {
                 if (player.getLevel() >= sm.getPointPrice(player))
                     if (config.get().getBoolean("points.restriction")) {
@@ -56,7 +60,12 @@ public class InventoryClick implements Listener {
                     return;
                 sm.resetAll(player);
                 reconstructInventory(player, false);
-                player.playSound(player.getLocation(), Sound.EXPLODE, 60.0F, 100.0F);
+                String version = Bukkit.getServer().getVersion();
+                if (version.contains("1.8") || version.contains("1.9")) {
+                    player.playSound(player.getLocation(), Sound.EXPLODE, 1.0F, 1.0F);
+                } else {
+                    player.playSound(player.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1.0F, 1.0F);
+                }
                 player.sendMessage(this.messageHelper.getMessage("skill_full_reset", new String[0]));
             } else if (e.getSlot() == gui.get().getInt("gui.display.strength-normal.slot")) {
                 updateSkill(sm, player, Skill.STRENGTH);
