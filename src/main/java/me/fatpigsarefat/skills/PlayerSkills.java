@@ -102,8 +102,8 @@ public class PlayerSkills extends JavaPlugin {
         BukkitScheduler healthCheck = this.getServer().getScheduler();
         healthCheck.scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getHealth() > player.getMaxHealth()) {
-                    player.setHealth(player.getMaxHealth());
+                if (player.getHealth() > player.getHealth()) {
+                    player.setHealth(player.getHealth());
                 }
             }
         }, 10L, 10L);
