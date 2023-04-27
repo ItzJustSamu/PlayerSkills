@@ -2,6 +2,7 @@ package me.fatpigsarefat.skills.managers;
 
 import me.fatpigsarefat.skills.PlayerSkills;
 import me.fatpigsarefat.skills.utils.Skill;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -79,7 +80,12 @@ public class SkillManager {
     public void buySkillPoint(Player player) {
         player.setLevel(player.getLevel() - getPointPrice(player));
         setSkillPoints(player, getSkillPoints(player) + 1);
-        player.playSound(player.getLocation(), Sound.LEVEL_UP, 60.0F, 100.0F);
+        String version = Bukkit.getServer().getVersion();
+        if (version.contains("1.8") || version.contains("1.9")) {
+            player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0F, 1.0F);
+        } else {
+            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1.0F, 1.0F);
+        }
     }
 
     public void setSkillPoints(OfflinePlayer player, int points) {
