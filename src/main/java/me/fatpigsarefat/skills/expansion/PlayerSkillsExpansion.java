@@ -17,7 +17,7 @@ public class PlayerSkillsExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "v2";
+        return "v2.1";
     }
 
     @Override
