@@ -11,7 +11,6 @@ import me.fatpigsarefat.skills.managers.SkillManager;
 import me.fatpigsarefat.skills.utils.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -45,11 +44,9 @@ public class InventoryClick implements Listener {
             if (e.getSlot() == gui.get().getInt("gui.display.points-purchase.slot") && e.getAction().equals(a)) {
                 if (player.getLevel() >= sm.getPointPrice(player))
                     if (config.get().getBoolean("points.restriction")) {
-                        if (sm.getTotalPointsSpent(player) != config.get().getInt("points.restriction-per")) {
+                        if (sm.getTotalPointsSpent(player) != config.get().getInt("points.restriction")) {
                             sm.buySkillPoint(player);
                             reconstructInventory(player, false);
-                        } else {
-                            player.sendMessage(this.messageHelper.getMessage("points_limit", new String[] { config.get().getString("points.restriction-per") }));
                         }
                     } else {
                         sm.buySkillPoint(player);
@@ -60,12 +57,6 @@ public class InventoryClick implements Listener {
                     return;
                 sm.resetAll(player);
                 reconstructInventory(player, false);
-                String version = Bukkit.getServer().getVersion();
-                if (version.contains("1.8") || version.contains("1.9")) {
-                    player.playSound(player.getLocation(), Sound.EXPLODE, 1.0F, 1.0F);
-                } else {
-                    player.playSound(player.getLocation(), Sound.valueOf("ENTITY_GENERIC_EXPLODE"), 1.0F, 1.0F);
-                }
                 player.sendMessage(this.messageHelper.getMessage("skill_full_reset", new String[0]));
             } else if (e.getSlot() == gui.get().getInt("gui.display.strength-normal.slot")) {
                 updateSkill(sm, player, Skill.STRENGTH);
