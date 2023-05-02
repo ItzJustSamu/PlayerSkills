@@ -41,7 +41,7 @@ public class PlayerSkills extends JavaPlugin {
         fileManager.AddConfig("gui");
         fileManager.AddConfig("data");
 
-        // Connect to MySQL
+        // Connect MySQL
         if (fileManager.getConfig("config").get().getBoolean("mysql-enabled")) {
             try {
                 Connection conn = DriverManager.getConnection(
@@ -112,8 +112,8 @@ public class PlayerSkills extends JavaPlugin {
     public void checkUpdates(Player player) {
         if (fileManager.getConfig("config").get().getBoolean("check-update")) {
             (new UpdateChecker(this, 109080)).getVersion((version) -> {
-                this.availableUpdate = !this.getDescription().getVersion().equalsIgnoreCase(version);
-                String string = "[PlayerSkills] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at https://www.spigotmc.org/resources/▶-playerskills-◀-upgrade-skills-citizens-support-holograms-suport-orbs-sourcecode.109080/" : "Looks like you have the latest version installed!");
+                this.availableUpdate = !this.getDescription().getVersion().equalsIgnoreCase(String.valueOf(version));
+                String string = "[PlayerSkills] " + (this.availableUpdate ? "Found a new available version! " + ChatColor.RED + "Download at https://www.spigotmc.org/resources/▶-playerskills-◀-upgrade-skills-citizens-support-holograms-support-orbs-sourcecode.109080/" : "Looks like you have the latest version installed!");
                 if (player != null) {
                     if (player.hasPermission("admin")) {
                         player.sendMessage(string);
