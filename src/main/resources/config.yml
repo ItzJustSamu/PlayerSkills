@@ -1,7 +1,7 @@
 check-update: true
 points:
   restriction: false
-  restriction-per: 10
+  points-limit: 10
 xp:
   price: 1
   add-total-to-price: true
