@@ -1,12 +1,14 @@
 package me.fatpigsarefat.skills.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class UpdateChecker {
     private final JavaPlugin plugin;
@@ -17,56 +19,20 @@ public class UpdateChecker {
         this.resourceId = resourceId;
     }
 
-    public void getVersion(Consumer<String> consumer) {
+    public void getVersion(Consumer<Optional<String>> consumer) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            try {
-                InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId)).openStream();
-                Throwable var3 = null;
+            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream();
+                 Scanner scanner = new Scanner(inputStream)) {
 
-                try {
-                    Scanner scanner = new Scanner(inputStream);
-                    Throwable var5 = null;
-
-                    try {
-                        if (scanner.hasNext()) {
-                            consumer.accept(scanner.next());
-                        }
-                    } catch (Throwable var30) {
-                        var5 = var30;
-                        throw var30;
-                    } finally {
-                        if (var5 != null) {
-                            try {
-                                scanner.close();
-                            } catch (Throwable var29) {
-                                var5.addSuppressed(var29);
-                            }
-                        } else {
-                            scanner.close();
-                        }
-
-                    }
-                } catch (Throwable var32) {
-                    var3 = var32;
-                    throw var32;
-                } finally {
-                    if (inputStream != null) {
-                        if (var3 != null) {
-                            try {
-                                inputStream.close();
-                            } catch (Throwable var28) {
-                                var3.addSuppressed(var28);
-                            }
-                        } else {
-                            inputStream.close();
-                        }
-                    }
-
+                if (scanner.hasNext()) {
+                    consumer.accept(Optional.of(scanner.next()));
+                } else {
+                    consumer.accept(Optional.empty());
                 }
-            } catch (IOException var34) {
-                this.plugin.getLogger().info("Cannot look for updates: " + var34.getMessage());
+            } catch (IOException e) {
+                plugin.getLogger().info("Cannot look for updates: " + e.getMessage());
+                consumer.accept(Optional.empty());
             }
-
         });
     }
 }
