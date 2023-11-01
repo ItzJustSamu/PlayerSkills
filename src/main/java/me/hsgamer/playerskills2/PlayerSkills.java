@@ -63,6 +63,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new CriticalsSkill(this));
         registerSkill(new ArcherySkill(this));
         registerSkill(new LacerateSkill(this));
+        registerSkill(new SwiftSkill(this));
 
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
