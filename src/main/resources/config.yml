@@ -50,18 +50,36 @@ skills:
   swift:
     display:
       name: "&cSwift Overview"
-      type: SUGAR
+      type: IRON_BOOTS
       lore:
-       - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
-       - "&7This skill increases your movement speed.",
-       - "&7Level: &e{level}&7/&e{max}&7",
-       - " ",
-       - "&cSpeed Increase: ",
+       - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s)."
+       - "&7This skill increases your movement speed."
+       - "&7Level: &e{level}&7/&e{max}&7"
+       - " "
+       - "&cSpeed Increase: "
        - "   &e{prev}x &7 >>> &e{next}x"
     config:
-      max-level: 6
-      gui-slot: 15
-      percent-increase: 2             # every level, 2% more chance to dodge attacks
+      max-level: 10
+      gui-slot: 16
+      swift-increment: 0.1
+      default-speed: 0.1
+  leap:
+    display:
+      name: "&cSwift Overview"
+      type: IRON_BOOTS
+      lore:
+        - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+        - "&7This skill gives you a leap effect for enhanced jumping.",
+        - "&7Level: &e{level}&7/&e{max}&7",
+        - " ",
+        - "&cLeap Amplifier: &e{leap-amplifier}"
+        - " "
+        - "&cLeap Increase: "
+        - "   &e{prev}x &7 >>> &e{next}x"
+    config:
+      max-level: 10
+      gui-slot: 16
+      leap-increment: 1
   dodge:
     display:
       name: "&cDodge Overview"
@@ -74,7 +92,7 @@ skills:
         - "&cDodge chance: "
         - "   &e{prev} &7 >>> &e{next}"
     config:
-      max-level: 6
+      max-level: 10
       gui-slot: 13
       percent-increase: 2
   criticals:
@@ -89,7 +107,7 @@ skills:
        - "&cCritical chance: "
        - "   &e{prev} &7 >>> &e{next}"
     config:
-      max-level: 3
+      max-level: 5
       gui-slot: 14
       percent-increase: 4             # every level, 4% more chance to deal criticals
       critical-multiplier: 1.5        # 150% damage

@@ -14,6 +14,8 @@ import me.hsgamer.playerskills2.util.modifier.XMaterialModifier;
 import org.bukkit.event.EventHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,14 +23,13 @@ import java.util.UUID;
 
 import static me.hsgamer.playerskills2.util.Utils.getPercentageFormat;
 
-public class SwiftSkill extends Skill {
+public class LeapSkill extends Skill {
 
-    private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.1);
+    private final ConfigPath<Integer> leapIncrement = Paths.integerPath("leap-increment", 1);
 
-    public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 3, 16);
+    public LeapSkill(PlayerSkills plugin) {
+        super(plugin, "Leap", "leap", 1, 18);
     }
-
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -48,51 +49,48 @@ public class SwiftSkill extends Skill {
             return;
         }
 
-        int speedLevel = getLevel(sPlayer);
+        int leapLevel = getLevel(sPlayer);
+        int leapAmplifier = this.leapIncrement.getValue();
 
-        if (speedLevel == 0) {
-            double defaultSpeed = MainConfig.DEFAULT_SPEED.getValue();
-            float defaultSpeedFloat = (float) defaultSpeed;
-            player.setWalkSpeed(defaultSpeedFloat);
+        if (leapLevel == 0) {
+            // If the player has no leap level, remove any existing leap effect
+            player.removePotionEffect(PotionEffectType.JUMP);
         } else {
-            double speedMultiplier = 0.1 + (speedLevel * swiftIncrement.getValue());
-            float validSpeed = (float) Math.max(-1.0, Math.min(1.0, speedMultiplier));
-            player.setWalkSpeed(validSpeed);
+            // Apply the leap effect based on the leap level and amplifier
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, leapAmplifier), true);
         }
     }
 
-
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(swiftIncrement);
+        return Collections.singletonList(this.leapIncrement);
     }
 
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder()
-                .addItemModifier(new NameModifier().setName("&cSpeed Overview"))
-                .addItemModifier(new XMaterialModifier(XMaterial.IRON_BOOTS))
+                .addItemModifier(new NameModifier().setName("&cLeap Overview"))
+                .addItemModifier(new XMaterialModifier(XMaterial.DIAMOND_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
-                        "&7This skill increases your movement speed.",
+                        "&7This skill gives you a leap effect for enhanced jumping.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
-                        "&cSpeed Increase: ",
-                        "   &e{prev}x &7 >>> &e{next}x"
+                        "&cLeap Amplifier: &e{leap-amplifier}"
                 ));
     }
 
-        @Override
-        public String getPreviousString(SPlayer player) {
-            int swiftLevel = getLevel(player);
-            double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
-            return getPercentageFormat().format(swift);
-        }
+    @Override
+    public String getPreviousString(SPlayer player) {
+        int leapLevel = getLevel(player);
+        double leap = 1.0 + (leapLevel * leapIncrement.getValue());
+        return getPercentageFormat().format(leap);
+    }
 
-        @Override
-        public String getNextString(SPlayer player) {
-            int swiftLevel=getLevel(player)+1;
-            double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
-            return getPercentageFormat().format(swift);
-        }
-        }
+    @Override
+    public String getNextString(SPlayer player) {
+        int swiftLevel=getLevel(player)+1;
+        double leap = 1.0 + (swiftLevel * leapIncrement.getValue());
+        return getPercentageFormat().format(leap);
+    }
+}

@@ -106,6 +106,7 @@ public class SkillsMenu implements Menu {
                         }
                     }
                     sPlayer.getSkills().clear();
+                    player.setWalkSpeed(0.2f);
                     XSound.ENTITY_GENERIC_EXPLODE.play(player, 1, 1);
                     this.open(player);
                 } else {

@@ -10,10 +10,7 @@ import me.hsgamer.hscore.config.PathableConfig;
 import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
-import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
-import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
-import me.hsgamer.hscore.config.path.impl.LongConfigPath;
-import me.hsgamer.hscore.config.path.impl.StringConfigPath;
+import me.hsgamer.hscore.config.path.impl.*;
 import me.hsgamer.playerskills2.PlayerSkills;
 import me.hsgamer.playerskills2.fundingsource.FundingSource;
 import me.hsgamer.playerskills2.fundingsource.XPFundingSource;
@@ -29,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 
 public class MainConfig extends PathableConfig {
+    public static final DoubleConfigPath DEFAULT_SPEED = new DoubleConfigPath("default-speed", 0.2);
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
