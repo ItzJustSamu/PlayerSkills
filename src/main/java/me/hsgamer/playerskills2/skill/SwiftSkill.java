@@ -23,7 +23,7 @@ import static me.hsgamer.playerskills2.util.Utils.getPercentageFormat;
 
 public class SwiftSkill extends Skill {
 
-    private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.1);
+    private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
 
     public SwiftSkill(PlayerSkills plugin) {
         super(plugin, "Swift", "swift", 3, 16);

@@ -1,17 +1,3 @@
-# | =================================================== |
-# | Thank you for purchasing and downloading my plugin: |
-# |                    PlayerSkills2                    |
-# |                 Created by LMBishop                 |
-# |                                                     |
-# |                         =x=                         |
-# |                                                     |
-# |              File comments should help              |
-# |                 you with the config.                |
-# |                                                     |
-# |                         =x=                         |
-# |                                                     |
-# | =================================================== |
-
 # this is the section where each skill can be customised and how they look in the GUI
 skills:
   strength:
@@ -61,25 +47,23 @@ skills:
     config:
       max-level: 10
       gui-slot: 16
-      swift-increment: 0.1
+      swift-increment: 0.05
       default-speed: 0.1
-  leap:
+  extrashot:
     display:
-      name: "&cSwift Overview"
-      type: IRON_BOOTS
+      name: "&cArrow Overview"
+      type: ARROW
       lore:
-        - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
-        - "&7This skill gives you a leap effect for enhanced jumping.",
-        - "&7Level: &e{level}&7/&e{max}&7",
-        - " ",
-        - "&cLeap Amplifier: &e{leap-amplifier}"
+        - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s)."
+        - "&7This skill increases the amount of arrows shot."
+        - "&7Level: &e{level}&7/&e{max}&7"
         - " "
-        - "&cLeap Increase: "
+        - "&cArrow amount: "
         - "   &e{prev}x &7 >>> &e{next}x"
     config:
       max-level: 10
-      gui-slot: 16
-      leap-increment: 1
+      gui-slot: 10
+      arrow-increment: 1
   dodge:
     display:
       name: "&cDodge Overview"

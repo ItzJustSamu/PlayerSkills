@@ -64,7 +64,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new ArcherySkill(this));
         registerSkill(new LacerateSkill(this));
         registerSkill(new SwiftSkill(this));
-
+        registerSkill(new ExtraShotSkill(this));
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
