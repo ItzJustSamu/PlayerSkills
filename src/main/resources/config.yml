@@ -47,7 +47,7 @@ skills:
     config:
       max-level: 10
       gui-slot: 16
-      swift-increment: 0.05
+      swift-increment: 0.1
       default-speed: 0.1
   extrashot:
     display:
@@ -79,6 +79,21 @@ skills:
       max-level: 10
       gui-slot: 13
       percent-increase: 2
+  looting:
+    display:
+      name: "&cDodge Overview"
+      type: BONE
+      lore:
+        - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s)."
+        - "&7This skill increases looting drops."
+        - "&7Level: &e{level}&7/&e{max}&7"
+        - " "
+        - "&cLooting increase: "
+        - "   &e{prev} &7 >>> &e{next}"
+    config:
+      max-level: 10
+      gui-slot: 9
+      looting-increment: 10
   criticals:
     display:
       name: "&cCriticals Overview"

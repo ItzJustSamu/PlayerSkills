@@ -1,8 +1,8 @@
-name: PlayerSkills2
+name: PlayerSkills
 version: ${project.version}
 
-main: me.hsgamer.playerskills2.PlayerSkills
+main: me.hsgamer.playerskills.PlayerSkills
 author: lmbishop, HSGamer, ItzJustSamu
-prefix: PlayerSkills2
+prefix: PlayerSkills
 softdepend: [ Vault ]
 api-version: 1.13
