@@ -23,13 +23,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.*;
 
 public class HealthSkill extends Skill {
-    private final ConfigPath<Integer> extraHealthPerLevel = Paths.integerPath("extra-health-per-level", 1);
+    private final ConfigPath<Double> extraHealthPerLevel = Paths.doublePath("extra-health-per-level", 0.5);
     private final ConfigPath<Boolean> compatibilityMode = Paths.booleanPath("compatibility-mode", false);
     private final Map<UUID, Integer> knownMaxHealth = new IdentityHashMap<>();
     private Task task;
 
     public HealthSkill(PlayerSkills plugin) {
-        super(plugin, "Health", "health", 5, 22);
+        super(plugin, "Health", "health", 20, 15);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class HealthSkill extends Skill {
                     clearPlayer(player);
                     return;
                 }
-                int hpNeeded = (getLevel(sPlayer) * (extraHealthPerLevel.getValue() * 2));
+                int hpNeeded = (int) (getLevel(sPlayer) * (extraHealthPerLevel.getValue() * 2));
                 if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
                     clearPlayer(player);
                     if (hpNeeded > 0) {
@@ -125,14 +125,14 @@ public class HealthSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int healthLevel = getLevel(player);
-        int hp = healthLevel * extraHealthPerLevel.getValue();
+        int hp = (int) (healthLevel * extraHealthPerLevel.getValue());
         return Integer.toString(hp);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int healthLevel = getLevel(player) + 1;
-        int hp = healthLevel * extraHealthPerLevel.getValue();
+        int hp = (int) (healthLevel * extraHealthPerLevel.getValue());
         return Integer.toString(hp);
     }
 }

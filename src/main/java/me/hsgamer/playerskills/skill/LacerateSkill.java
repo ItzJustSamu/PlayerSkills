@@ -32,7 +32,7 @@ import java.util.function.BooleanSupplier;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class LacerateSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 4D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
     private final ConfigPath<Integer> bleedCycles = Paths.integerPath("bleed-cycles", 8);
     private final ConfigPath<Long> bleedInterval = Paths.longPath("bleed-interval", 50L);
     private final ConfigPath<Integer> bleedDamage = Paths.integerPath("bleed-damage", 2);
@@ -43,7 +43,7 @@ public class LacerateSkill extends Skill {
     private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate", 4, 23);
+        super(plugin, "Lacerate", "lacerate", 20, 17);
     }
 
     @EventHandler

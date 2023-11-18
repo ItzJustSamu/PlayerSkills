@@ -66,16 +66,17 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new SwiftSkill(this));
         registerSkill(new ExtraShotSkill(this));
         registerSkill(new LootingSkill(this));
+        registerSkill(new KnockBackSkill(this));
+        registerSkill(new XPSkill(this));
+        registerSkill(new LumberSkill(this));
+        registerSkill(new ExtraJumpSkill(this));
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener());
     }
-
     @Override
     public void postEnable() {
-        Utils.logInfo("Use " + MainConfig.POINTS_FUNDING_SOURCE.getValue().getName() + " as funding source.");
-        Utils.logInfo("Use " + MainConfig.OPTIONS_PLAYER_STORAGE.getValue().getName() + " as player storage.");
         this.startAutoSaveTask();
     }
 

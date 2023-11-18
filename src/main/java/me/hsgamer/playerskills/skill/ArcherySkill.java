@@ -19,28 +19,28 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import java.util.Collections;
 import java.util.List;
 
+import static me.hsgamer.playerskills.skill.SkillEffect.playSound;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class ArcherySkill extends Skill {
-    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 6D);
+    private final ConfigPath<Double> DAMAGE_INCREMENT = Paths.doublePath("Damage-increment", 3D);
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 10, 15);
+        super(plugin, "Archery", "archery", 20, 9);
     }
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        Player player = null;
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-            if (arrow.getShooter() instanceof Player) {
-                player = (Player) arrow.getShooter();
-            }
-        }
-
-        if (player == null) {
+        if (!(event.getDamager() instanceof Arrow)) {
             return;
         }
+
+        Arrow arrow = (Arrow) event.getDamager();
+        if (!(arrow.getShooter() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) arrow.getShooter();
 
         if (isWorldNotAllowed(player)) {
             return;
@@ -55,17 +55,19 @@ public class ArcherySkill extends Skill {
             return;
         }
 
-        int archeryLevel = getLevel(sPlayer);
+        if (getLevel(sPlayer) > 0) {
+            playSound(player);
 
-        double percentile = event.getDamage() / 100;
-        percentile = percentile * damageIncrement.getValue();
-        double weightedDamage = archeryLevel * percentile;
-        event.setDamage(event.getDamage() + weightedDamage);
+            double damage = event.getDamage() / 100;
+            damage = damage * DAMAGE_INCREMENT.getValue();
+            double finalDamage = getLevel(sPlayer) * damage;
+            event.setDamage(event.getDamage() + finalDamage);
+        }
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(damageIncrement);
+        return Collections.singletonList(DAMAGE_INCREMENT);
     }
 
     @Override
@@ -78,22 +80,22 @@ public class ArcherySkill extends Skill {
                         "&7This skill increases damage dealt using bows.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
-                        "&cBow damage dealt: ",
+                        "&cBow Upgrade: ",
                         "   &e{prev}% &7 >>> &e{next}%"
                 ));
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int archeryLevel = getLevel(player);
-        double damage = 100 + (archeryLevel * damageIncrement.getValue());
-        return getPercentageFormat().format(damage);
+        int playerLevel = getLevel(player);
+        double archery = playerLevel * DAMAGE_INCREMENT.getValue();
+        return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int archeryLevel = getLevel(player) + 1;
-        double damage = 100 + (archeryLevel * damageIncrement.getValue());
-        return getPercentageFormat().format(damage);
+        int playerLevel = getLevel(player) + 1;
+        double archery = playerLevel * DAMAGE_INCREMENT.getValue();
+        return getPercentageFormat().format(archery);
     }
 }

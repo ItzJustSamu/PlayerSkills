@@ -13,8 +13,8 @@ import me.hsgamer.playerskills.util.Utils;
 import me.hsgamer.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractArrow;
-import org.bukkit.event.EventHandler;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -26,10 +26,10 @@ import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class ExtraShotSkill extends Skill {
 
-    private final ConfigPath<Double> arrowIncrement = Paths.doublePath("arrow-increment", 1.0);
+    private final ConfigPath<Double> ARROW_INCREMENT = Paths.doublePath("arrow-increment", 1.0);
 
     public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 10);
+        super(plugin, "ExtraShot", "extrashot", 10, 13);
     }
 
     @EventHandler
@@ -55,19 +55,19 @@ public class ExtraShotSkill extends Skill {
             int numArrows = 1 + arrowLevel; // Increase the number of arrows based on arrowLevel
 
             BukkitScheduler scheduler = Bukkit.getScheduler();
-            long delayBetweenShots = 4L; // Adjust this value to control the delay between shots (in ticks)
+            long delayBetweenShots = 3L; // Adjust this value to control the delay between shots (in ticks)
 
             for (int i = 0; i < numArrows; i++) {
                 int finalI = i;
                 scheduler.runTaskLater(getPlugin(), () -> {
-                    AbstractArrow arrow = (AbstractArrow) player.launchProjectile(AbstractArrow.class, player.getLocation().getDirection());
+                    AbstractArrow arrow = player.launchProjectile(AbstractArrow.class, player.getLocation().getDirection());
 
                     // Adjust arrow speed and distance here
-                    double speedMultiplier = 2.0; // Adjust the speed multiplier as needed
+                    double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
                     arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
 
-                    // Make the arrow not pick-uppable (Paper-specific)
-                    arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+                    // Deny arrow pickup (Paper-specific)
+                    arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 
                     if (finalI == numArrows - 1) {
                         // This is the last arrow, perform any final actions here
@@ -83,7 +83,7 @@ public class ExtraShotSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(arrowIncrement);
+        return Collections.singletonList(ARROW_INCREMENT);
     }
 
     @Override
@@ -97,21 +97,21 @@ public class ExtraShotSkill extends Skill {
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
                         "&cArrow amount: ",
-                        "   &e{prev}% &7 >>> &e{next}%"
+                        "   &e{prev}x&7 >>> &e{next}x"
                 ));
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
         int arrowLevel = getLevel(player);
-        double arrows = 1.0 + (arrowLevel * arrowIncrement.getValue());
+        double arrows = arrowLevel * ARROW_INCREMENT.getValue();
         return getPercentageFormat().format(arrows);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int arrowLevel = getLevel(player) + 1;
-        double arrows = 1.0 + (arrowLevel * arrowIncrement.getValue());
+        double arrows = arrowLevel * ARROW_INCREMENT.getValue();
         return getPercentageFormat().format(arrows);
     }
 }

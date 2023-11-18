@@ -21,10 +21,10 @@ import java.util.List;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class GluttonySkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 50D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
 
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony", 4, 21);
+        super(plugin, "Gluttony", "gluttony", 20, 14);
     }
 
     @EventHandler
@@ -79,14 +79,14 @@ public class GluttonySkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int gluttonyLevel = getLevel(player);
-        double heal = 100 + (gluttonyLevel * percentIncrease.getValue());
+        double heal = gluttonyLevel * percentIncrease.getValue();
         return getPercentageFormat().format(heal);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int gluttonyLevel = getLevel(player) + 1;
-        double heal = 100 + (gluttonyLevel * percentIncrease.getValue());
+        double heal =gluttonyLevel * percentIncrease.getValue();
         return getPercentageFormat().format(heal);
     }
 }

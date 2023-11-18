@@ -22,11 +22,10 @@ import me.hsgamer.playerskills.util.path.StringListConfigPath;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Collections;
 
+
 public class MainConfig extends PathableConfig {
-    public static final DoubleConfigPath DEFAULT_SPEED = new DoubleConfigPath("default-speed", 0.2);
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());

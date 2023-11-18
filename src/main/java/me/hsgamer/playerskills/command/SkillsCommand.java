@@ -9,13 +9,14 @@ import me.hsgamer.playerskills.menu.SkillsMenu;
 import me.hsgamer.playerskills.player.SPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SkillsCommand extends Command {
+public class SkillsCommand extends Command implements CommandExecutor {
 
     private final PlayerSkills plugin;
 
@@ -47,4 +48,17 @@ public class SkillsCommand extends Command {
         return true;
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+            if (sender.hasPermission("playerskills.reload")) {
+                plugin.reloadConfig(); // Reload the plugin's configuration
+                sender.sendMessage("PlayerSkills configuration reloaded.");
+                return true;
+            } else {
+                sender.sendMessage("You don't have permission to use this command.");
+            }
+        }
+        return false;
+    }
 }

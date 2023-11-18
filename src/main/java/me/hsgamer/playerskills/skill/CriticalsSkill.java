@@ -24,12 +24,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class CriticalsSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 4D);
-    private final ConfigPath<Double> criticalMultiplier = Paths.doublePath("critical-multiplier", 1.5D);
-    private final ConfigPath<String> criticalMessage = Paths.stringPath("critical-message", "&a*** CRITICAL HIT ***");
+    private final ConfigPath<Double> CRITICAL_INCREMENT = Paths.doublePath("percent-increase", 3D);
+    private final ConfigPath<Double> CRITICAL_MULTIPLIER = Paths.doublePath("critical-multiplier", 1.5D);
+    private final ConfigPath<String> CRITICAL_MESSAGE = Paths.stringPath("critical-message", "&a*** CRITICAL HIT ***");
 
     public CriticalsSkill(PlayerSkills plugin) {
-        super(plugin, "Criticals", "criticals", 3, 14);
+        super(plugin, "Criticals", "criticals", 20, 10);
     }
 
     @EventHandler
@@ -54,25 +54,26 @@ public class CriticalsSkill extends Skill {
 
         int criticalLevel = getLevel(sPlayer);
 
-        double chance = criticalLevel * percentIncrease.getValue();
+        double chance = criticalLevel * CRITICAL_INCREMENT.getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
-            String message = criticalMessage.getValue();
+            String message = CRITICAL_MESSAGE.getValue();
             if (!message.equals("")) {
                 MessageUtils.sendMessage(player, message, "");
             }
-            event.setDamage(event.getDamage() * criticalMultiplier.getValue());
+            event.setDamage(event.getDamage() * CRITICAL_MULTIPLIER.getValue());
         }
+
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(percentIncrease, criticalMultiplier);
+        return Arrays.asList(CRITICAL_INCREMENT, CRITICAL_MULTIPLIER);
     }
 
     @Override
     public List<ConfigPath<?>> getMessageConfigPaths() {
-        return Collections.singletonList(criticalMessage);
+        return Collections.singletonList(CRITICAL_MESSAGE);
     }
 
     @Override
@@ -93,14 +94,14 @@ public class CriticalsSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int criticalLevel = getLevel(player);
-        double damage = criticalLevel * percentIncrease.getValue();
+        double damage = criticalLevel * CRITICAL_INCREMENT.getValue();
         return getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int criticalLevel = getLevel(player) + 1;
-        double damage = criticalLevel * percentIncrease.getValue();
+        double damage = criticalLevel * CRITICAL_INCREMENT.getValue();
         return getPercentageFormat().format(damage);
     }
 }

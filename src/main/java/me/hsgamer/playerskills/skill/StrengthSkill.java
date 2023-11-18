@@ -21,10 +21,10 @@ import java.util.List;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class StrengthSkill extends Skill {
-    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 6D);
+    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 3D);
 
     public StrengthSkill(PlayerSkills plugin) {
-        super(plugin, "Strength", "strength", 10, 11);
+        super(plugin, "Strength", "strength", 20, 21);
     }
 
     @EventHandler
@@ -78,14 +78,14 @@ public class StrengthSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int strengthLevel = getLevel(player);
-        double damage = 100 + (strengthLevel * damageIncrement.getValue());
+        double damage = strengthLevel * damageIncrement.getValue();
         return getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int strengthLevel = getLevel(player) + 1;
-        double damage = 100 + (strengthLevel * damageIncrement.getValue());
+        double damage = strengthLevel * damageIncrement.getValue();
         return getPercentageFormat().format(damage);
     }
 }

@@ -11,8 +11,8 @@ import me.hsgamer.playerskills.config.MainConfig;
 import me.hsgamer.playerskills.player.SPlayer;
 import me.hsgamer.playerskills.util.Utils;
 import me.hsgamer.playerskills.util.modifier.XMaterialModifier;
-import org.bukkit.event.EventHandler;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Collections;
@@ -22,11 +22,11 @@ import java.util.UUID;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class SwiftSkill extends Skill {
-
+    private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath("default-speed", 0.2);
     private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 3, 16);
+        super(plugin, "Swift", "swift", 4, 22);
     }
 
 
@@ -51,11 +51,11 @@ public class SwiftSkill extends Skill {
         int speedLevel = getLevel(sPlayer);
 
         if (speedLevel == 0) {
-            double defaultSpeed = MainConfig.DEFAULT_SPEED.getValue();
+            double defaultSpeed = DEFAULT_SPEED.getValue();
             float defaultSpeedFloat = (float) defaultSpeed;
             player.setWalkSpeed(defaultSpeedFloat);
         } else {
-            double speedMultiplier = 0.1 + (speedLevel * swiftIncrement.getValue());
+            double speedMultiplier = speedLevel * swiftIncrement.getValue();
             float validSpeed = (float) Math.max(-1.0, Math.min(1.0, speedMultiplier));
             player.setWalkSpeed(validSpeed);
         }
@@ -84,15 +84,15 @@ public class SwiftSkill extends Skill {
 
         @Override
         public String getPreviousString(SPlayer player) {
-            int swiftLevel = getLevel(player);
-            double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
-            return getPercentageFormat().format(swift);
+            int speedLevel = getLevel(player);
+            double speed = speedLevel * swiftIncrement.getValue();
+            return getPercentageFormat().format(speed);
         }
 
         @Override
         public String getNextString(SPlayer player) {
-            int swiftLevel=getLevel(player)+1;
-            double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
-            return getPercentageFormat().format(swift);
+            int speedLevel=getLevel(player)+1;
+            double speed = speedLevel * swiftIncrement.getValue();
+            return getPercentageFormat().format(speed);
         }
         }

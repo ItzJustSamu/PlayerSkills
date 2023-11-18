@@ -24,7 +24,7 @@ public class ResistanceSkill extends Skill {
     private final ConfigPath<Double> damageDrop = Paths.doublePath("damage-drop", 3D);
 
     public ResistanceSkill(PlayerSkills plugin) {
-        super(plugin, "Resistance", "resistance", 10, 12);
+        super(plugin, "Resistance", "resistance", 20, 20);
     }
 
     @EventHandler

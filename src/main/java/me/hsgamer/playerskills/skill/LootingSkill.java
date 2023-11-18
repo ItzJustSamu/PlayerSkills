@@ -22,10 +22,10 @@ import java.util.List;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class LootingSkill extends Skill {
-    private final ConfigPath<Double> lootingIncrement = Paths.doublePath("looting-increment", 10.0);
+    private final ConfigPath<Double> lootingIncrement = Paths.doublePath("looting-increment", 0.3D);
 
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 10, 9);
+        super(plugin, "Looting", "looting", 20, 18);
     }
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
@@ -52,7 +52,7 @@ public class LootingSkill extends Skill {
 
                 for (ItemStack drop : drops) {
                     // Apply looting bonus
-                    int amount = (int) (drop.getAmount() * (1 + lootingLevel * lootingIncrementValue));
+                    int amount = (int) (drop.getAmount() * lootingLevel * lootingIncrementValue);
                     drop.setAmount(amount);
                 }
             }
@@ -73,21 +73,21 @@ public class LootingSkill extends Skill {
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
                         "&cLoot Bonus: ",
-                        "   &e{prev}% &7 >>> &e{next}%"
+                        "   &e{prev}x &7 >>> &e{next}x"
                 ));
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
         int lootingLevel = getLevel(player);
-        double lootBonus = 10.0 + (lootingLevel * lootingIncrement.getValue());
+        double lootBonus = lootingLevel * lootingIncrement.getValue();
         return getPercentageFormat().format(lootBonus);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int lootingLevel = getLevel(player) + 1;
-        double lootBonus = 10.0 + (lootingLevel * lootingIncrement.getValue());
+        int lootingLevel = getLevel(player)+1;
+        double lootBonus = lootingLevel * lootingIncrement.getValue();
         return getPercentageFormat().format(lootBonus);
     }
 }

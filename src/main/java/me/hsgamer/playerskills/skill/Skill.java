@@ -3,7 +3,7 @@ package me.hsgamer.playerskills.skill;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.config.path.impl.*;
 import me.hsgamer.playerskills.PlayerSkills;
 import me.hsgamer.playerskills.config.MainConfig;
 import me.hsgamer.playerskills.config.MessageConfig;
@@ -27,30 +27,35 @@ public abstract class Skill implements Listener {
     private final SkillConfig config;
     private final PlayerSkills plugin;
     private final String name;
-    private final String configName;
-    private final int defaultMaxLevel;
-    private final int defaultGuiSlot;
-    private ConfigPath<Integer> maxLevelConfig;
-    private ConfigPath<Integer> guiSlotConfig;
+    private final String skills;
+
+
     private ConfigPath<List<String>> onlyInWorldsConfig;
     private ConfigPath<Map<Integer, Integer>> pointPriceOverridesConfig;
     private ItemBuilder displayItem;
 
-    public Skill(PlayerSkills plugin, String name, String configName, int defaultMaxLevel, int defaultGuiSlot) {
+    private ConfigPath<Integer> GET_MAX_LEVEL;
+    private ConfigPath<Integer> GET_GUI_SLOT;
+
+    private final int MAX_LEVEL;
+
+    private final int GUI_SLOT;
+
+    public Skill(PlayerSkills plugin, String name, String skills, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
         this.plugin = plugin;
         this.name = name;
-        this.configName = configName;
-        this.defaultMaxLevel = defaultMaxLevel;
-        this.defaultGuiSlot = defaultGuiSlot;
+        this.skills = skills;
+        this.MAX_LEVEL = SET_MAX_LEVEL;
+        this.GUI_SLOT = SET_GUI_SLOT;
         this.config = new SkillConfig(this);
     }
 
     public final void setup() {
         config.setup();
-        this.maxLevelConfig = Paths.integerPath("max-level", defaultMaxLevel);
-        maxLevelConfig.setConfig(config);
-        this.guiSlotConfig = Paths.integerPath("gui-slot", defaultGuiSlot);
-        guiSlotConfig.setConfig(config);
+        this.GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
+        GET_MAX_LEVEL.setConfig(config);
+        this.GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
+        GET_GUI_SLOT.setConfig(config);
         this.onlyInWorldsConfig = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
         onlyInWorldsConfig.setConfig(config);
         this.pointPriceOverridesConfig = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
@@ -87,8 +92,17 @@ public abstract class Skill implements Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+    public int getMaxLevel() {
+        return GET_MAX_LEVEL.getValue();
+    }
 
-    public abstract List<ConfigPath<?>> getAdditionalConfigPaths();
+    public int getGuiSlot() {
+        return GET_GUI_SLOT.getValue();
+    }
+
+    public List<ConfigPath<?>> getAdditionalConfigPaths() {
+        return null;
+    }
 
     public List<ConfigPath<?>> getMessageConfigPaths() {
         return Collections.emptyList();
@@ -101,7 +115,7 @@ public abstract class Skill implements Listener {
     }
 
     public final String getConfigName() {
-        return configName;
+        return skills;
     }
 
     public final PlayerSkills getPlugin() {
@@ -139,7 +153,6 @@ public abstract class Skill implements Listener {
     public Map<Integer, Integer> getPointPriceOverrides() {
         return pointPriceOverridesConfig.getValue();
     }
-
     public boolean isWorldNotAllowed(Player player) {
         List<String> list = onlyInWorldsConfig.getValue();
         if (list.isEmpty()) {
@@ -152,11 +165,4 @@ public abstract class Skill implements Listener {
         return !list.contains(world.getName());
     }
 
-    public int getMaxLevel() {
-        return maxLevelConfig.getValue();
-    }
-
-    public int getGuiSlot() {
-        return guiSlotConfig.getValue();
-    }
 }
