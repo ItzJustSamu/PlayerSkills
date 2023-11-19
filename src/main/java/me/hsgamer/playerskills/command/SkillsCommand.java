@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-public class SkillsCommand extends Command implements CommandExecutor {
+public class SkillsCommand extends Command {
 
     private final PlayerSkills plugin;
 
@@ -46,19 +46,5 @@ public class SkillsCommand extends Command implements CommandExecutor {
 
         new SkillsMenu(plugin, player, sPlayer).open(player);
         return true;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            if (sender.hasPermission("playerskills.reload")) {
-                plugin.reloadConfig(); // Reload the plugin's configuration
-                sender.sendMessage("PlayerSkills configuration reloaded.");
-                return true;
-            } else {
-                sender.sendMessage("You don't have permission to use this command.");
-            }
-        }
-        return false;
     }
 }

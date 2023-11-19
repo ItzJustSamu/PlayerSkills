@@ -21,7 +21,7 @@ import java.util.List;
 import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class StrengthSkill extends Skill {
-    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 3D);
+    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 5D);
 
     public StrengthSkill(PlayerSkills plugin) {
         super(plugin, "Strength", "strength", 20, 21);

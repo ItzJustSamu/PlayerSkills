@@ -23,13 +23,13 @@ import static me.hsgamer.playerskills.util.Utils.getPercentageFormat;
 
 public class SwiftSkill extends Skill {
 
-    private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath("swift-increment", 0.2);
+    private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath("default-speed", 0.2);
 
 
     private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 5, 16);
+        super(plugin, "Swift", "swift", 5, 22);
     }
 
 

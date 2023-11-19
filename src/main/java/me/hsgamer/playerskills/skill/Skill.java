@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public abstract class Skill implements Listener {
     private final String name;
     private final String skills;
 
+    private ItemBuilderConfigPath itemBuilderConfigPath;
 
     private ConfigPath<List<String>> onlyInWorldsConfig;
     private ConfigPath<Map<Integer, Integer>> pointPriceOverridesConfig;
@@ -101,15 +103,20 @@ public abstract class Skill implements Listener {
     }
 
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return null;
+        return new ArrayList<>();
     }
 
     public List<ConfigPath<?>> getMessageConfigPaths() {
         return Collections.emptyList();
     }
 
-    public abstract ItemBuilder getDefaultItem();
-
+    public ItemBuilder getDefaultItem() {
+        if (itemBuilderConfigPath == null) {
+            itemBuilderConfigPath = new ItemBuilderConfigPath("display", null);
+            itemBuilderConfigPath.setConfig(config);
+        }
+        return itemBuilderConfigPath.getValue();
+    }
     public final String getName() {
         return name;
     }
@@ -141,6 +148,17 @@ public abstract class Skill implements Listener {
     public void disable() {
         // EMPTY
     }
+
+    public void reload() {
+        // ... other reloading logic
+        if (itemBuilderConfigPath == null) {
+            itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
+            itemBuilderConfigPath.setConfig(config);
+        }
+        displayItem = itemBuilderConfigPath.getValue();
+    }
+
+
 
     public int getLevel(SPlayer player) {
         return player.getLevel(getConfigName());

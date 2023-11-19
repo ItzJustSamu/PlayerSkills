@@ -213,7 +213,7 @@ skills:
       #  - "worldname"
       max-level: 20
       gui-slot: 21
-      damage-increment: 35             # every level, damage will increase by 5%
+      damage-increment: 5           # every level, damage will increase by 5%
   swift:
     display:
       name: "&cSwift Overview"
