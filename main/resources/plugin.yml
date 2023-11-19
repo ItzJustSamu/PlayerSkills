@@ -1,8 +1,0 @@
-name: PlayerSkills
-version: ${project.version}
-description: Player Skills offers a customizable and engaging skill progression system.
-main: me.hsgamer.playerskills.PlayerSkills
-author: lmbishop, ItzJustSamu
-prefix: PlayerSkills
-softdepend: [ Vault ]
-api-version: 1.13
