@@ -2,6 +2,8 @@ package me.hsgamer.playerskills.menu;
 
 import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
+import me.hsgamer.playerskills.config.MainConfig;
+import me.hsgamer.playerskills.menu.ConfirmationMenu;
 import me.hsgamer.playerskills.PlayerSkills;
 import me.hsgamer.playerskills.config.MainConfig;
 import me.hsgamer.playerskills.player.SPlayer;
@@ -10,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 public class SkillsMenu implements Menu {
@@ -32,13 +33,6 @@ public class SkillsMenu implements Menu {
 
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
-        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
-            for (int i = 0; i < inventory.getSize(); i++) {
-                inventory.setItem(i, background);
-            }
-        }
-
         for (Skill skill : plugin.getSkillRegistrar().values()) {
             inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
         }
@@ -46,8 +40,19 @@ public class SkillsMenu implements Menu {
         inventory.setItem(MainConfig.GUI_INFO_SLOT.getValue(), MainConfig.GUI_INFO_DISPLAY.getValue().build(player));
         inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(player));
         inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(player));
+        
+        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
+            for (int i = 0; i < inventory.getSize(); i++) {
+                if (inventory.getItem(i) == null) {
+                    inventory.setItem(i, background);
+                }
+            }
+        }
+
         return inventory;
     }
+
 
     @Override
     public void onClick(int slot) {
@@ -107,8 +112,6 @@ public class SkillsMenu implements Menu {
                         }
                     }
                     sPlayer.getSkills().clear();
-                    player.removePotionEffect(PotionEffectType.REGENERATION);
-                    player.setWalkSpeed(0.2f);
                     XSound.ENTITY_GENERIC_EXPLODE.play(player, 1, 1);
                     this.open(player);
                 } else {

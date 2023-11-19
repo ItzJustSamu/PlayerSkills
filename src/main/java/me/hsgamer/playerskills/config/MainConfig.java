@@ -26,6 +26,7 @@ import java.util.Collections;
 
 
 public class MainConfig extends PathableConfig {
+    // Skill-related configurations
     public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
@@ -50,8 +51,11 @@ public class MainConfig extends PathableConfig {
     public static final LongConfigPath OPTIONS_AUTO_SAVE_TICKS = new LongConfigPath("options.auto-save.ticks", 1000L);
     public static final BooleanConfigPath OPTIONS_AUTO_SAVE_ASYNC = new BooleanConfigPath("options.auto-save.async", true);
 
+    // GUI-related configurations
     public static final StringConfigPath GUI_TITLE = new StringConfigPath("gui.title", "&6Skills");
     public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 27);
+
+    // Background configurations
     public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);
     public static final ConfigPath<ItemBuilder> GUI_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.background.display",
             new ItemBuilder()

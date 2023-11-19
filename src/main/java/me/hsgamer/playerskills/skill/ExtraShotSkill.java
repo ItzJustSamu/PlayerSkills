@@ -12,7 +12,7 @@ import me.hsgamer.playerskills.player.SPlayer;
 import me.hsgamer.playerskills.util.Utils;
 import me.hsgamer.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -60,14 +60,14 @@ public class ExtraShotSkill extends Skill {
             for (int i = 0; i < numArrows; i++) {
                 int finalI = i;
                 scheduler.runTaskLater(getPlugin(), () -> {
-                    AbstractArrow arrow = player.launchProjectile(AbstractArrow.class, player.getLocation().getDirection());
+                    Arrow arrow = player.launchProjectile(Arrow.class, player.getLocation().getDirection());
 
                     // Adjust arrow speed and distance here
                     double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
                     arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
 
                     // Deny arrow pickup (Paper-specific)
-                    arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+                    arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
 
                     if (finalI == numArrows - 1) {
                         // This is the last arrow, perform any final actions here
