@@ -228,7 +228,7 @@ skills:
     config:
       max-level: 10
       gui-slot: 22
-      swift-increment: 0.01
+      swift-increment: 0.05
       default-speed: 0.2
   xp:
     display:

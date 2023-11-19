@@ -40,7 +40,7 @@ public class SkillsMenu implements Menu {
         inventory.setItem(MainConfig.GUI_INFO_SLOT.getValue(), MainConfig.GUI_INFO_DISPLAY.getValue().build(player));
         inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(player));
         inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(player));
-        
+
         if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
             ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
             for (int i = 0; i < inventory.getSize(); i++) {
