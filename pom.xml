@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.hsgamer</groupId>
-    <artifactId>playerskills2</artifactId>
-    <version>2.0</version>
-    <name>PlayerSkills2</name>
+    <artifactId>PlayerSkills</artifactId>
+    <version>2.6</version>
+    <name>PlayerSkills</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -16,7 +16,7 @@
     </properties>
 
     <build>
-        <finalName>PlayerSkills2</finalName>
+        <finalName>PlayerSkills</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
