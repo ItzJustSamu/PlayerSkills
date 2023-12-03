@@ -33,7 +33,7 @@ public class SkillsSettings implements Menu {
     @Override
     public @NotNull Inventory getInventory() {
         String title = ColorUtils.colorize("&6Skills Settings");
-        int size = Math.max(9, 9 * (int) Math.ceil(plugin.getSkillRegistrar().size() / 9.0));
+        int size = Math.max(9, 9 * (int) Math.ceil(plugin.getSkills().size() / 9.0));
 
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
@@ -73,7 +73,7 @@ public class SkillsSettings implements Menu {
 
     private Skill getSkillFromSlot(int slot) {
         int index = 0;
-        for (Skill skill : plugin.getSkillRegistrar().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             if (index++ == slot) {
                 return skill;
             }
@@ -96,7 +96,7 @@ public class SkillsSettings implements Menu {
 
     private Collection<Skill> getEnabledSkills() {
         List<Skill> enabledSkills = new ArrayList<>();
-        for (Skill skill : plugin.getSkillRegistrar().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             if (!plugin.getDisabledSkills().containsKey(skill.getConfigName())) {
                 enabledSkills.add(skill);
             }

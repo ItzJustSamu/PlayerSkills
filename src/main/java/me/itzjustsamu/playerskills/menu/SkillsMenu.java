@@ -38,7 +38,7 @@ public class SkillsMenu implements Menu {
             }
         }
 
-        for (Skill skill : plugin.getSkillRegistrar().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             // Only add the skill item if it is not disabled
             if (!plugin.getDisabledSkills().containsKey(skill.getConfigName())) {
                 // Call setup to ensure placeholders are replaced
@@ -55,7 +55,7 @@ public class SkillsMenu implements Menu {
 
     @Override
     public void onClick(int slot) {
-        for (Skill skill : plugin.getSkillRegistrar().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             if (slot == skill.getGuiSlot() && (skill.getLevel(sPlayer) < skill.getMaxLevel())) {
                 int price = skill.getPriceOverride(skill.getLevel(sPlayer) + 1);
                 if (sPlayer.getPoints() >= price) {
@@ -106,7 +106,7 @@ public class SkillsMenu implements Menu {
                     if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                         for (String s : sPlayer.getSkills().keySet()) {
                             for (int i = 1; i <= sPlayer.getLevel(s); i++) {
-                                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkillRegistrar().get(s).getPriceOverride(i));
+                                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPriceOverride(i));
                             }
                         }
                     }

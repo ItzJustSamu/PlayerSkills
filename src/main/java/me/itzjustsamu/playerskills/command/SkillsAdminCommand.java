@@ -95,7 +95,7 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
             return;
         }
 
-        Skill s = plugin.getSkillRegistrar().get(skillName);
+        Skill s = plugin.getSkills().get(skillName);
 
         if (s == null) {
             sender.sendMessage(ChatColor.RED + "Skill could not be found. Skill names used in configurations and commands should contain no spaces and" +
@@ -132,7 +132,7 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
 
         StringBuilder message = new StringBuilder();
         message.append(ChatColor.RED.toString()).append(ChatColor.BOLD).append("Skills").append("\n");
-        for (Skill skill : plugin.getSkillRegistrar().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             message.append(ChatColor.RED).append(skill.getName()).append(": ").append(ChatColor.GRAY).append(skill.getLevel(sPlayer)).append("\n");
         }
         message.append(ChatColor.RED.toString()).append(ChatColor.BOLD).append("Points: ").append(ChatColor.GRAY).append(sPlayer.getPoints());

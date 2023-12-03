@@ -34,7 +34,7 @@ public class PlayerSkills extends BasePlugin {
 
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final MainConfig mainConfig = new MainConfig(this);
-    private final Map<String, Skill> skillRegistrar = new ConcurrentHashMap<>();
+    private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Map<String, Skill> disabledSkills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
@@ -72,15 +72,30 @@ public class PlayerSkills extends BasePlugin {
     private void loadSkillsFromConfig() {
         try (InputStream input = getResource("SkillsSettings.yml")) {
             Yaml yaml = new Yaml();
-            Map<String, List<Map<String, String>>> skillMap = yaml.load(input);
-
+            Map<String, List<Map<String, Object>>> skillMap = yaml.load(input);
+            if (input == null) {
+                getLogger().severe("SkillsSettings.yml not found!");
+                return;
+            }
             if (skillMap != null && skillMap.containsKey("skills")) {
-                List<Map<String, String>> skills = skillMap.get("skills");
+                List<Map<String, Object>> skillsList = skillMap.get("skills");
 
-                for (Map<String, String> skillEntry : skills) {
-                    String skillName = skillEntry.get("name");
-                    String skillClassName = skillEntry.get("class");
-                    registerSkill(skillName, skillClassName);
+                for (Map<String, Object> skillEntry : skillsList) {
+                    String skillName = (String) skillEntry.get("name");
+                    boolean isEnabled = (boolean) skillEntry.getOrDefault("enable", true);
+                    String skillClassName = (String) skillEntry.get("class");
+
+                    if (isEnabled) {
+                        registerSkill(skillName, skillClassName);
+                    } else {
+                        // Skill is disabled, add it to disabledSkills map
+                        try {
+                            Skill skill = createSkillInstance(skillClassName);
+                            disabledSkills.put(skill.getConfigName(), skill);
+                        } catch (Exception e) {
+                            logger.log(Level.SEVERE, "Error registering disabled skill: " + skillName, e);
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -88,6 +103,14 @@ public class PlayerSkills extends BasePlugin {
         }
     }
 
+    private Skill createSkillInstance(String skillClassName) throws Exception {
+        Class<?> skillClass = Class.forName(skillClassName);
+        if (!Skill.class.isAssignableFrom(skillClass)) {
+            throw new IllegalArgumentException("Invalid skill class: " + skillClassName);
+        }
+        Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
+        return (Skill) constructor.newInstance(this);
+    }
 
     private void registerSkills() {
         loadSkillsFromConfig();
@@ -99,17 +122,15 @@ public class PlayerSkills extends BasePlugin {
         }
 
         try {
-            Class<?> skillClass = Class.forName(skillClassName);
-            Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
-            Skill skill = (Skill) constructor.newInstance(this);
-
-            skillRegistrar.put(skill.getConfigName(), skill);
+            Skill skill = createSkillInstance(skillClassName);
+            skills.put(skill.getConfigName(), skill);
             skill.setup();
             skill.enable();
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error registering skill: " + skillName, e);
         }
     }
+
     @Override
     public void postEnable() {
         this.startAutoSaveTask();
@@ -139,13 +160,12 @@ public class PlayerSkills extends BasePlugin {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(player);
         }
-        skillRegistrar.values().forEach(skill -> {
+        skills.values().forEach(skill -> {
             skill.disable();
             HandlerList.unregisterAll(skill);
         });
-        skillRegistrar.clear();
+        skills.clear();
     }
-
 
     public void disableSkill(Skill skill) {
         // Save players
@@ -164,13 +184,13 @@ public class PlayerSkills extends BasePlugin {
     public void enableSkill(String skillName) {
         Skill skill = disabledSkills.remove(skillName);
         if (skill != null) {
-            skillRegistrar.put(skill.getConfigName(), skill);
+            skills.put(skill.getConfigName(), skill);
             skill.enable();
         }
     }
 
-    public Map<String, Skill> getSkillRegistrar() {
-        return skillRegistrar;
+    public Map<String, Skill> getSkills() {
+        return skills;
     }
 
     public Map<String, Skill> getDisabledSkills() {
