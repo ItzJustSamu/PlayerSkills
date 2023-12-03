@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.hsgamer</groupId>
+    <groupId>me.itzjustsamu</groupId>
     <artifactId>PlayerSkills</artifactId>
-    <version>2.5</version>
+    <version>2.6.1</version>
     <name>PlayerSkills</name>
 
     <properties>
@@ -30,8 +30,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -62,11 +62,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.cryptomorin.xseries</pattern>
-                                    <shadedPattern>me.hsgamer.playerskills2.lib.xseries</shadedPattern>
+                                    <shadedPattern>me.itzjustsamu.playerskills2.lib.xseries</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>me.hsgamer.hscore</pattern>
-                                    <shadedPattern>me.hsgamer.playerskills2.lib.hscore</shadedPattern>
+                                    <shadedPattern>me.itzjustsamu.playerskills2.lib.hscore</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
