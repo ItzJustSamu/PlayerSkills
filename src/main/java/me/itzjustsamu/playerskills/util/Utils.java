@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Utils {
-    private static final Logger logger = JavaPlugin.getProvidingPlugin(Utils.class).getLogger();
+    public static final Logger logger = JavaPlugin.getProvidingPlugin(Utils.class).getLogger();
     private static final DecimalFormat percentageFormat = new DecimalFormat("#.#");
 
     static {

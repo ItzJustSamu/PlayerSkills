@@ -18,12 +18,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public abstract class  Skill implements Listener {
+public abstract class Skill implements Listener {
 
     private final SkillConfig config;
     private final PlayerSkills plugin;
@@ -53,6 +52,7 @@ public abstract class  Skill implements Listener {
     }
 
     public final void setup() {
+
         config.setup();
         this.GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
         GET_MAX_LEVEL.setConfig(config);
@@ -94,6 +94,7 @@ public abstract class  Skill implements Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+
     public int getMaxLevel() {
         return GET_MAX_LEVEL.getValue();
     }
@@ -103,7 +104,7 @@ public abstract class  Skill implements Listener {
     }
 
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     public List<ConfigPath<?>> getMessageConfigPaths() {
@@ -117,6 +118,7 @@ public abstract class  Skill implements Listener {
         }
         return itemBuilderConfigPath.getValue();
     }
+
     public final String getName() {
         return name;
     }
@@ -158,9 +160,6 @@ public abstract class  Skill implements Listener {
         displayItem = itemBuilderConfigPath.getValue();
     }
 
-
-
-
     public int getLevel(SPlayer player) {
         return player.getLevel(getConfigName());
     }
@@ -172,6 +171,7 @@ public abstract class  Skill implements Listener {
     public Map<Integer, Integer> getPointPriceOverrides() {
         return pointPriceOverridesConfig.getValue();
     }
+
     public boolean isWorldNotAllowed(Player player) {
         List<String> list = onlyInWorldsConfig.getValue();
         if (list.isEmpty()) {

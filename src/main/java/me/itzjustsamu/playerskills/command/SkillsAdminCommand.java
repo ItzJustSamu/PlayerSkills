@@ -20,9 +20,10 @@ import org.jetbrains.annotations.NotNull;
 public class SkillsAdminCommand extends Command implements TabCompleter {
 
     private final PlayerSkills plugin;
+    private static final List<String> SUBCOMMANDS = List.of("setskill", "givepoints", "view", "fullreset", "settings");
 
     public SkillsAdminCommand(PlayerSkills plugin) {
-        super("skillsadmin", "Admin control for PlayerSkills", "/skillsadmin", List.of("sa", "skillsadmin", "skilladmin"));
+        super("skillsadmin", "Admin control for PlayerSkills", "/skillsadmin", SUBCOMMANDS);
         setPermission(Permissions.ADMIN.getName());
         this.plugin = plugin;
     }
@@ -131,11 +132,11 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
         SPlayer sPlayer = optionalSPlayer.get();
 
         StringBuilder message = new StringBuilder();
-        message.append(ChatColor.RED.toString()).append(ChatColor.BOLD).append("Skills").append("\n");
+        message.append(ChatColor.RED).append(ChatColor.BOLD).append("Skills").append("\n");
         for (Skill skill : plugin.getSkills().values()) {
             message.append(ChatColor.RED).append(skill.getName()).append(": ").append(ChatColor.GRAY).append(skill.getLevel(sPlayer)).append("\n");
         }
-        message.append(ChatColor.RED.toString()).append(ChatColor.BOLD).append("Points: ").append(ChatColor.GRAY).append(sPlayer.getPoints());
+        message.append(ChatColor.RED).append(ChatColor.BOLD).append("Points: ").append(ChatColor.GRAY).append(sPlayer.getPoints());
 
         sender.sendMessage(message.toString());
     }
@@ -173,7 +174,7 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
             // Tab complete subcommands
             String partialSubCommand = args[0].toLowerCase();
             List<String> completions = new ArrayList<>();
-            for (String subCommand : List.of("setskill", "givepoints", "view", "fullreset", "settings")) {
+            for (String subCommand : SUBCOMMANDS) {
                 if (subCommand.startsWith(partialSubCommand) && sender.hasPermission("playerskills.admin." + subCommand)) {
                     completions.add(subCommand);
                 }

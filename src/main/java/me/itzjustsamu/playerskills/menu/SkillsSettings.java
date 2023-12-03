@@ -2,21 +2,26 @@ package me.itzjustsamu.playerskills.menu;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.skill.Skill;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+
+import static me.itzjustsamu.playerskills.util.Utils.logger;
 
 public class SkillsSettings implements Menu {
 
@@ -81,18 +86,43 @@ public class SkillsSettings implements Menu {
         return null;
     }
 
-    private void toggleSkill(Skill skill) {
+    public void toggleSkill(Skill skill) {
         String skillName = skill.getConfigName();
-        if (plugin.getDisabledSkills().containsKey(skillName)) {
-            // Enable the skill
-            plugin.enableSkill(skillName);
-            XSound.BLOCK_NOTE_BLOCK_PLING.play(player, 1, 2);
+        boolean currentStatus = !plugin.getDisabledSkills().containsKey(skillName);
+
+        // Update the in-memory state of disabled skills
+        if (currentStatus) {
+            plugin.getDisabledSkills().remove(skillName);
         } else {
-            // Disable the skill
-            plugin.disableSkill(skill);
-            XSound.BLOCK_NOTE_BLOCK_BASS.play(player, 1, 0.5f);
+            plugin.getDisabledSkills().put(skillName, skill);
+        }
+
+        // Persist the changes to the configuration file
+        saveChangesToConfig();
+
+        // Play the sound
+        XSound.BLOCK_NOTE_BLOCK_PLING.play(player, 1, 2);
+    }
+
+    private void saveChangesToConfig() {
+        BukkitConfig skillsConfig = new BukkitConfig(plugin, "SkillsSettings.yml");
+        skillsConfig.setup();
+
+        ConfigurationSection skillsSection = skillsConfig.getOriginal().getConfigurationSection("skills");
+        if (skillsSection != null) {
+            for (Map.Entry<String, Skill> entry : plugin.getDisabledSkills().entrySet()) {
+                String skillName = entry.getKey();
+                boolean isDisabled = skillsSection.getBoolean(skillName + ".enable", false);
+
+                // Save the modified configuration with the new value
+                skillsSection.set(skillName + ".enable", isDisabled);
+            }
+
+            // Save the changes to the configuration file
+            skillsConfig.save();
         }
     }
+
 
     private Collection<Skill> getEnabledSkills() {
         List<Skill> enabledSkills = new ArrayList<>();

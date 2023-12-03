@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
@@ -21,8 +22,8 @@ import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.storage.PlayerStorage;
 import me.itzjustsamu.playerskills.skill.Skill;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
-import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -70,27 +71,30 @@ public class PlayerSkills extends BasePlugin {
     }
 
     private void loadSkillsFromConfig() {
-        try (InputStream input = getResource("SkillsSettings.yml")) {
-            Yaml yaml = new Yaml();
-            Map<String, List<Map<String, Object>>> skillMap = yaml.load(input);
-            if (input == null) {
-                getLogger().severe("SkillsSettings.yml not found!");
-                return;
-            }
-            if (skillMap != null && skillMap.containsKey("skills")) {
-                List<Map<String, Object>> skillsList = skillMap.get("skills");
+        BukkitConfig skillsConfig = new BukkitConfig(this, "SkillsSettings.yml");
+        skillsConfig.setup();
 
-                for (Map<String, Object> skillEntry : skillsList) {
-                    String skillName = (String) skillEntry.get("name");
-                    boolean isEnabled = (boolean) skillEntry.getOrDefault("enable", true);
-                    String skillClassName = (String) skillEntry.get("class");
+        ConfigurationSection skillSection = skillsConfig.getOriginal();
+        if (skillSection != null && skillSection.contains("skills")) {
+            ConfigurationSection skills = skillSection.getConfigurationSection("skills");
+
+            if (skills != null) {
+                for (String skillName : skills.getKeys(false)) {
+                    ConfigurationSection skillEntry = skills.getConfigurationSection(skillName);
+                    assert skillEntry != null;
+
+                    boolean isEnabled = skillEntry.getBoolean("enable", true);
 
                     if (isEnabled) {
-                        registerSkill(skillName, skillClassName);
+                        // Continue with the existing code for enabled skills
+                        registerSkill(skillName, skillEntry.getString("class"));
                     } else {
                         // Skill is disabled, add it to disabledSkills map
                         try {
-                            Skill skill = createSkillInstance(skillClassName);
+                            Class<?> skillClass = Class.forName(skillEntry.getString("class"));
+                            Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
+                            Skill skill = (Skill) constructor.newInstance(this);
+
                             disabledSkills.put(skill.getConfigName(), skill);
                         } catch (Exception e) {
                             logger.log(Level.SEVERE, "Error registering disabled skill: " + skillName, e);
@@ -98,10 +102,9 @@ public class PlayerSkills extends BasePlugin {
                     }
                 }
             }
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Error loading skills from config", e);
         }
     }
+
 
     private Skill createSkillInstance(String skillClassName) throws Exception {
         Class<?> skillClass = Class.forName(skillClassName);
@@ -155,11 +158,16 @@ public class PlayerSkills extends BasePlugin {
         }
     }
 
+    // Inside the PlayerSkills class
     @Override
     public void disable() {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(player);
         }
+
+        // Save the current state of skill enable/disable to the SkillsSettings.yml file
+        saveSkillSettings();
+
         skills.values().forEach(skill -> {
             skill.disable();
             HandlerList.unregisterAll(skill);
@@ -167,25 +175,26 @@ public class PlayerSkills extends BasePlugin {
         skills.clear();
     }
 
-    public void disableSkill(Skill skill) {
-        // Save players
-        for (SPlayer player : SPlayer.getPlayers().values()) {
-            SPlayer.save(player);
-        }
+    public void saveSkillSettings() {
+        BukkitConfig skillsConfig = new BukkitConfig(this, "SkillsSettings.yml");
+        skillsConfig.setup();
 
-        // Disable the specific skill
-        skill.disable();
-        disabledSkills.put(skill.getConfigName(), skill);
+        ConfigurationSection skillsSection = skillsConfig.getOriginal().getConfigurationSection("skills");
+        if (skillsSection != null) {
+            for (Map.Entry<String, Skill> entry : disabledSkills.entrySet()) {
+                String skillName = entry.getKey();
+                boolean isDisabled = skillsSection.getBoolean(skillName + ".enable", false);
 
-        // Reload or perform any other necessary cleanup for the skill
-        skill.reload();
-    }
+                // Save the modified configuration with the new value
+                skillsSection.set(skillName + ".enable", isDisabled);
 
-    public void enableSkill(String skillName) {
-        Skill skill = disabledSkills.remove(skillName);
-        if (skill != null) {
-            skills.put(skill.getConfigName(), skill);
-            skill.enable();
+                // Update the in-memory state of disabled skills
+                if (isDisabled) {
+                    entry.getValue().disable(); // Optional: Disable the skill if it was enabled
+                }
+            }
+
+            skillsConfig.save();
         }
     }
 
