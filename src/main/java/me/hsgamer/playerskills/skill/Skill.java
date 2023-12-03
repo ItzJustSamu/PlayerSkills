@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Skill implements Listener {
+public abstract class  Skill implements Listener {
 
     private final SkillConfig config;
     private final PlayerSkills plugin;
@@ -150,13 +150,14 @@ public abstract class Skill implements Listener {
     }
 
     public void reload() {
-        // ... other reloading logic
+        config.reload();
         if (itemBuilderConfigPath == null) {
             itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
             itemBuilderConfigPath.setConfig(config);
         }
         displayItem = itemBuilderConfigPath.getValue();
     }
+
 
 
 

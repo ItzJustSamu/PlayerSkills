@@ -9,9 +9,9 @@ import me.hsgamer.playerskills.menu.SkillsMenu;
 import me.hsgamer.playerskills.player.SPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ public class SkillsCommand extends Command {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] args) {
         if (!testPermission(sender)) {
             return false;
         }

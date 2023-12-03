@@ -27,7 +27,6 @@ import java.util.Collections;
 
 public class MainConfig extends PathableConfig {
     // Skill-related configurations
-    public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_WORLD_RESTRICTION = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
     public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(

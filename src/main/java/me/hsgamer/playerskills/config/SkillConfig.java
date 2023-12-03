@@ -10,4 +10,5 @@ public class SkillConfig extends BukkitConfig {
         super(new File(skill.getPlugin().getDataFolder(), "skills" + File.separator + skill.getConfigName() + ".yml"));
 
     }
+
 }
