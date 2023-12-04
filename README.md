@@ -1,3 +1,3 @@
 # PlayerSkills
 
-Version: 2.5.1 Beta unstable
+Version: 2.6.6 Beta unstable
