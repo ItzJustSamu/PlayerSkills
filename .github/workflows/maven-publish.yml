@@ -1,34 +1,62 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
-
-name: Maven Package
+name: Build and Release
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+  push:
+    paths:
+    - 'src/**/*'
+    - 'pom.xml'
+    - '.github/workflows/maven.yml'
+
+permissions:
+  contents: write
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
+    - name: Checkout Code
+      uses: actions/checkout@v2
+  
+    - name: Cache Dependencies
+      id: cache-dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven
+    
+    - name: Set up Java Environment
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: 19
         distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+        cache: 'maven'
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+    - name: Build and Test
+      run: mvn clean package install
+    
+    - name: Set outputs
+      id: short_sha
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    
+    - name: Deploy to GitHub Releases
+      uses: actions/upload-artifact@v2
+      with:
+        name: EpicSpawners-${{ steps.short_sha.outputs.sha_short }}
+        path: target/*.jar
+    
+    - name: Publish Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: target/*.jar
+        body: |
+          Commit ${{ steps.short_sha.outputs.sha_short }}
+          Automation Compile
+        name: Automation Compile ${{ steps.short_sha.outputs.sha_short }}
+        draft: false
+        tag_name: commit-${{ steps.short_sha.outputs.sha_short }}
+        generate_release_notes: true
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.RELEASE_KEY }}
+        GITHUB_REPOSITORY: ItzJustSamu/PlayerSkills
