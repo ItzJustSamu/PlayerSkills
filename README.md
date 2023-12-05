@@ -15,6 +15,8 @@ Adding or fixing:
 
 - Reload Config Command
 
+- Skills being registers in settings in lowercaser fix that
+
 - DoubleJump Fall damage
 
 - MySQL Support
