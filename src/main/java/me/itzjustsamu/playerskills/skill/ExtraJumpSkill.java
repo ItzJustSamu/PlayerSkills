@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -115,9 +116,21 @@ public class  ExtraJumpSkill extends Skill {
         player.setVelocity(direction.multiply(jumpHeight));
         player.setAllowFlight(false);
 
-        // Set the flag indicating that the player has double-jumped
         HasDoubleJumped.put(player, true);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (player.isOnGround()) {
+                    player.sendMessage("Floor!");
+                    player.setAllowFlight(true);
+                    HasDoubleJumped.put(player, false);
+                    cancel();
+                }
+            }
+        }.runTaskTimer(getPlugin(), 0, 1); // Change 'plugin' to your actual plugin instance
     }
+
 
     @EventHandler
     public void onSneak(final PlayerToggleSneakEvent event) {
