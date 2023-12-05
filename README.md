@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.6.6 Beta unstable
+Version: 2.6.7 Beta unstable
 
 - Performance fixes
 - Bugs
