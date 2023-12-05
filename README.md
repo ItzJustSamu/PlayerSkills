@@ -15,6 +15,8 @@ Adding or fixing:
 
 - Reload Config Command
 
+- DoubleJump Fall damage
+
 - MySQL Support
 
 - More skills
