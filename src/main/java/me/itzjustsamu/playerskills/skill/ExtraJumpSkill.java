@@ -1,5 +1,7 @@
 package me.itzjustsamu.playerskills.skill;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
@@ -20,14 +22,15 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class  ExtraJumpSkill extends Skill {
-    private final ConfigPath<Double> VELOCITY = Paths.doublePath("skills.extrajump.config.Velocity-increment", 0.5);
+    private final ConfigPath<Double> VELOCITY = Paths.doublePath("Velocity-increment", 0.5);
+
+    private final ConfigPath<Long> COOLDOWN = Paths.longPath("Cooldown", 30000L); // Default: 30 seconds
 
     private final HashMap<Player, Boolean> coolDown = new HashMap<>();
+    private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public ExtraJumpSkill(PlayerSkills plugin) {
         super(plugin, "DoubleJump", "doublejump", 5, 12);
@@ -35,11 +38,18 @@ public class  ExtraJumpSkill extends Skill {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+        Player player = (Player) event.getEntity();
+
+        // Cancel fall damage only if the player has double-jumped
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL && hasDoubleJumped(player)) {
             event.setCancelled(true);
         }
     }
@@ -52,60 +62,64 @@ public class  ExtraJumpSkill extends Skill {
             return;
         }
 
-        player.setAllowFlight(coolDown.get(player) != null && coolDown.get(player));
-
-        if (player.getLocation().getY() % 1 == 0) {
-            coolDown.put(player, true);
-        }
+        // Check if the player has a cooldown
+        player.setAllowFlight(!cooldownMap.containsKey(player) || System.currentTimeMillis() >= cooldownMap.get(player));
     }
 
-
-        @EventHandler
+    @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
-            Player player = event.getPlayer();
-            if (player.getGameMode() == GameMode.CREATIVE) {
-                return;
-            }
+        Player player = event.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
 
-            if (isWorldNotAllowed(player)) {
-                return;
-            }
+        if (isWorldNotAllowed(player)) {
+            return;
+        }
 
-            SPlayer sPlayer = SPlayer.get(player.getUniqueId());
-
-            if (sPlayer == null) {
-                if (MainConfig.isVerboseLogging()) {
-                    Utils.logError("Failed event. SPlayer for " + player.getUniqueId() + " is null.");
-                }
-                return;
-            }
-
-            int jumpLevel = getLevel(sPlayer);
-
-            double jumpHeight = 0;
-            if (jumpLevel > 0) {
-                jumpHeight = jumpLevel * VELOCITY.getValue();
-            }
-
-            if (jumpLevel > 0) {
-                SkillEffect.playParticles(player, player.getLocation());
-                SkillEffect.playSound(player);
-            }
-            // Perform double jump
-            if (coolDown.get(player)) {
-                event.setCancelled(true);
-                coolDown.put(player, false);
-
-                // Get the player's direction vector
-                Vector direction = player.getLocation().getDirection();
-
-                // Set the player's velocity using the direction vector and jump height
-                player.setVelocity(direction.multiply(jumpHeight));
-            }
+        // Check if the player has a cooldown
+        if (cooldownMap.containsKey(player) && System.currentTimeMillis() < cooldownMap.get(player)) {
+            event.setCancelled(true);
             player.setAllowFlight(false);
+            return;
+        }
+
+        SPlayer sPlayer = SPlayer.get(player.getUniqueId());
+
+        if (sPlayer == null) {
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logError("Failed event. SPlayer for " + player.getUniqueId() + " is null.");
+            }
+            return;
+        }
+
+        int jumpLevel = getLevel(sPlayer);
+
+        double jumpHeight = 0;
+        if (jumpLevel > 0) {
+            jumpHeight = jumpLevel * VELOCITY.getValue();
+        }
+
+        if (jumpLevel > 0) {
+            SkillEffect.playParticles(player, player.getLocation());
+            SkillEffect.playSound(player);
+        }
+
+        // Perform double jump
+        event.setCancelled(true);
+        cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue()); // Use configured cooldown
+
+        // Get the player's direction vector
+        Vector direction = player.getLocation().getDirection();
+
+        // Set the player's velocity using the direction vector and jump height
+        player.setVelocity(direction.multiply(jumpHeight));
+        player.setAllowFlight(false);
     }
 
-            @EventHandler
+
+
+    @EventHandler
     public void onSneak(final PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
@@ -120,8 +134,9 @@ public class  ExtraJumpSkill extends Skill {
     }
 
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(VELOCITY);
+        return Arrays.asList(VELOCITY, COOLDOWN);
     }
+
 
     @Override
     public ItemBuilder getDefaultItem() {
@@ -152,4 +167,7 @@ public class  ExtraJumpSkill extends Skill {
         return String.valueOf(jumpHeight);
     }
 
+    private boolean hasDoubleJumped(Player player) {
+        return player.getAllowFlight() && player.getGameMode() != GameMode.CREATIVE;
+    }
 }

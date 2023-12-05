@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.*;
 
-import me.itzjustsamu.playerskills.menu.SkillsSettings;
 import me.itzjustsamu.playerskills.skill.Skill;
 import me.itzjustsamu.playerskills.Permissions;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -52,18 +51,12 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
                 fullReset(sender, args);
                 return true;
             }
-        } else if (args.length == 1)  {
-            if (args[0].equalsIgnoreCase("settings")) {
-                openSettingsMenu(sender);
-                return true;
-            }
         }
 
         sender.sendMessage(ChatColor.RED + "/skillsadmin view <player>");
         sender.sendMessage(ChatColor.RED + "/skillsadmin givepoints <player> [-]<points>");
         sender.sendMessage(ChatColor.RED + "/skillsadmin setskill <player> <skill name> <level>");
         sender.sendMessage(ChatColor.RED + "/skillsadmin fullreset <player>");
-        sender.sendMessage(ChatColor.RED + "/skillsadmin settings");
         return true;
     }
 
@@ -155,18 +148,6 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
                 "has been reset.");
     }
 
-    private void openSettingsMenu(CommandSender sender) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            Optional<SPlayer> optionalSPlayer = getPlayer(sender, player.getName());
-            if (!optionalSPlayer.isPresent()) return;
-            SPlayer sPlayer = optionalSPlayer.get();
-            SkillsSettings menu = new SkillsSettings(plugin, player, sPlayer);
-            menu.open(player);
-        } else {
-            sender.sendMessage(ChatColor.RED + "This command can only be executed by a player");
-        }
-    }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
