@@ -32,25 +32,26 @@ public class  ExtraJumpSkill extends Skill {
     private final HashMap<Player, Boolean> coolDown = new HashMap<>();
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
+    private final HashMap<Player, Boolean> HasDoubleJumped = new HashMap<>();
+
+
     public ExtraJumpSkill(PlayerSkills plugin) {
         super(plugin, "DoubleJump", "doublejump", 5, 12);
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (!(event.getEntity() instanceof Player)) {
+        if (event.isCancelled() || !(event.getEntity() instanceof Player)) {
             return;
         }
 
         Player player = (Player) event.getEntity();
 
-        // Cancel fall damage only if the player has double-jumped
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL && hasDoubleJumped(player)) {
+        // Check if the damage is fall damage and the player has double-jumped
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL && HasDoubleJumped.getOrDefault(player, false)) {
             event.setCancelled(true);
+
+            HasDoubleJumped.put(player, false);
         }
     }
 
@@ -62,13 +63,12 @@ public class  ExtraJumpSkill extends Skill {
             return;
         }
 
-        // Check if the player has a cooldown
         player.setAllowFlight(!cooldownMap.containsKey(player) || System.currentTimeMillis() >= cooldownMap.get(player));
     }
-
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
+
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
@@ -77,7 +77,6 @@ public class  ExtraJumpSkill extends Skill {
             return;
         }
 
-        // Check if the player has a cooldown
         if (cooldownMap.containsKey(player) && System.currentTimeMillis() < cooldownMap.get(player)) {
             event.setCancelled(true);
             player.setAllowFlight(false);
@@ -107,7 +106,7 @@ public class  ExtraJumpSkill extends Skill {
 
         // Perform double jump
         event.setCancelled(true);
-        cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue()); // Use configured cooldown
+        cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue());
 
         // Get the player's direction vector
         Vector direction = player.getLocation().getDirection();
@@ -115,9 +114,10 @@ public class  ExtraJumpSkill extends Skill {
         // Set the player's velocity using the direction vector and jump height
         player.setVelocity(direction.multiply(jumpHeight));
         player.setAllowFlight(false);
+
+        // Set the flag indicating that the player has double-jumped
+        HasDoubleJumped.put(player, true);
     }
-
-
 
     @EventHandler
     public void onSneak(final PlayerToggleSneakEvent event) {
@@ -136,7 +136,6 @@ public class  ExtraJumpSkill extends Skill {
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Arrays.asList(VELOCITY, COOLDOWN);
     }
-
 
     @Override
     public ItemBuilder getDefaultItem() {
@@ -167,7 +166,4 @@ public class  ExtraJumpSkill extends Skill {
         return String.valueOf(jumpHeight);
     }
 
-    private boolean hasDoubleJumped(Player player) {
-        return player.getAllowFlight() && player.getGameMode() != GameMode.CREATIVE;
-    }
 }
