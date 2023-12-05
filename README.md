@@ -19,3 +19,5 @@ List of things I gotta add:
 - More skills
 
 - PlaceholderAPI Support
+
+- API Support
