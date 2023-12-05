@@ -6,6 +6,7 @@ Version: 2.6.6 Beta unstable
 - Bugs
 - Removed Skills Settings
 - Internal changes
+- DoubleJump CoolDown fixed # 30000 = 30 Seconds
 
   
 Adding or fixing:
