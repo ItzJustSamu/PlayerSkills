@@ -43,7 +43,7 @@ jobs:
     - name: Deploy to GitHub Releases
       uses: actions/upload-artifact@v2
       with:
-        name: EpicSpawners-${{ steps.short_sha.outputs.sha_short }}
+        name: PlayerSkills-${{ steps.short_sha.outputs.sha_short }}
         path: target/*.jar
     
     - name: Publish Release
@@ -52,8 +52,8 @@ jobs:
         files: target/*.jar
         body: |
           Commit ${{ steps.short_sha.outputs.sha_short }}
-          Automation Compile
-        name: Automation Compile ${{ steps.short_sha.outputs.sha_short }}
+          PlayerSkills Automation Compile
+        name: PlayerSkills Automation Compile ${{ steps.short_sha.outputs.sha_short }}
         draft: false
         tag_name: commit-${{ steps.short_sha.outputs.sha_short }}
         generate_release_notes: true
