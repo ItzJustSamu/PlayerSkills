@@ -19,7 +19,7 @@ import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.storage.PlayerStorage;
-import org.bukkit.Bukkit;
+import me.itzjustsamu.playerskills.util.Updater;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
 
@@ -73,7 +73,11 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener());
-         }
+
+        Updater updater = new Updater(this, 113626);
+        updater.checkForUpdates();
+
+    }
 
 
     private void loadSkillsFromConfig() {
@@ -92,18 +96,13 @@ public class PlayerSkills extends BasePlugin {
                     boolean isEnabled = skillEntry.getBoolean("enable", true);
 
                     if (isEnabled) {
-                        // Convert skillName to lowercase
                         String lowerCaseSkillName = skillName.toLowerCase();
-                        // Continue with the existing code for enabled skills
                         registerSkill(lowerCaseSkillName, skillEntry.getString("class"));
                     } else {
-                        // Skill is disabled, add it to disabledSkills map
                         try {
                             Class<?> skillClass = Class.forName(skillEntry.getString("class"));
                             Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
                             Skill skill = (Skill) constructor.newInstance(this);
-
-                            // Convert skillName to lowercase
                             String lowerCaseSkillName = skillName.toLowerCase();
                             disabledSkills.put(lowerCaseSkillName, skill);
                         } catch (Exception e) {
@@ -125,17 +124,16 @@ public class PlayerSkills extends BasePlugin {
     }
 
     private void registerSkills() {
-        disabledSkills.clear(); // Clear the disabledSkills map to avoid duplicates
+        disabledSkills.clear();
         loadSkillsFromConfig();
     }
 
 
     private void registerSkill(String skillName, String skillClassName) {
-        // Convert skillName to lowercase
         String lowerCaseSkillName = skillName.toLowerCase();
 
         if (disabledSkills.containsKey(lowerCaseSkillName)) {
-            return;  // Skill is disabled
+            return;
         }
 
         try {
@@ -173,21 +171,19 @@ public class PlayerSkills extends BasePlugin {
         }
     }
 
-    // Inside the PlayerSkills class
     @Override
     public void disable() {
         for (SPlayer player : SPlayer.getPlayers().values()) {
             SPlayer.save(player);
         }
 
-        // Save the current state of skill enable/disable to the SkillsSettings.yml file
         saveSkillSettings();
 
         for (Skill skill : skills.values()) {
             skill.disable();
         }
 
-        HandlerList.unregisterAll(this); // Assuming the PlayerSkills class is also a listener
+        HandlerList.unregisterAll(this);
 
         skills.clear();
     }
@@ -206,16 +202,14 @@ public class PlayerSkills extends BasePlugin {
 
         for (Map.Entry<String, Skill> entry : disabledSkills.entrySet()) {
             String originalSkillName = entry.getKey();
-            String lowerCaseSkillName = originalSkillName.toLowerCase(); // Convert to lowercase
+            String lowerCaseSkillName = originalSkillName.toLowerCase();
 
             boolean isDisabled = skillsSection.getBoolean(lowerCaseSkillName + ".enable", false);
 
-            // Save the modified configuration with the new value
             skillsSection.set(lowerCaseSkillName + ".enable", isDisabled);
 
-            // Update the in-memory state of disabled skills
             if (isDisabled) {
-                entry.getValue().disable(); // Optional: Disable the skill if it was enabled
+                entry.getValue().disable();
             }
         }
 

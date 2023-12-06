@@ -338,6 +338,7 @@ points:
     enabled: false                    # if true, the price will increase based on total skill points bought and spent
     price-increase-per-point: 1       # for every skill point bought, the price of the next will increase by 1 level
 
+
 options:
   logging:
     verbose: false
@@ -352,4 +353,3 @@ messages:
   bleeding-enemy: "&a*** ENEMY BLEEDING ***"
   bleeding-self: "&c*** YOU ARE BLEEDING ***"
   menu-world-restriction: "&cYou cannot modify your skills in your current location."
-
