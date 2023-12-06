@@ -13,6 +13,9 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -116,19 +119,39 @@ public class  ExtraJumpSkill extends Skill {
         player.setVelocity(direction.multiply(jumpHeight));
         player.setAllowFlight(false);
 
+        long remainingTime = (cooldownMap.get(player) - System.currentTimeMillis()) / 1000L;
+        CooldownUI(player, remainingTime);
+
         HasDoubleJumped.put(player, true);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (player.isOnGround()) {
-                    player.sendMessage("Floor!");
                     player.setAllowFlight(true);
                     HasDoubleJumped.put(player, false);
                     cancel();
                 }
             }
-        }.runTaskTimer(getPlugin(), 0, 1); // Change 'plugin' to your actual plugin instance
+        }.runTaskTimer(getPlugin(), 0, 20);
+    }
+
+    private void CooldownUI(Player player, long remainingTime) {
+        new BukkitRunnable() {
+            long timeLeft = remainingTime;
+
+            @Override
+            public void run() {
+                if (timeLeft > 0) {
+                    String actionBarMessage = ChatColor.RED + "Double Jump Cooldown: " + ChatColor.YELLOW + timeLeft + "s";
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBarMessage));
+                    timeLeft--;
+                } else {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
+                    cancel(); // Stop the task when the cooldown ends
+                }
+            }
+        }.runTaskTimer(getPlugin(), 0L, 20L); // Update every second
     }
 
 

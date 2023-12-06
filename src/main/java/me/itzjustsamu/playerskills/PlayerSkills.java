@@ -19,6 +19,7 @@ import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.storage.PlayerStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
 
@@ -41,6 +42,7 @@ public class PlayerSkills extends BasePlugin {
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Map<String, Skill> disabledSkills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
+
 
     public MessageConfig getMessageConfig() {
         return messageConfig;
@@ -71,7 +73,8 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener());
-    }
+         }
+
 
     private void loadSkillsFromConfig() {
         BukkitConfig skillsConfig = new BukkitConfig(this, "SkillsSettings.yml");
