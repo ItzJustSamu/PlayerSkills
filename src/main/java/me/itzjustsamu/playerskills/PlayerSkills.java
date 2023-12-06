@@ -177,8 +177,6 @@ public class PlayerSkills extends BasePlugin {
             SPlayer.save(player);
         }
 
-        saveSkillSettings();
-
         for (Skill skill : skills.values()) {
             skill.disable();
         }
@@ -186,34 +184,6 @@ public class PlayerSkills extends BasePlugin {
         HandlerList.unregisterAll(this);
 
         skills.clear();
-    }
-
-
-    public void saveSkillSettings() {
-        BukkitConfig skillsConfig = new BukkitConfig(this, "SkillsSettings.yml");
-        skillsConfig.setup();
-
-        ConfigurationSection originalSection = skillsConfig.getOriginal();
-        ConfigurationSection skillsSection = originalSection.getConfigurationSection("skills");
-
-        if (skillsSection == null) {
-            skillsSection = originalSection.createSection("skills");
-        }
-
-        for (Map.Entry<String, Skill> entry : disabledSkills.entrySet()) {
-            String originalSkillName = entry.getKey();
-            String lowerCaseSkillName = originalSkillName.toLowerCase();
-
-            boolean isDisabled = skillsSection.getBoolean(lowerCaseSkillName + ".enable", false);
-
-            skillsSection.set(lowerCaseSkillName + ".enable", isDisabled);
-
-            if (isDisabled) {
-                entry.getValue().disable();
-            }
-        }
-
-        skillsConfig.save();
     }
 
 

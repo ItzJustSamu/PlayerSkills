@@ -119,8 +119,10 @@ public class  ExtraJumpSkill extends Skill {
         player.setVelocity(direction.multiply(jumpHeight));
         player.setAllowFlight(false);
 
-        long remainingTime = (cooldownMap.get(player) - System.currentTimeMillis()) / 1000L;
-        CooldownUI(player, remainingTime);
+        if (jumpLevel > 0) {
+            long remainingTime = (cooldownMap.get(player) - System.currentTimeMillis()) / 1000L;
+            CooldownUI(player, remainingTime);
+        }
 
         HasDoubleJumped.put(player, true);
 
