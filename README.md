@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.6.7 Beta unstable
+Version: 2.6.8 Beta unstable
 
 - Performance fixes
 - Bugs
@@ -10,6 +10,8 @@ Version: 2.6.7 Beta unstable
 - Fixes Fall damage
 - Added and fixed Cooldown
 - Added ActionBar to display cooldown
+- Fixes DoubleJump Air cancellation
+
 
   
 Adding or fixing:
@@ -17,8 +19,6 @@ Adding or fixing:
 - A In Game GUI to toggle the enable or disabled status of /skills | or Implement it into the /skills menu, Player will need to right click the gui skill slot to disable or enable that specific skill | Give player option to Increase or Decrease levels after purchasing that Skill level.
 
 - Reload Config Command
-
-- Skills being registers in settings in lowercaser fix that
 
 - MySQL Support
 
