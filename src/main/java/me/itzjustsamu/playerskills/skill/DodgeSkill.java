@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DodgeSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 2D);
     private final ConfigPath<String> dodgeMessage = Paths.stringPath("dodge-message", "&a*** ATTACK DODGED ***");
 
     public DodgeSkill(PlayerSkills plugin) {

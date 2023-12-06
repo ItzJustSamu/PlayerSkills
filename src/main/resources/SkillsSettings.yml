@@ -1,0 +1,66 @@
+skills:
+  Gluttony:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.GluttonySkill
+
+  Strength:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.StrengthSkill
+
+  Resistance:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ResistanceSkill
+
+  Dodge:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.DodgeSkill
+
+  Durability:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.DurabilitySkill
+
+  Health:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.HealthSkill
+
+  Criticals:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.CriticalsSkill
+
+  Archery:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ArcherySkill
+
+  Lacerate:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LacerateSkill
+
+  Swift:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.SwiftSkill
+
+  ExtraShot:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ExtraShotSkill
+
+  Looting:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LootingSkill
+
+  KnockBack:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.KnockBackSkill
+
+  XP:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.XPSkill
+
+  Lumber:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LumberSkill
+
+  ExtraJump:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ExtraJumpSkill
+
+  # Add other skills as needed

@@ -45,7 +45,22 @@ skills:
     config:
       max-level: 20
       gui-slot: 11
-      percent-increase: 3             # # every level, 5% more chance to block hits
+      percent-increase: 2             # # every level, 2% more chance to block hits
+  durability:
+    display:
+      name: "&cdurability Overview"
+      type: 'STRING'
+      lore:
+        - "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+        - "&7This skill increases durability of equipped items."
+        - "&7Level: &e{level}&7/&e{max}&7"
+        - " "
+        - "&cDurability Increase: "
+        - "   &e{prev}% &7 >>> &e{next}"
+    config:
+      max-level: 20
+      gui-slot: 12
+      durability-drop: 2.0
   extrajump:
     display:
       name: "&cJump Overview"
@@ -59,7 +74,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 5
-      gui-slot: 12
+      gui-slot: 13
       ParticleEffect: 'EXPLOSION_LARGE'
       ParticleAmount: 1
       SoundEffect: 'ENTITY_GENERIC_EXPLODE'
@@ -77,7 +92,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 10
-      gui-slot: 13
+      gui-slot: 14
       arrow-increment: 1
   gluttony:
     display:
@@ -92,7 +107,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 20
-      gui-slot: 14
+      gui-slot: 15
       percent-increase: 3            # every level, food intake will increase by 50%
   health:
     display:
@@ -107,7 +122,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 20
-      gui-slot: 15
+      gui-slot: 16
       extra-health-per-level: 0.5       # every level, 1 heart (2 HP) is added
       compatibility-mode: false
     price-override: # price override allows you to set the price at each level
@@ -129,7 +144,7 @@ skills:
         - "   &e{prev}x &7 >>> &e{next}x"
     config:
       max-level: 3
-      gui-slot: 16
+      gui-slot: 17
       knockback-increment: 0.2
   lacerate:
     display:
@@ -144,7 +159,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 20
-      gui-slot: 17
+      gui-slot: 18
       percent-increase: 3            # every level, chance to bleed will increase by 4%
       bleed-cycles: 8                 # the amount of times a player will lose health from a single cut
       bleed-interval: 50              # the interval (in TICKS, 20 = 1 second) of bleed cycles
@@ -163,7 +178,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 20
-      gui-slot: 18
+      gui-slot: 19
       looting-increment: 0.3
   lumber:
     display:
@@ -178,7 +193,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 2
-      gui-slot: 19
+      gui-slot: 30
       lumber-upgrade: 1.0
       break-leaves: true
   resistance:
@@ -194,7 +209,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 20
-      gui-slot: 20
+      gui-slot: 21
       damage-drop: 3                # every level, 3% of damage will be dampened
   strength:
     display:
@@ -212,7 +227,7 @@ skills:
       #only-in-worlds:
       #  - "worldname"
       max-level: 20
-      gui-slot: 21
+      gui-slot: 22
       damage-increment: 5           # every level, damage will increase by 5%
   swift:
     display:
@@ -227,7 +242,7 @@ skills:
         - "   &e{prev} &7 >>> &e{next}"
     config:
       max-level: 10
-      gui-slot: 22
+      gui-slot: 23
       swift-increment: 0.05
       default-speed: 0.2
   xp:
@@ -243,12 +258,9 @@ skills:
         - "   &e{prev}% &7 >>> &e{next}%"
     config:
       max-level: 20
-      gui-slot: 23
+      gui-slot: 24
       xp-increment: 0.2
 
-# You can disable specific skills from being registered here.
-disabled-skills:
- - "some-skill-id"
 
 ###### Developers ######
 # For those registering their own custom skills, they can be added to the config using the following:

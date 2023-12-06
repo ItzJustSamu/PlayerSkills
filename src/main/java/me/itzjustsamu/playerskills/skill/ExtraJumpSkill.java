@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 
-public class  ExtraJumpSkill extends Skill {
+public class ExtraJumpSkill extends Skill {
     private final ConfigPath<Double> VELOCITY = Paths.doublePath("Velocity-increment", 0.5);
 
     private final ConfigPath<Long> COOLDOWN = Paths.longPath("Cooldown", 30000L); // Default: 30 seconds
@@ -40,7 +40,7 @@ public class  ExtraJumpSkill extends Skill {
 
 
     public ExtraJumpSkill(PlayerSkills plugin) {
-        super(plugin, "DoubleJump", "doublejump", 5, 12);
+        super(plugin, "DoubleJump", "doublejump", 5, 13);
     }
 
     @EventHandler
