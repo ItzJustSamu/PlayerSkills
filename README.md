@@ -12,6 +12,7 @@ Version: 2.5.9 Beta unstable
 - Added ActionBar to display cooldown
 - Fixes DoubleJump Air cancellation
 - New Skill Durability
+- Updater notifications
 
 
   
