@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.6.8 Beta unstable
+Version: 2.5.9 Beta unstable
 
 - Performance fixes
 - Bugs
@@ -11,6 +11,8 @@ Version: 2.6.8 Beta unstable
 - Added and fixed Cooldown
 - Added ActionBar to display cooldown
 - Fixes DoubleJump Air cancellation
+- New Skill Durability
+- Updater notifications
 
 
   
