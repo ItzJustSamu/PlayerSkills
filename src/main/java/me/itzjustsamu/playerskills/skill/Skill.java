@@ -151,15 +151,6 @@ public abstract class Skill implements Listener {
         // EMPTY
     }
 
-    public void reload() {
-        config.reload();
-        if (itemBuilderConfigPath == null) {
-            itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
-            itemBuilderConfigPath.setConfig(config);
-        }
-        displayItem = itemBuilderConfigPath.getValue();
-    }
-
     public int getLevel(SPlayer player) {
         return player.getLevel(getConfigName());
     }
