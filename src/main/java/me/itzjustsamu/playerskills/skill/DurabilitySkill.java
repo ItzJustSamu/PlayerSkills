@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-
 import java.util.Collections;
 import java.util.List;
 
@@ -42,13 +41,27 @@ public class DurabilitySkill extends Skill implements Listener {
     }
 
     private void updateDurability(Player player, ItemStack itemStack, int currentLevel) {
-        // Update NBT lore with new durability
-        Durability(itemStack, currentLevel);
-
+        adjustDamage(itemStack, currentLevel);
+        loreDurability(itemStack);
         player.getInventory().setItemInMainHand(itemStack);
     }
 
-    private void Durability(ItemStack itemStack, int durabilityLevel) {
+    private void adjustDamage(ItemStack itemStack, int durabilityLevel) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
+            Damageable damageable = (Damageable) itemStack.getItemMeta();
+            if (damageable != null) {
+                int maxDurability = itemStack.getType().getMaxDurability();
+                int currentDurability = maxDurability - damageable.getDamage();
+
+                int newDurability = Math.min(maxDurability, currentDurability + (int) (durabilityIncrease.getValue() * durabilityLevel));
+
+                damageable.setDamage(maxDurability - newDurability);
+                itemStack.setItemMeta((ItemMeta) damageable);
+            }
+        }
+    }
+
+    private void loreDurability(ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR) {
             NBTItem nbtItem = new NBTItem(itemStack);
             int loreDurability = nbtItem.getInteger("Durability");
@@ -56,33 +69,10 @@ public class DurabilitySkill extends Skill implements Listener {
 
             double increaseDurability = durabilityIncrease.getValue();
 
-            // Calculate new durability based on skill level
             int newLoreDurability = (int) Math.min(loreMaxDurability, loreDurability - increaseDurability);
-            nbtItem.setInteger("Durability", newLoreDurability); // Set new durability
-
-            // Adjust the damage to simulate increasing max durability
-            int newDamage = loreMaxDurability - newLoreDurability;
-            Damageable damageable = (Damageable) itemStack.getItemMeta();
-            assert damageable != null;
-            damageable.setDamage(newDamage);
-            itemStack.setItemMeta((ItemMeta) damageable);
-
-            itemStack = nbtItem.getItem();
-            ItemMeta itemMeta = itemStack.getItemMeta();
-
-            if (itemMeta instanceof Damageable) {
-                damageable = (Damageable) itemMeta;
-                int maxDurability = itemStack.getType().getMaxDurability();
-                int currentDurability = maxDurability - damageable.getDamage();
-
-                int newDurability = Math.min(maxDurability, currentDurability + (int) (durabilityIncrease.getValue() * durabilityLevel));
-
-                damageable.setDamage(maxDurability - newDurability);
-                itemStack.setItemMeta(itemMeta);
-            }
+            nbtItem.setInteger("Durability", newLoreDurability);
         }
     }
-
 
     @Override
     public ItemBuilder getDefaultItem() {
