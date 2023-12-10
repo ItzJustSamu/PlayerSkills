@@ -365,3 +365,7 @@ messages:
   bleeding-enemy: "&a*** ENEMY BLEEDING ***"
   bleeding-self: "&c*** YOU ARE BLEEDING ***"
   menu-world-restriction: "&cYou cannot modify your skills in your current location."
+
+actionbar:
+  enable: true
+  durability: "&fItem Durability: &b{current}&6/&b{maximum} &6{percentage}%"

@@ -4,5 +4,5 @@ description: Player Skills offers a customizable and engaging skill progression 
 main: me.itzjustsamu.playerskills.PlayerSkills
 author: lmbishop, ItzJustSamu
 prefix: PlayerSkills
-softdepend: [ Vault ]
+softdepend: [ Vault, NBTAPI ]
 api-version: 1.13

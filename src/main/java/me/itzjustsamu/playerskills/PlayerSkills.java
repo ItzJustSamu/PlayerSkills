@@ -13,6 +13,8 @@ import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.fundingsource.FundingSource;
 import me.itzjustsamu.playerskills.fundingsource.VaultFundingSource;
 import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
+import me.itzjustsamu.playerskills.listener.ItemDamageEvent;
+import me.itzjustsamu.playerskills.listener.ItemMendEvent;
 import me.itzjustsamu.playerskills.listener.PlayerListener;
 import me.itzjustsamu.playerskills.menu.MenuController;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -73,6 +75,8 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener());
+        registerListener(new ItemDamageEvent());
+        registerListener(new ItemMendEvent());
 
         Updater updater = new Updater(this, 113626);
         updater.checkForUpdates();
