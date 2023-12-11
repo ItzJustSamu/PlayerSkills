@@ -15,10 +15,6 @@ skills:
     enable: true
     class: me.itzjustsamu.playerskills.skill.DodgeSkill
 
-  Durability:
-    enable: true
-    class: me.itzjustsamu.playerskills.skill.DurabilitySkill
-
   Health:
     enable: true
     class: me.itzjustsamu.playerskills.skill.HealthSkill
