@@ -53,13 +53,15 @@ public class XPSkill extends Skill {
         double increment = XP_Increment.getValue();
 
         // Calculate additional XP from killing an entity
-        int xp = (int) (getLevel(sPlayer) + increment + killer.getTotalExperience());
+        int xpLevel = (int) (getLevel(sPlayer) * increment);
+
+        int xp = killer.getTotalExperience() + xpLevel;
 
         // Set the new experience points
         killer.setTotalExperience(xp);
 
         // You might also want to update the player's visible XP bar
-        killer.setLevel(killer.getLevel() + xp);
+        killer.setLevel(killer.getLevel() + xpLevel);
     }
 
     @EventHandler
