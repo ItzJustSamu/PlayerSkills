@@ -13,8 +13,6 @@ import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.fundingsource.FundingSource;
 import me.itzjustsamu.playerskills.fundingsource.VaultFundingSource;
 import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
-import me.itzjustsamu.playerskills.listener.ItemDamageEvent;
-import me.itzjustsamu.playerskills.listener.ItemMendEvent;
 import me.itzjustsamu.playerskills.listener.PlayerListener;
 import me.itzjustsamu.playerskills.menu.MenuController;
 import me.itzjustsamu.playerskills.player.SPlayer;
