@@ -73,8 +73,6 @@ public class PlayerSkills extends BasePlugin {
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
         registerListener(new PlayerListener());
-        registerListener(new ItemDamageEvent());
-        registerListener(new ItemMendEvent());
 
         Updater updater = new Updater(this, 113626);
         updater.checkForUpdates();
