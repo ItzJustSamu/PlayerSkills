@@ -3,9 +3,7 @@
 Version: 2.5.1 Beta
 
 - Performance fixes
-- Bugs
 - Removed Skills Settings
-- Internal changes
 - DoubleJump CoolDown fixed # 30000 = 30 Seconds
 - Fixes Fall damage
 - Added and fixed Cooldown
