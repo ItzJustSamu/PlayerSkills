@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.5.9 Beta unstable
+Version: 2.5.1 Beta
 
 - Performance fixes
 - Bugs
@@ -13,6 +13,10 @@ Version: 2.5.9 Beta unstable
 - Fixes DoubleJump Air cancellation
 - New Skill Durability
 - Updater notifications
+
+  [Vaulted Skills]
+
+  Durability: Not fully functionional will be pushed for next update 
 
 
   
