@@ -11,12 +11,12 @@ Version: 2.5.1 Beta
 - Added and fixed Cooldown
 - Added ActionBar to display cooldown
 - Fixes DoubleJump Air cancellation
-- New Skill Durability
 - Updater notifications
+- XP Skill Properly calculates new experience based on kill xp and increment
 
   [Vaulted Skills]
 
-  Durability: Not fully functionional will be pushed for next update 
+  Durability: Not functional pushed for further update!
 
 
   

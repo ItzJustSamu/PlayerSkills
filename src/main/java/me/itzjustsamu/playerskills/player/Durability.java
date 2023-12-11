@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public class Durability implements IDurabilityItem {
+
     private final ItemStack item;
 
     public Durability(ItemStack item) {
@@ -24,9 +25,12 @@ public class Durability implements IDurabilityItem {
 
     @Override
     public boolean hasDurability() {
-        return this.item.getType().getMaxDurability() != 0 &&
-                NBT.get(this.item, (Function<ReadableItemNBT, Boolean>) nbt ->
-                        Objects.requireNonNull(nbt.getCompound(Constants.COMPOUND)).hasTag(Constants.DURABILITY));
+        if (this.item.getType().getMaxDurability() == 0) {
+            return false;  // Item has no durability
+        }
+        Object result = NBT.get(this.item, (Function<ReadableItemNBT, Object>) nbt -> nbt.hasTag(Constants.COMPOUND));
+
+        return result instanceof Boolean && (Boolean) result;
     }
 
     @Override
@@ -105,7 +109,7 @@ public class Durability implements IDurabilityItem {
     }
 
     @Override
-    public void printDebugInfo(Player player) {
+    public void updateLoreDurability(Player player) {
         if (item.getType() != Material.AIR) {
             new playerActionBar(player).sendActionBar(this.getDurability(), this.getMaxDurability());
         }

@@ -27,7 +27,7 @@ public class SwiftSkill extends Skill {
     private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 5, 23);
+        super(plugin, "Swift", "swift", 5, 22);
     }
 
 

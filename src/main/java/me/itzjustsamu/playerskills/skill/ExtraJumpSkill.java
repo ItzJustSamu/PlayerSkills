@@ -40,7 +40,7 @@ public class ExtraJumpSkill extends Skill {
 
 
     public ExtraJumpSkill(PlayerSkills plugin) {
-        super(plugin, "DoubleJump", "doublejump", 5, 13);
+        super(plugin, "DoubleJump", "doublejump", 5, 12);
     }
 
     @EventHandler

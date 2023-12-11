@@ -7,59 +7,55 @@ import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.player.Durability;
+import me.itzjustsamu.playerskills.player.IDurabilityItem;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
-
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class DurabilitySkill extends Skill implements Listener {
 
     private final ConfigPath<Double> durabilityIncrease = Paths.doublePath("durability-increase", 2.0);
-    private final Durability durability;  // Create a field for the Durability object
+
 
     public DurabilitySkill(PlayerSkills plugin) {
-        super(plugin, "Durability", "durability", 20, 12);
-        this.durability = new Durability();  // Initialize the Durability object with an item stack
-
+        super(plugin, "Durability", "durability", 20, -1);
     }
 
     @EventHandler
-    public void onPlayerItemDamage(PlayerItemDamageEvent event) {
-        SPlayer sPlayer = SPlayer.get(event.getPlayer().getUniqueId());
-        int durabilityLevel = getLevel(sPlayer);
-        double increase = durabilityIncrease.getValue() * durabilityLevel;
+    public void onInventoryOpen(InventoryOpenEvent event, ItemStack item, int durability) {
+        if (event.getPlayer() instanceof Player) {
+            Player player = (Player) event.getPlayer();
+            SPlayer sPlayer = SPlayer.get(player.getUniqueId());
+            int durabilityLevel = getLevel(sPlayer);
+            double increase = durabilityIncrease.getValue() * durabilityLevel;
 
-        // Iterate through the player's equipped items
-        for (ItemStack itemStack : event.getPlayer().getEquipment().getArmorContents()) {
-            applyDurabilityIncrease(itemStack, increase);
-        }
+            // Loop through player's inventory
+            for (ItemStack itemStack : player.getInventory().getContents()) {
+                if (itemStack != null && itemStack.getType() != Material.AIR) {
+                    // Check if the item has durability
+                    IDurabilityItem durabilityItem = new Durability(itemStack);
+                    if (durabilityItem.hasDurability()) {
+                        // Increment durability based on the increase value
+                        int maxDurability = durabilityItem.getMaxDurability();
+                        int currentDurability = durabilityItem.getDurability();
+                        int newMaxDurability = (int) (maxDurability * (1 + increase / 100.0));
+                        int newDurability = (int) (currentDurability * (1 + increase / 100.0));
 
-        // Apply to main hand and off hand
-        applyDurabilityIncrease(event.getPlayer().getEquipment().getItemInMainHand(), increase);
-        applyDurabilityIncrease(event.getPlayer().getEquipment().getItemInOffHand(), increase);
-    }
+                        // Update item durability
+                        new Durability(item).createDurability(newMaxDurability, newDurability);
 
-    private void applyDurabilityIncrease(ItemStack itemStack, double increase) {
-        if (itemStack != null && itemStack.getType() != Material.AIR) {
-            // Adjust the item's durability based on the increase using the Durability object
-            int currentDurability = this.durability.getDurability(itemStack);
-            int maxDurability = this.durability.getMaxDurability(itemStack);
-
-            // Calculate the new durability based on the increase
-            int newDurability = (int) (currentDurability * (1 + increase / 100));
-
-            // Set the new durability for the item using the Durability object
-            this.durability.setDurability(itemStack, newDurability);
+                    }
+                }
+            }
         }
     }
 

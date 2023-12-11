@@ -24,7 +24,7 @@ public class LumberSkill extends Skill {
     private final ConfigPath<Double> lumberUpgrade = Paths.doublePath("lumber-upgrade", 1.0);
 
     public LumberSkill(PlayerSkills plugin) {
-        super(plugin, "Lumber", "lumber", 1, 20);
+        super(plugin, "Lumber", "lumber", 1, 19);
     }
 
     @EventHandler

@@ -25,7 +25,7 @@ public class XPSkill extends Skill {
     private final ConfigPath<Double> XP_Increment = Paths.doublePath("xp-increment", 0.2);
 
     public XPSkill(PlayerSkills plugin) {
-        super(plugin, "XP", "xp", 20, 24);
+        super(plugin, "XP", "xp", 20, 23);
     }
 
     // Event handler for hit event
@@ -53,15 +53,13 @@ public class XPSkill extends Skill {
         double increment = XP_Increment.getValue();
 
         // Calculate additional XP from killing an entity
-        int xpLevel = (int) (getLevel(sPlayer) * increment);
-
-        int xp = killer.getTotalExperience() + xpLevel;
+        int xp = (int) (getLevel(sPlayer) * increment * killer.getTotalExperience());
 
         // Set the new experience points
         killer.setTotalExperience(xp);
 
         // You might also want to update the player's visible XP bar
-        killer.setLevel(killer.getLevel() + xpLevel);
+        killer.setLevel(killer.getLevel() + xp);
     }
 
     @EventHandler

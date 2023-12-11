@@ -14,7 +14,7 @@ public class ItemMendEvent implements Listener {
         if(item.hasDurability()) {
             item.repairItem(event.getRepairAmount());
             event.setRepairAmount(0);
-            item.printDebugInfo(event.getPlayer());
+            item.updateLoreDurability(event.getPlayer());
         }
     }
 }

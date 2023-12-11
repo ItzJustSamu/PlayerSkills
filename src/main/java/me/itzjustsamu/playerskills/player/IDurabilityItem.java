@@ -12,7 +12,6 @@ public interface IDurabilityItem {
     void createDurability(int maxDurability, int durability);
     void damageItem(int amount);
     void repairItem(int amount);
-    void printDebugInfo(Player player);
+    void updateLoreDurability(Player player);
 
 }
-

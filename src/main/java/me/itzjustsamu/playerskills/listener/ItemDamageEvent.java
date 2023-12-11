@@ -14,7 +14,7 @@ public class ItemDamageEvent implements Listener {
         if(item.hasDurability()) {
             item.damageItem(event.getDamage());
             event.setDamage(0);
-            item.printDebugInfo(event.getPlayer());
+            item.updateLoreDurability(event.getPlayer());
         }
     }
 }
