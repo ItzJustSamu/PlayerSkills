@@ -20,6 +20,8 @@ Version: 2.5.1 Beta
   
 Adding or fixing:
 
+- Increment Lumberjack so every update allows the next Axe to work [Wood>Stone>Gold>Iron>Diamond>Netherite]
+
 - A In Game GUI to toggle the enable or disabled status of /skills | or Implement it into the /skills menu, Player will need to right click the gui skill slot to disable or enable that specific skill | Give player option to Increase or Decrease levels after purchasing that Skill level.
 
 - Reload Config Command
