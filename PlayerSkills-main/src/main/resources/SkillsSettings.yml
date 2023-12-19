@@ -1,0 +1,90 @@
+skills:
+  Archery:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ArcherySkill
+
+  Breeder:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.BreederSkill
+
+  Criticals:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.CriticalsSkill
+
+  Dodge:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.DodgeSkill
+
+  ExplosiveArrows:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ExplosiveArrowsSkill
+
+  ExtraJump:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ExtraJumpSkill
+
+  ExtraShot:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ExtraShotSkill
+
+  FireBall:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.FireBallSkill
+
+  Fishing:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.FishingSkill
+
+  Gluttony:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.GluttonySkill
+
+  Grappling:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.GrapplingSkill
+
+  Health:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.HealthSkill
+
+  InstantBreaker:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.InstantBreakerSkill
+
+  KnockBack:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.KnockBackSkill
+
+  Lacerate:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LacerateSkill
+
+  Looting:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LootingSkill
+
+  Lumber:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LumberSkill
+
+  Resistance:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ResistanceSkill
+
+  ShadowStep:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ShadowStepSkill
+
+  Strength:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.StrengthSkill
+
+  Swift:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.SwiftSkill
+
+  XP:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.XPSkill
+
+  # Add other skills as needed
