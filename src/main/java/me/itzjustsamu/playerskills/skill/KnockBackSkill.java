@@ -11,6 +11,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,7 +60,13 @@ public class KnockBackSkill extends Skill {
         }
 
         // Get the entity being damaged
-        LivingEntity entity = (LivingEntity) event.getEntity();
+        Entity damager = event.getDamager();
+        if (!(damager instanceof LivingEntity)) {
+            // Check if the damager is a LivingEntity
+            return;
+        }
+
+        LivingEntity entity = (LivingEntity) damager;
 
         // Calculate the knockback strength based on the knockback level and increment
         double knockbackStrength = knockbackLevel * knockbackIncrementValue;
@@ -76,7 +83,6 @@ public class KnockBackSkill extends Skill {
         // Set the entity's velocity using the direction vector and knockback strength
         entity.setVelocity(direction.multiply(knockbackStrength));
     }
-
 
     private boolean isFinite(double value) {
         return !Double.isNaN(value) && !Double.isInfinite(value);

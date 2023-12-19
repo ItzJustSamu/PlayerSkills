@@ -1,7 +1,6 @@
 package me.itzjustsamu.playerskills.skill;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import com.cryptomorin.xseries.messages.ActionBar;
 import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
@@ -13,9 +12,7 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import me.itzjustsamu.playerskills.player.SPlayer;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,18 +23,17 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExtraJumpSkill extends Skill {
     private final ConfigPath<Double> VELOCITY = Paths.doublePath("Velocity-increment", 0.5);
-
     private final ConfigPath<Long> COOLDOWN = Paths.longPath("Cooldown", 30000L); // Default: 30 seconds
 
     private final HashMap<Player, Boolean> coolDown = new HashMap<>();
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
-
     private final HashMap<Player, Boolean> HasDoubleJumped = new HashMap<>();
-
 
     public ExtraJumpSkill(PlayerSkills plugin) {
         super(plugin, "DoubleJump", "doublejump", 5, 12);
@@ -51,10 +47,8 @@ public class ExtraJumpSkill extends Skill {
 
         Player player = (Player) event.getEntity();
 
-        // Check if the damage is fall damage and the player has double-jumped
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL && HasDoubleJumped.getOrDefault(player, false)) {
             event.setCancelled(true);
-
             HasDoubleJumped.put(player, false);
         }
     }
@@ -69,6 +63,7 @@ public class ExtraJumpSkill extends Skill {
 
         player.setAllowFlight(!cooldownMap.containsKey(player) || System.currentTimeMillis() >= cooldownMap.get(player));
     }
+
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
@@ -108,20 +103,15 @@ public class ExtraJumpSkill extends Skill {
             SkillEffect.playSound(player);
         }
 
-        // Perform double jump
         event.setCancelled(true);
         cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue());
-
-        // Get the player's direction vector
         Vector direction = player.getLocation().getDirection();
-
-        // Set the player's velocity using the direction vector and jump height
         player.setVelocity(direction.multiply(jumpHeight));
         player.setAllowFlight(false);
 
         if (jumpLevel > 0) {
             long remainingTime = (cooldownMap.get(player) - System.currentTimeMillis()) / 1000L;
-            CooldownUI(player, remainingTime);
+            sendActionBar(player, ChatColor.RED + "Double Jump Cooldown: " + ChatColor.YELLOW + remainingTime + "s");
         }
 
         HasDoubleJumped.put(player, true);
@@ -137,25 +127,6 @@ public class ExtraJumpSkill extends Skill {
             }
         }.runTaskTimer(getPlugin(), 0, 20);
     }
-
-    private void CooldownUI(Player player, long remainingTime) {
-        new BukkitRunnable() {
-            long timeLeft = remainingTime;
-
-            @Override
-            public void run() {
-                if (timeLeft > 0) {
-                    String actionBarMessage = ChatColor.RED + "Double Jump Cooldown: " + ChatColor.YELLOW + timeLeft + "s";
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBarMessage));
-                    timeLeft--;
-                } else {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
-                    cancel(); // Stop the task when the cooldown ends
-                }
-            }
-        }.runTaskTimer(getPlugin(), 0L, 20L); // Update every second
-    }
-
 
     @EventHandler
     public void onSneak(final PlayerToggleSneakEvent event) {
@@ -204,4 +175,7 @@ public class ExtraJumpSkill extends Skill {
         return String.valueOf(jumpHeight);
     }
 
+    private void sendActionBar(Player player, String message) {
+        ActionBar.sendActionBar(getPlugin(), player, message);
+    }
 }

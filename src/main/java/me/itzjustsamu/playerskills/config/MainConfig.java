@@ -52,7 +52,7 @@ public class MainConfig extends PathableConfig {
 
     // GUI-related configurations
     public static final StringConfigPath GUI_TITLE = new StringConfigPath("gui.title", "&6Skills");
-    public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 27);
+    public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath("gui.size", 36);
 
     // Background configurations
     public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);

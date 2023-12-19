@@ -1,62 +1,90 @@
 skills:
-  Gluttony:
+  Archery:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.GluttonySkill
+    class: me.itzjustsamu.playerskills.skill.ArcherySkill
 
-  Strength:
+  Breeder:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.StrengthSkill
-
-  Resistance:
-    enable: true
-    class: me.itzjustsamu.playerskills.skill.ResistanceSkill
-
-  Dodge:
-    enable: true
-    class: me.itzjustsamu.playerskills.skill.DodgeSkill
-
-  Health:
-    enable: true
-    class: me.itzjustsamu.playerskills.skill.HealthSkill
+    class: me.itzjustsamu.playerskills.skill.BreederSkill
 
   Criticals:
     enable: true
     class: me.itzjustsamu.playerskills.skill.CriticalsSkill
 
-  Archery:
+  Dodge:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.ArcherySkill
+    class: me.itzjustsamu.playerskills.skill.DodgeSkill
 
-  Lacerate:
+  ExplosiveArrows:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.LacerateSkill
+    class: me.itzjustsamu.playerskills.skill.ExplosiveArrowsSkill
 
-  Swift:
+  ExtraJump:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.SwiftSkill
+    class: me.itzjustsamu.playerskills.skill.ExtraJumpSkill
 
   ExtraShot:
     enable: true
     class: me.itzjustsamu.playerskills.skill.ExtraShotSkill
 
-  Looting:
+  FireBall:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.LootingSkill
+    class: me.itzjustsamu.playerskills.skill.FireBallSkill
+
+  Fishing:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.FishingSkill
+
+  Gluttony:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.GluttonySkill
+
+  Grappling:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.GrapplingSkill
+
+  Health:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.HealthSkill
+
+  InstantBreaker:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.InstantBreakerSkill
 
   KnockBack:
     enable: true
     class: me.itzjustsamu.playerskills.skill.KnockBackSkill
 
-  XP:
+  Lacerate:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.XPSkill
+    class: me.itzjustsamu.playerskills.skill.LacerateSkill
+
+  Looting:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.LootingSkill
 
   Lumber:
     enable: true
     class: me.itzjustsamu.playerskills.skill.LumberSkill
 
-  ExtraJump:
+  Resistance:
     enable: true
-    class: me.itzjustsamu.playerskills.skill.ExtraJumpSkill
+    class: me.itzjustsamu.playerskills.skill.ResistanceSkill
+
+  ShadowStep:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.ShadowStepSkill
+
+  Strength:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.StrengthSkill
+
+  Swift:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.SwiftSkill
+
+  XP:
+    enable: true
+    class: me.itzjustsamu.playerskills.skill.XPSkill
 
   # Add other skills as needed
