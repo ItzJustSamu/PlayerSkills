@@ -1,22 +1,14 @@
 # PlayerSkills
 
-Version: 2.5.2 Beta
+Version: 2.5.3 Beta
 
-- Performance fixes
-- Removed Skills Settings
-- DoubleJump CoolDown fixed # 30000 = 30 Seconds
-- Fixes Fall damage
-- Added and fixed Cooldown
-- Added ActionBar to display cooldown
-- Fixes DoubleJump Air cancellation
-- Updater notifications
-- XP Skill Properly calculates new experience based on kill xp and increment
-
-  [Vaulted Skills]
-
-  Durability: Not functional pushed for further update!
-
-
+- Shadow Step Skill
+- Fishing Skill
+- Grappling Skill
+- Instant breaker
+- Fireball Skill
+- Breeder Skill
+- Explosive Arrow Skill
   
 Adding or fixing:
 
