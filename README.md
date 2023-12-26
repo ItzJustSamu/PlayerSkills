@@ -9,6 +9,8 @@ Version: 2.5.3 Beta
 - Fireball Skill
 - Breeder Skill
 - Explosive Arrow Skill
+
+- Cooldowns for all Skills 
   
 Adding or fixing:
 
