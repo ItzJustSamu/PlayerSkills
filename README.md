@@ -10,7 +10,7 @@ Version: 2.5.3 Beta
 - Breeder Skill
 - Explosive Arrow Skill
 
-- Cooldowns for all Skills 
+- Cooldowns for most Skills 
   
 Adding or fixing:
 
