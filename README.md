@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.5.3 Beta
+Version: 2.5.2 Beta
 
 - Shadow Step Skill
 - Fishing Skill
