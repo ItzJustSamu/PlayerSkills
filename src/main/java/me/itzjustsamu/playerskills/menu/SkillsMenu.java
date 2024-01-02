@@ -37,7 +37,7 @@ public class SkillsMenu implements Menu {
         }
 
         for (Skill skill : this.plugin.getSkills().values()) {
-            if (!this.plugin.getDisabledSkills().containsKey(skill.getConfigName())) {
+            if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
                 skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(this.player));
             }
@@ -51,19 +51,24 @@ public class SkillsMenu implements Menu {
 
     public void onClick(int slot, ClickType clickType) {
         for (Skill skill : this.plugin.getSkills().values()) {
-            if (slot == skill.getGuiSlot() && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
+            if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
+                // Handle right-click on skill slot
+                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, this, sPlayer);
+                skillsSettings.open(this.player);
+                return; // Stop processing further actions
+            }
+
+            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
                 int price = skill.getPriceOverride(skill.getLevel(this.sPlayer) + 1);
                 if (this.sPlayer.getPoints() >= price) {
                     Runnable callback = () -> {
-                        this.sPlayer.setLevel(skill.getConfigName(), skill.getLevel(this.sPlayer) + 1);
+                        this.sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(this.sPlayer) + 1);
                         this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
                         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
                         this.open(this.player);
                     };
-                    if (clickType == ClickType.RIGHT) {
-                        SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, skill, this);
-                        skillsSettings.open(this.player);
-                    } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
+
+                    if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
                         ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                         confirmationMenu.open(this.player);
                     } else {
@@ -78,7 +83,7 @@ public class SkillsMenu implements Menu {
         if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (clickType == ClickType.RIGHT) {
-                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this);
+                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, null, this, sPlayer);
                 skillsSettings.open(this.player);
             } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
@@ -89,7 +94,7 @@ public class SkillsMenu implements Menu {
         } else if (slot == MainConfig.GUI_RESET_SLOT.getValue()) {
             Runnable callback = null;  // Declare callback as final
             if (clickType == ClickType.RIGHT) {
-                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this);
+                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, null, this, sPlayer);
                 skillsSettings.open(this.player);
             } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_RESET_SKILLS.getValue()) {
                 callback = () -> {
@@ -98,7 +103,7 @@ public class SkillsMenu implements Menu {
                         this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
                         if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                             for (String s : this.sPlayer.getSkills().keySet()) {
-                                for (int i = 1; i <= this.sPlayer.getLevel(s); ++i) {
+                                for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
                                     this.sPlayer.setPoints(this.sPlayer.getPoints() + this.plugin.getSkills().get(s).getPriceOverride(i));
                                 }
                             }
@@ -119,7 +124,7 @@ public class SkillsMenu implements Menu {
                         this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
                         if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                             for (String s : this.sPlayer.getSkills().keySet()) {
-                                for (int i = 1; i <= this.sPlayer.getLevel(s); ++i) {
+                                for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
                                     this.sPlayer.setPoints(this.sPlayer.getPoints() + this.plugin.getSkills().get(s).getPriceOverride(i));
                                 }
                             }
