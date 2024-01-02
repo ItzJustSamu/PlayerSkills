@@ -6,6 +6,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -33,8 +34,7 @@ public class ConfirmationMenu implements Menu {
     @Override
     public @NotNull Inventory getInventory() {
         String title = ColorUtils.colorize(MainConfig.GUI_CONFIRMATION_TITLE.getValue());
-        int size = 27;
-
+        int size = MainConfig.GUI_CONFIRMATION_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (MainConfig.GUI_CONFIRMATION_BACKGROUND_ENABLED.getValue()) {
@@ -59,7 +59,7 @@ public class ConfirmationMenu implements Menu {
     }
 
     @Override
-    public void onClick(int slot) {
+    public void onClick(int slot, ClickType event) {
         if (slot == 10 || slot == 11 || slot == 12) {
             if (superMenu != null) {
                 superMenu.open(player);

@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CriticalsSkill extends Skill {
-    private final ConfigPath<Double> CRITICAL_INCREMENT = Paths.doublePath("percent-increase", 3D);
+    private final ConfigPath<Double> CRITICAL_INCREMENT = Paths.doublePath("percent-increase", 2D);
     private final ConfigPath<Double> CRITICAL_MULTIPLIER = Paths.doublePath("critical-multiplier", 1.5D);
     private final ConfigPath<String> CRITICAL_MESSAGE = Paths.stringPath("critical-message", "&a*** CRITICAL HIT ***");
 
     public CriticalsSkill(PlayerSkills plugin) {
-        super(plugin, "Criticals", "criticals", 20, 10);
+        super(plugin, "Criticals", "criticals", 20, 2);
     }
 
     @EventHandler
@@ -37,7 +37,7 @@ public class CriticalsSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -56,7 +56,7 @@ public class CriticalsSkill extends Skill {
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = CRITICAL_MESSAGE.getValue();
-            if (!message.equals("")) {
+            if (!message.isEmpty()) {
                 MessageUtils.sendMessage(player, message, "");
             }
             event.setDamage(event.getDamage() * CRITICAL_MULTIPLIER.getValue());

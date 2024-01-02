@@ -2,10 +2,10 @@ package me.itzjustsamu.playerskills.command;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.itzjustsamu.playerskills.Permissions;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.menu.SkillsMenu;
 import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,9 +38,9 @@ public class SkillsCommand extends Command {
         Player player = (Player) sender;
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
-        List<String> listOfWorlds = MainConfig.OPTIONS_MENU_WORLD_RESTRICTION.getValue();
+        List<String> listOfWorlds = MainConfig.OPTIONS_MENU_Worlds_Restrictions.getValue();
         if (!listOfWorlds.isEmpty() && !listOfWorlds.contains(player.getWorld().getName())) {
-            MessageUtils.sendMessage(player, MessageConfig.MENU_WORLD_RESTRICTION.getValue());
+            MessageUtils.sendMessage(player, MessageConfig.MENU_Worlds_Restrictions.getValue());
             return true;
         }
 

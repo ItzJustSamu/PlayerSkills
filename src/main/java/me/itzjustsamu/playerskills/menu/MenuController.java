@@ -1,6 +1,5 @@
 package me.itzjustsamu.playerskills.menu;
 
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,12 +16,11 @@ public class MenuController implements Listener {
             return;
         }
         InventoryHolder holder = inventory.getHolder();
-        if (!(holder instanceof Menu)) {
-            return;
+        if (holder instanceof Menu) {
+            Menu menu = (Menu) holder;
+            event.setCancelled(true);
+            menu.onClick(event.getSlot(), event.getClick());
         }
-        Menu menu = (Menu) holder;
-        event.setCancelled(true);
-        menu.onClick(event.getSlot());
     }
 
     @EventHandler

@@ -29,14 +29,14 @@ public class InstantBreakerSkill extends Skill {
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public InstantBreakerSkill(PlayerSkills plugin) {
-        super(plugin, "InstantBreaker", "instantbreaker", 10, 25);
+        super(plugin, "InstantBreaker", "instantbreaker", 10, 12);
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -48,10 +48,6 @@ public class InstantBreakerSkill extends Skill {
         }
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK && getLevel(sPlayer) > 0) {
-            if (isWorldNotAllowed(player)) {
-                return;
-            }
-
             if (!hasCooldown(player, sPlayer)) {
                 Block block = event.getClickedBlock();
 

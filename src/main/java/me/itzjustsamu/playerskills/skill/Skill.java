@@ -24,16 +24,16 @@ import java.util.Map;
 
 public abstract class Skill implements Listener {
 
-    private final SkillConfig config;
-    private final PlayerSkills plugin;
-    private final String name;
-    private final String skills;
+    private final SkillConfig CONFIG;
+    private final PlayerSkills PLUGIN;
+    private final String NAME;
+    private final String SKILL;
 
-    private ItemBuilderConfigPath itemBuilderConfigPath;
+    private ItemBuilderConfigPath ITEM_CONFIG;
 
-    private ConfigPath<List<String>> onlyInWorldsConfig;
+    private ConfigPath<List<String>> Worlds_Restrictions;
     private ConfigPath<Map<Integer, Integer>> pointPriceOverridesConfig;
-    private ItemBuilder displayItem;
+    private ItemBuilder DISPLAY_ITEM;
 
     private ConfigPath<Integer> GET_MAX_LEVEL;
     private ConfigPath<Integer> GET_GUI_SLOT;
@@ -42,33 +42,33 @@ public abstract class Skill implements Listener {
 
     private final int GUI_SLOT;
 
-    public Skill(PlayerSkills plugin, String name, String skills, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
-        this.plugin = plugin;
-        this.name = name;
-        this.skills = skills;
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
+        this.PLUGIN = PlayerSkills;
+        this.NAME = SKILL_CONFIG_NAME;
+        this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
         this.GUI_SLOT = SET_GUI_SLOT;
-        this.config = new SkillConfig(this);
+        this.CONFIG = new SkillConfig(this);
     }
 
     public final void setup() {
 
-        config.setup();
+        CONFIG.setup();
         this.GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
-        GET_MAX_LEVEL.setConfig(config);
+        GET_MAX_LEVEL.setConfig(CONFIG);
         this.GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
-        GET_GUI_SLOT.setConfig(config);
-        this.onlyInWorldsConfig = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
-        onlyInWorldsConfig.setConfig(config);
+        GET_GUI_SLOT.setConfig(CONFIG);
+        this.Worlds_Restrictions = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
+        Worlds_Restrictions.setConfig(CONFIG);
         this.pointPriceOverridesConfig = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
-        pointPriceOverridesConfig.setConfig(config);
-        getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(config));
+        pointPriceOverridesConfig.setConfig(CONFIG);
+        getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(CONFIG));
         ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
-        itemBuilderConfigPath.setConfig(config);
-        config.save();
+        itemBuilderConfigPath.setConfig(CONFIG);
+        CONFIG.save();
 
-        this.displayItem = itemBuilderConfigPath.getValue();
-        displayItem.addStringReplacer("skill-properties", (original, uuid) -> {
+        this.DISPLAY_ITEM = itemBuilderConfigPath.getValue();
+        DISPLAY_ITEM.addStringReplacer("skill-properties", (original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
             int maxLevel = getMaxLevel();
@@ -88,11 +88,11 @@ public abstract class Skill implements Listener {
 
         List<ConfigPath<?>> messageConfigPaths = getMessageConfigPaths();
         if (!messageConfigPaths.isEmpty()) {
-            MessageConfig messageConfig = plugin.getMessageConfig();
+            MessageConfig messageConfig = PLUGIN.getMessageConfig();
             messageConfigPaths.forEach(configPath -> configPath.setConfig(messageConfig));
             messageConfig.save();
         }
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, PLUGIN);
     }
 
     public int getMaxLevel() {
@@ -112,31 +112,31 @@ public abstract class Skill implements Listener {
     }
 
     public ItemBuilder getDefaultItem() {
-        if (itemBuilderConfigPath == null) {
-            itemBuilderConfigPath = new ItemBuilderConfigPath("display", null);
-            itemBuilderConfigPath.setConfig(config);
+        if (ITEM_CONFIG == null) {
+            ITEM_CONFIG = new ItemBuilderConfigPath("display", null);
+            ITEM_CONFIG.setConfig(CONFIG);
         }
-        return itemBuilderConfigPath.getValue();
+        return ITEM_CONFIG.getValue();
     }
 
-    public final String getName() {
-        return name;
+    public final String getSkillsConfigName() {
+        return NAME;
     }
 
-    public final String getConfigName() {
-        return skills;
+    public final String getSkillsName() {
+        return SKILL;
     }
 
     public final PlayerSkills getPlugin() {
-        return plugin;
+        return PLUGIN;
     }
 
     public final SkillConfig getConfig() {
-        return config;
+        return CONFIG;
     }
 
     public ItemStack getDisplayItem(Player player) {
-        return displayItem.build(player);
+        return DISPLAY_ITEM.build(player);
     }
 
     public abstract String getPreviousString(SPlayer player);
@@ -152,7 +152,7 @@ public abstract class Skill implements Listener {
     }
 
     public int getLevel(SPlayer player) {
-        return player.getLevel(getConfigName());
+        return player.Level(getSkillsConfigName());
     }
 
     public int getPriceOverride(int level) {
@@ -163,8 +163,8 @@ public abstract class Skill implements Listener {
         return pointPriceOverridesConfig.getValue();
     }
 
-    public boolean isWorldNotAllowed(Player player) {
-        List<String> list = onlyInWorldsConfig.getValue();
+    public boolean Worlds_Restriction(Player player) {
+        List<String> list = Worlds_Restrictions.getValue();
         if (list.isEmpty()) {
             return false;
         }
@@ -174,5 +174,4 @@ public abstract class Skill implements Listener {
         }
         return !list.contains(world.getName());
     }
-
 }

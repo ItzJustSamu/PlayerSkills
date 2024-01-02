@@ -1,8 +1,6 @@
 package me.itzjustsamu.playerskills;
 
-
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
-import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.collections.map.CaseInsensitiveStringHashMap;
@@ -16,18 +14,14 @@ import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.listener.PlayerListener;
 import me.itzjustsamu.playerskills.menu.MenuController;
 import me.itzjustsamu.playerskills.player.SPlayer;
-import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.skill.*;
 import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.storage.PlayerStorage;
 import me.itzjustsamu.playerskills.util.Updater;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -39,10 +33,10 @@ public class PlayerSkills extends BasePlugin {
 
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final MainConfig mainConfig = new MainConfig(this);
+
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Map<String, Skill> disabledSkills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
-
 
     public MessageConfig getMessageConfig() {
         return messageConfig;
@@ -68,7 +62,28 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
-        registerSkills();
+        registerSkill(new ArcherySkill(this));
+        registerSkill(new BreederSkill(this));
+        registerSkill(new CriticalsSkill(this));
+        registerSkill(new DodgeSkill(this));
+        registerSkill(new ExplosiveArrowsSkill(this));
+        registerSkill(new ExtraJumpSkill(this));
+        registerSkill(new ExtraShotSkill(this));
+        registerSkill(new FireBallSkill(this));
+        registerSkill(new FishingSkill(this));
+        registerSkill(new GluttonySkill(this));
+        registerSkill(new GrapplingSkill(this));
+        registerSkill(new HealthSkill(this));
+        registerSkill(new InstantBreakerSkill(this));
+        registerSkill(new KnockBackSkill(this));
+        registerSkill(new LacerateSkill(this));
+        registerSkill(new LootingSkill(this));
+        registerSkill(new LumberSkill(this));
+        registerSkill(new ResistanceSkill(this));
+        registerSkill(new ShadowStepSkill(this));
+        registerSkill(new StrengthSkill(this));
+        registerSkill(new SwiftSkill(this));
+        registerSkill(new XPSkill(this));
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
         registerListener(new MenuController());
@@ -76,77 +91,7 @@ public class PlayerSkills extends BasePlugin {
 
         Updater updater = new Updater(this, 113626);
         updater.checkForUpdates();
-
     }
-
-
-    private void loadSkillsFromConfig() {
-        BukkitConfig skillsConfig = new BukkitConfig(this, "SkillsSettings.yml");
-        skillsConfig.setup();
-
-        ConfigurationSection skillSection = skillsConfig.getOriginal();
-        if (skillSection != null && skillSection.contains("skills")) {
-            ConfigurationSection skills = skillSection.getConfigurationSection("skills");
-
-            if (skills != null) {
-                for (String skillName : skills.getKeys(false)) {
-                    ConfigurationSection skillEntry = skills.getConfigurationSection(skillName);
-                    assert skillEntry != null;
-
-                    boolean isEnabled = skillEntry.getBoolean("enable", true);
-
-                    if (isEnabled) {
-                        String lowerCaseSkillName = skillName.toLowerCase();
-                        registerSkill(lowerCaseSkillName, skillEntry.getString("class"));
-                    } else {
-                        try {
-                            Class<?> skillClass = Class.forName(skillEntry.getString("class"));
-                            Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
-                            Skill skill = (Skill) constructor.newInstance(this);
-                            String lowerCaseSkillName = skillName.toLowerCase();
-                            disabledSkills.put(lowerCaseSkillName, skill);
-                        } catch (Exception e) {
-                            logger.log(Level.SEVERE, "Error registering disabled skill: " + skillName, e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private Skill createSkillInstance(String skillClassName) throws Exception {
-        Class<?> skillClass = Class.forName(skillClassName);
-        if (!Skill.class.isAssignableFrom(skillClass)) {
-            throw new IllegalArgumentException("Invalid skill class: " + skillClassName);
-        }
-        Constructor<?> constructor = skillClass.getConstructor(PlayerSkills.class);
-        return (Skill) constructor.newInstance(this);
-    }
-
-    private void registerSkills() {
-        disabledSkills.clear();
-        loadSkillsFromConfig();
-    }
-
-
-    private void registerSkill(String skillName, String skillClassName) {
-        String lowerCaseSkillName = skillName.toLowerCase();
-
-        if (disabledSkills.containsKey(lowerCaseSkillName)) {
-            return;
-        }
-
-        try {
-            Skill skill = createSkillInstance(skillClassName);
-            skills.put(skill.getConfigName(), skill);
-            skill.setup();
-            skill.enable();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error registering skill: " + skillName, e);
-        }
-    }
-
-
 
     @Override
     public void postEnable() {
@@ -187,13 +132,17 @@ public class PlayerSkills extends BasePlugin {
         skills.clear();
     }
 
-
-
     public Map<String, Skill> getSkills() {
         return skills;
     }
 
-    public Map<String, Skill> getDisabledSkills() {
-        return disabledSkills;
+    public void registerSkill(Skill skill) {
+        if (MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
+            return;
+        }
+        skills.put(skill.getSkillsConfigName(), skill);
+        skill.setup();
+        skill.enable();
     }
+
 }

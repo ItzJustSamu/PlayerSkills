@@ -41,7 +41,7 @@ public class LacerateSkill extends Skill {
     private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate", 20, 17);
+        super(plugin, "Lacerate", "lacerate", 20, 14);
     }
 
     @EventHandler
@@ -51,7 +51,7 @@ public class LacerateSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -74,11 +74,11 @@ public class LacerateSkill extends Skill {
             bleed(victim);
 
             String message = bleedingEnemy.getValue();
-            if (!message.equals("")) {
+            if (!message.isEmpty()) {
                 MessageUtils.sendMessage(player, message, "");
             }
             String victimMesssage = bleedingSelf.getValue();
-            if (!victimMesssage.equals("")) {
+            if (!victimMesssage.isEmpty()) {
                 MessageUtils.sendMessage(victim, victimMesssage, "");
             }
         }

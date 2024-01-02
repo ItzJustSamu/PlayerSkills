@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -11,24 +12,35 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
-import static me.itzjustsamu.playerskills.skill.SkillEffect.playSound;
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ShadowStepSkill extends Skill {
-    private final ConfigPath<Double> TELEPORT_BASE_CHANCE = Paths.doublePath("Teleport-base-chance", 20D);
-    private final ConfigPath<Double> TELEPORT_CHANCE_INCREMENT = Paths.doublePath("Teleport-chance-increment", 5D);
+    private final ConfigPath<Double> TELEPORT_CHANCE_INCREMENT = Paths.doublePath("teleport-chance-increment", 2.0D);
+    private final ConfigPath<String> TELEPORT_MESSAGE = Paths.stringPath("teleport-message", "&a*** SNEAK ATTACK ***");
+    private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath("cooldown-duration", 5000L); // 5000 milliseconds (5 seconds)
+    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cShadowStep cooldown: {remaining_time} seconds.");
 
+    private final Map<UUID, Long> cooldowns = new HashMap<>();
     private final Random random = new Random();
 
     public ShadowStepSkill(PlayerSkills plugin) {
-        super(plugin, "ShadowStep", "shadowstep", 15, 29);
+        super(plugin, "ShadowStep", "shadowstep", 20, 18);
     }
 
     @EventHandler
@@ -40,7 +52,7 @@ public class ShadowStepSkill extends Skill {
         Player target = (Player) event.getEntity();
         Player player = (Player) event.getDamager();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -53,33 +65,69 @@ public class ShadowStepSkill extends Skill {
             return;
         }
 
-        if (getLevel(sPlayer) > 0) {
-            playSound(player);
+        // Check cooldown
+        if (cooldowns.containsKey(player.getUniqueId())) {
+            Long cooldownEndTime = cooldowns.get(player.getUniqueId());
+            if (cooldownEndTime != null && System.currentTimeMillis() < cooldownEndTime) {
+                // Check if the player's level is above 1 before sending the cooldown message
+                if (getLevel(sPlayer) > 1) {
+                    sendActionBar(player, cooldownEndTime);
+                }
+                return;
+            }
+        }
 
+        if (getLevel(sPlayer) > 0) {
             // Check if teleportation should occur
             if (shouldTeleport(sPlayer)) {
                 // Teleport behind the target
                 teleportBehindTarget(player, target);
+
+                // Send the teleport message
+                String message = TELEPORT_MESSAGE.getValue();
+                if (!message.isEmpty()) {
+                    MessageUtils.sendMessage(player, message, "");
+                }
+                MessageUtils.sendMessage(player, message, "");
+                // Set cooldown
+                cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + COOLDOWN_DURATION.getValue());
             }
         }
     }
 
     private boolean shouldTeleport(SPlayer sPlayer) {
-        double baseChance = TELEPORT_BASE_CHANCE.getValue();
         double increment = TELEPORT_CHANCE_INCREMENT.getValue();
-        double chance = baseChance + (getLevel(sPlayer) - 1) * increment;
+        int playerLevel = Math.max(0, getLevel(sPlayer));  // Ensure playerLevel is at least 0
+        double chance = playerLevel * increment;
 
-        return random.nextDouble() * 100 < chance;
+        return random.nextDouble() * 70 < chance;
     }
 
     private void teleportBehindTarget(Player player, Player target) {
+        Location targetLocation = target.getLocation().add(target.getLocation().getDirection().multiply(-1));
+        Location finalLocation = findSafeLocation(targetLocation);
+
         // Implement teleportation logic here
-        player.teleport(target.getLocation().add(target.getLocation().getDirection().multiply(-1)));
+        player.teleport(finalLocation);
+    }
+
+    private Location findSafeLocation(Location location) {
+        Block block = location.getBlock();
+        Block feet = block.getRelative(0, 1, 0);
+
+        if (!feet.getType().isSolid()) {
+            return location;
+        }
+
+        Location newLocation = location.clone();
+        newLocation.setY(location.getY() + 2);
+
+        return newLocation;
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(TELEPORT_BASE_CHANCE, TELEPORT_CHANCE_INCREMENT);
+        return List.of(TELEPORT_CHANCE_INCREMENT, TELEPORT_MESSAGE, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -99,18 +147,38 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double baseChance = TELEPORT_BASE_CHANCE.getValue();
         double increment = TELEPORT_CHANCE_INCREMENT.getValue();
-        double chance = baseChance + (getLevel(player) - 1) * increment;
+        int playerLevel = Math.max(0, getLevel(player) - 1);  // Ensure playerLevel is at least 0
+        double chance = playerLevel * increment;
         return getPercentageFormat().format(chance);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double baseChance = TELEPORT_BASE_CHANCE.getValue();
         double increment = TELEPORT_CHANCE_INCREMENT.getValue();
-        double chance = baseChance + (playerLevel - 1) * increment;
+        double chance = playerLevel * increment;
         return getPercentageFormat().format(chance);
+    }
+
+    private void sendActionBar(Player player, long cooldownEndTime) {
+        long remainingTime = (cooldownEndTime - System.currentTimeMillis()) / 1000L;
+
+        new BukkitRunnable() {
+            long timeLeft = remainingTime;
+
+            @Override
+            public void run() {
+                if (timeLeft > 0) {
+                    String actionBarMessage = ChatColor.translateAlternateColorCodes('&', COOLDOWN_MESSAGE.getValue())
+                            .replace("{remaining_time}", String.valueOf(timeLeft));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBarMessage));
+                    timeLeft--;
+                } else {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
+                    cancel(); // Stop the task when the cooldown ends
+                }
+            }
+        }.runTaskTimer(getPlugin(), 0L, 20L); // Update every second
     }
 }

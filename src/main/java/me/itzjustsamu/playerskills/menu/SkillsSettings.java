@@ -13,74 +13,56 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class SkillsMenu implements Menu {
+public class SkillsSettings implements Menu {
+
     private final PlayerSkills plugin;
     private final Player player;
+    private final Skill skill;
+    private final Menu superMenu;
     private final SPlayer sPlayer;
 
-    public SkillsMenu(PlayerSkills plugin, Player player, SPlayer sPlayer) {
+    public SkillsSettings(PlayerSkills plugin, Player player, Skill skill, Menu superMenu, SPlayer sPlayer) {
         this.plugin = plugin;
         this.player = player;
+        this.skill = skill;
+        this.superMenu = superMenu;
         this.sPlayer = sPlayer;
     }
 
+    @Override
     public @NotNull Inventory getInventory() {
         String title = ColorUtils.colorize(MainConfig.GUI_TITLE.getValue());
         int size = MainConfig.GUI_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
-        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(this.player);
 
-            for (int i = 0; i < inventory.getSize(); ++i) {
+        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
+            for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        for (Skill skill : this.plugin.getSkills().values()) {
-            if (!this.plugin.getDisabledSkills().containsKey(skill.getConfigName())) {
-                skill.setup();
-                inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(this.player));
-            }
+        // Check if skill is not null before using it
+        if (skill != null) {
+            inventory.setItem(MainConfig.GUI_INFO_SLOT.getValue(), MainConfig.GUI_INFO_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
+
         }
 
-        inventory.setItem(MainConfig.GUI_INFO_SLOT.getValue(), MainConfig.GUI_INFO_DISPLAY.getValue().build(this.player));
-        inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player));
-        inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
+
         return inventory;
     }
 
-    public void onClick(int slot, ClickType clickType) {
-        for (Skill skill : this.plugin.getSkills().values()) {
-            if (slot == skill.getGuiSlot() && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
-                int price = skill.getPriceOverride(skill.getLevel(this.sPlayer) + 1);
-                if (this.sPlayer.getPoints() >= price) {
-                    Runnable callback = () -> {
-                        this.sPlayer.setLevel(skill.getConfigName(), skill.getLevel(this.sPlayer) + 1);
-                        this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
-                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
-                        this.open(this.player);
-                    };
-                    if (clickType == ClickType.RIGHT) {
-                        SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, skill, this);
-                        skillsSettings.open(this.player);
-                    } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
-                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
-                        confirmationMenu.open(this.player);
-                    } else {
-                        callback.run();
-                    }
-                    return;
-                }
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
-            }
-        }
-
+    @Override
+    public void onClick(int slot, ClickType event) {
         if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
-            if (clickType == ClickType.RIGHT) {
-                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this);
+            if (event == ClickType.RIGHT) {
+                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this, this.sPlayer);
                 skillsSettings.open(this.player);
-            } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
+            } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(this.player);
             } else {
@@ -88,18 +70,18 @@ public class SkillsMenu implements Menu {
             }
         } else if (slot == MainConfig.GUI_RESET_SLOT.getValue()) {
             Runnable callback = null;  // Declare callback as final
-            if (clickType == ClickType.RIGHT) {
-                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this);
+            if (event == ClickType.RIGHT) {
+                SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this, this.sPlayer);
                 skillsSettings.open(this.player);
-            } else if (clickType == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_RESET_SKILLS.getValue()) {
+            } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_RESET_SKILLS.getValue()) {
                 callback = () -> {
                     int resetPoint = MainConfig.POINTS_RESET_PRICE.getValue();
                     if (this.sPlayer.getPoints() >= resetPoint) {
                         this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
                         if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                             for (String s : this.sPlayer.getSkills().keySet()) {
-                                for (int i = 1; i <= this.sPlayer.getLevel(s); ++i) {
-                                    this.sPlayer.setPoints(this.sPlayer.getPoints() + this.plugin.getSkills().get(s).getPriceOverride(i));
+                                for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
+                                    this.sPlayer.setPoints(this.sPlayer.getPoints() +  plugin.getSkills().get(s).getPriceOverride(i));
                                 }
                             }
                         }
@@ -119,8 +101,8 @@ public class SkillsMenu implements Menu {
                         this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
                         if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                             for (String s : this.sPlayer.getSkills().keySet()) {
-                                for (int i = 1; i <= this.sPlayer.getLevel(s); ++i) {
-                                    this.sPlayer.setPoints(this.sPlayer.getPoints() + this.plugin.getSkills().get(s).getPriceOverride(i));
+                                for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
+                                    this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPriceOverride(i));
                                 }
                             }
                         }

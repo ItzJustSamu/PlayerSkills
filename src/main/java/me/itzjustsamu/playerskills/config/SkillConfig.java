@@ -6,9 +6,10 @@ import me.itzjustsamu.playerskills.skill.Skill;
 import java.io.File;
 
 public class SkillConfig extends BukkitConfig {
-    public SkillConfig(Skill skill) {
-        super(new File(skill.getPlugin().getDataFolder(), "skills" + File.separator + skill.getConfigName() + ".yml"));
+    public SkillConfig(Skill Skills) {
+        super(new File(Skills.getPlugin().getDataFolder(), "skills" + File.separator + Skills.getSkillsConfigName() + ".yml"));
 
     }
 
 }
+

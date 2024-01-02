@@ -54,7 +54,7 @@ public class SPlayer {
         return skills;
     }
 
-    public int getLevel(String skill) {
+    public int Level(String skill) {
         return skills.getOrDefault(skill, 0);
     }
 

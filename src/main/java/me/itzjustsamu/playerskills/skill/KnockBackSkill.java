@@ -6,9 +6,9 @@ import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.entity.Entity;
@@ -26,7 +26,7 @@ public class KnockBackSkill extends Skill {
     private final ConfigPath<Double> knockbackIncrement = Paths.doublePath("knockback-increment", 0.2);
 
     public KnockBackSkill(PlayerSkills plugin) {
-        super(plugin, "Knockback", "knockback", 10, 16);
+        super(plugin, "Knockback", "knockback", 10, 13);
     }
 
     @EventHandler
@@ -37,7 +37,7 @@ public class KnockBackSkill extends Skill {
 
         Player player = (Player) event.getDamager();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

@@ -25,7 +25,7 @@ public class XPSkill extends Skill {
     private final ConfigPath<Double> XP_Increment = Paths.doublePath("xp-increment", 0.2);
 
     public XPSkill(PlayerSkills plugin) {
-        super(plugin, "XP", "xp", 20, 23);
+        super(plugin, "XP", "xp", 20, 21);
     }
 
     // Event handler for hit event
@@ -37,7 +37,7 @@ public class XPSkill extends Skill {
 
         Player killer = (Player) event.getEntity().getKiller();
 
-        if (isWorldNotAllowed(killer)) {
+        if (Worlds_Restriction(killer)) {
             return;
         }
 
@@ -69,7 +69,7 @@ public class XPSkill extends Skill {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

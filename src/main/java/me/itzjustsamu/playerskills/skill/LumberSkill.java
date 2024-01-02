@@ -6,9 +6,9 @@ import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Material;
@@ -24,14 +24,14 @@ public class LumberSkill extends Skill {
     private final ConfigPath<Double> lumberUpgrade = Paths.doublePath("lumber-upgrade", 1.0);
 
     public LumberSkill(PlayerSkills plugin) {
-        super(plugin, "Lumber", "lumber", 1, 19);
+        super(plugin, "Lumber", "lumber", 1, 16);
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

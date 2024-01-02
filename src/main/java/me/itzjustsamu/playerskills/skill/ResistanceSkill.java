@@ -22,7 +22,7 @@ public class ResistanceSkill extends Skill {
     private final ConfigPath<Double> damageDrop = Paths.doublePath("damage-drop", 3D);
 
     public ResistanceSkill(PlayerSkills plugin) {
-        super(plugin, "Resistance", "resistance", 20, 20);
+        super(plugin, "Resistance", "resistance", 20, 17);
     }
 
     @EventHandler
@@ -32,7 +32,7 @@ public class ResistanceSkill extends Skill {
         }
 
         Player player = (Player) event.getEntity();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

@@ -6,9 +6,9 @@ import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.entity.Player;
@@ -22,13 +22,13 @@ public class GluttonySkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
 
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony", 20, 14);
+        super(plugin, "Gluttony", "gluttony", 20, 9);
     }
 
     @EventHandler
     public void onFood(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

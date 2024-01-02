@@ -27,7 +27,7 @@ public class ExtraShotSkill extends Skill {
     private final ConfigPath<Double> ARROW_INCREMENT = Paths.doublePath("arrow-increment", 1.0);
 
     public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 13);
+        super(plugin, "ExtraShot", "extrashot", 10, 6);
     }
 
     @EventHandler
@@ -67,9 +67,9 @@ public class ExtraShotSkill extends Skill {
                     // Deny arrow pickup (Paper-specific)
                     arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
 
-                    if (finalI == numArrows - 1) {
-                        // This is the last arrow, perform any final actions here
+                    if (finalI != numArrows - 1) {
                     }
+                    // This is the last arrow, perform any final actions here
                 }, i * delayBetweenShots);
             }
         }

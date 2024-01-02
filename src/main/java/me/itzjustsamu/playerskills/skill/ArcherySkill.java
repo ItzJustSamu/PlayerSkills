@@ -19,14 +19,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import java.util.Collections;
 import java.util.List;
 
-import static me.itzjustsamu.playerskills.skill.SkillEffect.playSound;
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ArcherySkill extends Skill {
     private final ConfigPath<Double> DAMAGE_INCREMENT = Paths.doublePath("Damage-increment", 3D);
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 20, 9);
+        super(plugin, "Archery", "archery", 20, 0);
     }
 
     @EventHandler
@@ -42,7 +41,7 @@ public class ArcherySkill extends Skill {
 
         Player player = (Player) arrow.getShooter();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -56,7 +55,6 @@ public class ArcherySkill extends Skill {
         }
 
         if (getLevel(sPlayer) > 0) {
-            playSound(player);
 
             double damage = event.getDamage() / 100;
             damage = damage * DAMAGE_INCREMENT.getValue();

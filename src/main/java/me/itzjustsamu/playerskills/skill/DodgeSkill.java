@@ -16,16 +16,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+// ... (other imports and package declaration)
 
 public class DodgeSkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 2D);
     private final ConfigPath<String> dodgeMessage = Paths.stringPath("dodge-message", "&a*** ATTACK DODGED ***");
+    private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath("cooldown-duration", 5000L); // 5000 milliseconds (5 seconds)
+    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cDodge cooldown: &e{remaining_time} seconds.");
+
+    private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     public DodgeSkill(PlayerSkills plugin) {
-        super(plugin, "Dodge", "dodge", 20, 11);
+        super(plugin, "Dodge", "dodge", 20, 3);
     }
 
     @EventHandler
@@ -35,7 +40,7 @@ public class DodgeSkill extends Skill {
         }
 
         Player player = (Player) event.getEntity();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 
@@ -48,22 +53,37 @@ public class DodgeSkill extends Skill {
             return;
         }
 
+        // Check cooldown
+        if (cooldowns.containsKey(player.getUniqueId())) {
+            Long cooldownEndTime = cooldowns.get(player.getUniqueId());
+            if (cooldownEndTime != null && System.currentTimeMillis() < cooldownEndTime) {
+                // Send cooldown message
+                String cooldownMessage = COOLDOWN_MESSAGE.getValue()
+                        .replace("{remaining_time}", String.valueOf((cooldownEndTime - System.currentTimeMillis()) / 1000L));
+                MessageUtils.sendMessage(player, cooldownMessage, "");
+                return;
+            }
+        }
+
         int dodgeLevel = getLevel(sPlayer);
 
         double chance = dodgeLevel * percentIncrease.getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = dodgeMessage.getValue();
-            if (!message.equals("")) {
+            if (!message.isEmpty()) {
                 MessageUtils.sendMessage(player, message, "");
             }
             event.setCancelled(true);
+
+            // Set cooldown
+            cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + COOLDOWN_DURATION.getValue());
         }
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(percentIncrease);
+        return Arrays.asList(percentIncrease, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override

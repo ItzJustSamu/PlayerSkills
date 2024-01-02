@@ -20,14 +20,12 @@ import org.bukkit.event.entity.EntityBreedEvent;
 
 import java.util.List;
 
-import static me.itzjustsamu.playerskills.skill.SkillEffect.playSound;
-
 public class BreederSkill extends Skill {
     private final ConfigPath<Integer> SPAWN_CHANCE_INCREASE = Paths.integerPath("spawn-chance-increase", 25);
     private final ConfigPath<Integer> MAX_SPAWN_AMOUNT = Paths.integerPath("max-spawn-amount", 5);
 
     public BreederSkill(PlayerSkills plugin) {
-        super(plugin, "Breeder", "breeder", 25, 24);
+        super(plugin, "Breeder", "breeder", 25, 1);
     }
 
     @EventHandler
@@ -39,7 +37,7 @@ public class BreederSkill extends Skill {
             Animals animalMother = (Animals) mother;
             World world = animalMother.getWorld();
 
-            if (isWorldNotAllowed((Player) world)) {
+            if (Worlds_Restriction((Player) world)) {
                 return;
             }
 
@@ -53,7 +51,6 @@ public class BreederSkill extends Skill {
             }
 
             if (getLevel(sPlayer) > 0) {
-                playSound((Player) animalMother);
 
                 // Increase the chances of spawning multiple animals
                 handleBreeding(event, SPAWN_CHANCE_INCREASE.getValue());

@@ -27,7 +27,7 @@ public class SwiftSkill extends Skill {
     private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 5, 22);
+        super(plugin, "Swift", "swift", 5, 20);
     }
 
 
@@ -35,7 +35,7 @@ public class SwiftSkill extends Skill {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

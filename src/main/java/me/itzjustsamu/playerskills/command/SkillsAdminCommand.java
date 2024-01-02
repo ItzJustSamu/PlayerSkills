@@ -89,16 +89,16 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
             return;
         }
 
-        Skill s = plugin.getSkills().get(skillName);
+        Skill Skills = plugin.getSkills().get(skillName);
 
-        if (s == null) {
+        if (Skills == null) {
             sender.sendMessage(ChatColor.RED + "Skill could not be found. Skill names used in configurations and commands should contain no spaces and" +
                     " should be all lower case.");
             return;
         }
 
-        sPlayer.setLevel(s.getConfigName(), level);
-        sender.sendMessage(ChatColor.GREEN + "Skill level for " + s.getName() + " updated to " + s.getLevel(sPlayer) + ".");
+        sPlayer.setLevel(Skills.getSkillsConfigName(), level);
+        sender.sendMessage(ChatColor.GREEN + "Skill level for " + Skills.getSkillsName() + " updated to " + Skills.getLevel(sPlayer) + ".");
     }
 
     private void givePoints(CommandSender sender, String[] args) {
@@ -126,8 +126,8 @@ public class SkillsAdminCommand extends Command implements TabCompleter {
 
         StringBuilder message = new StringBuilder();
         message.append(ChatColor.RED).append(ChatColor.BOLD).append("Skills").append("\n");
-        for (Skill skill : plugin.getSkills().values()) {
-            message.append(ChatColor.RED).append(skill.getName()).append(": ").append(ChatColor.GRAY).append(skill.getLevel(sPlayer)).append("\n");
+        for (Skill Skills : plugin.getSkills().values()) {
+            message.append(ChatColor.RED).append(Skills.getSkillsName()).append(": ").append(ChatColor.GRAY).append(Skills.getLevel(sPlayer)).append("\n");
         }
         message.append(ChatColor.RED).append(ChatColor.BOLD).append("Points: ").append(ChatColor.GRAY).append(sPlayer.getPoints());
 

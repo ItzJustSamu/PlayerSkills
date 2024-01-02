@@ -24,14 +24,14 @@ public class FishingSkill extends Skill {
     private final ConfigPath<Double> catchChanceIncrease = Paths.doublePath("catch-chance-increase", 2.0);
 
     public FishingSkill(PlayerSkills plugin) {
-        super(plugin, "Fishing", "fishing", 20, 28);
+        super(plugin, "Fishing", "fishing", 20, 8);
     }
 
     @EventHandler
     public void onFish(PlayerFishEvent event) {
         Player player = event.getPlayer();
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

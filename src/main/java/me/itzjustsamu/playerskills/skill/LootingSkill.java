@@ -23,13 +23,13 @@ public class LootingSkill extends Skill {
     private final ConfigPath<Double> lootingIncrement = Paths.doublePath("looting-increment", 0.3D);
 
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 18);
+        super(plugin, "Looting", "looting", 20, 15);
     }
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
-            if (isWorldNotAllowed(player)) {
+            if (Worlds_Restriction(player)) {
                 return;
             }
 

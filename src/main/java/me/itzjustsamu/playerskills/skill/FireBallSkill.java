@@ -34,14 +34,14 @@ public class FireBallSkill extends Skill implements Listener {
     private final ConfigPath<Integer> FIREBALL_VELOCITY = Paths.integerPath("fireball-velocity", 2);
 
     public FireBallSkill(PlayerSkills plugin) {
-        super(plugin, "FireBall", "fireball", 5, 27);
+        super(plugin, "FireBall", "fireball", 5, 7);
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

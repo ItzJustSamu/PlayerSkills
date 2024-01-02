@@ -6,9 +6,9 @@ import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class StrengthSkill extends Skill {
     private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 5D);
 
     public StrengthSkill(PlayerSkills plugin) {
-        super(plugin, "Strength", "strength", 20, 21);
+        super(plugin, "Strength", "strength", 20, 19);
     }
 
     @EventHandler
@@ -32,7 +32,7 @@ public class StrengthSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (isWorldNotAllowed(player)) {
+        if (Worlds_Restriction(player)) {
             return;
         }
 

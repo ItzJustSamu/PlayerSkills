@@ -20,14 +20,12 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import java.util.List;
 
-import static me.itzjustsamu.playerskills.skill.SkillEffect.playSound;
-
 public class ExplosiveArrowsSkill extends Skill {
     private final ConfigPath<Double> EXPLOSION_RADIUS = Paths.doublePath("explosion-radius", 3D);
     private final ConfigPath<Double> EXPLOSION_DAMAGE = Paths.doublePath("explosion-damage", 5D);
 
     public ExplosiveArrowsSkill(PlayerSkills plugin) {
-        super(plugin, "ExplosiveArrows", "explosivearrows", 20, 26);
+        super(plugin, "ExplosiveArrows", "explosivearrows", 20, 4);
     }
 
     @EventHandler
@@ -47,7 +45,7 @@ public class ExplosiveArrowsSkill extends Skill {
 
         Player shooter = (Player) arrow.getShooter();
 
-        if (isWorldNotAllowed(shooter)) {
+        if (Worlds_Restriction(shooter)) {
             return;
         }
 
@@ -61,8 +59,6 @@ public class ExplosiveArrowsSkill extends Skill {
         }
 
         if (getLevel(sPlayer) > 0) {
-            playSound(shooter);
-
             // Apply explosive effect on the arrow
             applyExplosiveEffect(arrow);
         }
