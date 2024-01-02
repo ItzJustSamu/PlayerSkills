@@ -26,17 +26,14 @@ public class SkillsAdmin implements Menu {
     private final PlayerSkills plugin;
     private final Player player;
     private final Skill skill;
-    private final Menu superMenu;
     private final SPlayer sPlayer;
 
-    private final String titleEditPermission = "playerskills.edit.title";
     private final Map<UUID, Consumer<String>> textInputCallbacks = new HashMap<>();
 
-    public SkillsAdmin(PlayerSkills plugin, Player player, Skill skill, Menu superMenu, SPlayer sPlayer) {
+    public SkillsAdmin(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer) {
         this.plugin = plugin;
         this.player = player;
         this.skill = skill;
-        this.superMenu = superMenu;
         this.sPlayer = sPlayer;
     }
 
@@ -55,6 +52,7 @@ public class SkillsAdmin implements Menu {
 
         if (skill != null) {
             inventory.setItem(MainConfig.GUI_EDIT_TITLE_SLOT.getValue(), MainConfig.GUI_EDIT_TITLE_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
         }
 
         return inventory;
@@ -62,13 +60,14 @@ public class SkillsAdmin implements Menu {
 
     @Override
     public void onClick(int slot, ClickType event) {
+
         if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             // Open SkillsMenu when clicking the GUI_BACK_SLOT
-            SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
-            skillsMenu.open(this.player);
+            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, this, sPlayer);
+            skillsSettings.open(this.player);
         } else if (slot == MainConfig.GUI_EDIT_TITLE_SLOT.getValue()) {
             // Handle title edit event
-            if (event == ClickType.LEFT && player.hasPermission(titleEditPermission)) {
+            if (event == ClickType.LEFT) {
                 // Send a message to the player to enter a new title
                 player.sendMessage(ChatColor.YELLOW + "Please enter a new title:");
 
@@ -77,6 +76,7 @@ public class SkillsAdmin implements Menu {
                     if (newTitle != null && !newTitle.isEmpty()) {
                         // Modify the skill title
                         ItemMeta itemMeta = skill.getDisplayItem(player).getItemMeta();
+                        assert itemMeta != null;
                         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', newTitle));
                         skill.getDisplayItem(player).setItemMeta(itemMeta);
 

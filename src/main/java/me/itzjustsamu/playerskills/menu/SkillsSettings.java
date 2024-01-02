@@ -1,8 +1,8 @@
 package me.itzjustsamu.playerskills.menu;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
+import me.itzjustsamu.playerskills.Permissions;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -119,12 +119,15 @@ public class SkillsSettings implements Menu {
                 confirmationMenu.open(this.player);
             }
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
-            SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
-            skillsMenu.open(this.player);
+                SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
+                skillsMenu.open(this.player);
         } else if (slot == MainConfig.GUI_ADMIN_SLOT.getValue()) {
-            // Open SkillsAdmin when clicking the GUI_ADMIN_SLOT
-            SkillsAdmin skillsAdmin = new SkillsAdmin(this.plugin, this.player, this.skill, this, this.sPlayer);
-            skillsAdmin.open(this.player);
+            String ADMIN = "playerskills.admin";
+            if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
+                // Open SkillsAdmin when clicking the GUI_ADMIN_SLOT
+                SkillsAdmin skillsAdmin = new SkillsAdmin(this.plugin, this.player, this.skill, this.sPlayer);
+                skillsAdmin.open(this.player);
+            }
         } else if (slot == 3) {
             // Handle click event for the skill in slot 3
             if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
