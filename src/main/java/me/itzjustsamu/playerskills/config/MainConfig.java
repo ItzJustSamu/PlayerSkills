@@ -118,16 +118,11 @@ public class MainConfig extends PathableConfig {
     ));
 
     // Back Arrow
-    public static final IntegerConfigPath GUI_BACK_SLOT = new IntegerConfigPath("gui.back.slot", 3);
+    public static final IntegerConfigPath GUI_BACK_SLOT = new IntegerConfigPath("gui.back.slot", 0);
     public static final ConfigPath<ItemBuilder> GUI_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.back.display",
             new ItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&a&bBACK"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&cSkill points &7can be bought using XP or money.",
-                            "&7These points can be used to upgrade &cskills.",
-                            "&7Each skill has its own individual perk."
-                    ))
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
 
     // Item Slots

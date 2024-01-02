@@ -51,7 +51,6 @@ public class SkillsSettings implements Menu {
 
         }
 
-
         return inventory;
     }
 
@@ -120,6 +119,10 @@ public class SkillsSettings implements Menu {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player), callback, this);
                 confirmationMenu.open(this.player);
             }
+        } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
+            // Open SkillsMenu when clicking the GUI_BACK_SLOT
+            SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
+            skillsMenu.open(this.player);
         }
     }
 
