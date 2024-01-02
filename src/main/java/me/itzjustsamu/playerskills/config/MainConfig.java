@@ -125,18 +125,6 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
 
-    // Item Slots
-    public static final IntegerConfigPath GUI_INFO_SLOT = new IntegerConfigPath("gui.info.slot", 3);
-    public static final ConfigPath<ItemBuilder> GUI_INFO_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.info.display",
-            new ItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cInformation"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&cSkill points &7can be bought using XP or money.",
-                            "&7These points can be used to upgrade &cskills.",
-                            "&7Each skill has its own individual perk."
-                    ))
-    ));
     public static final IntegerConfigPath GUI_POINTS_SLOT = new IntegerConfigPath("gui.points.slot", 4);
     public static final ConfigPath<ItemBuilder> GUI_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.points.display",
             new ItemBuilder()
@@ -145,6 +133,25 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new LoreModifier().setLore(
                             "&7You have &e{points} &7points.",
                             "&eLeft-Click &7to purchase a skill point for &e{price} {symbol}&7."
+                    ))
+    ));
+    public static final IntegerConfigPath GUI_EDIT_TITLE_SLOT = new IntegerConfigPath("gui.edit.title.slot", 11);
+    public static final ConfigPath<ItemBuilder> GUI_EDIT_TITLE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.edit.title.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cEdit Title"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&eClick to edit skill title!"
+                    ))
+    ));
+
+    public static final IntegerConfigPath GUI_ADMIN_SLOT = new IntegerConfigPath("gui.admin.slot", 9);
+    public static final ConfigPath<ItemBuilder> GUI_ADMIN_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.admin.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cEdit Skills"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.NETHER_STAR))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&eClick to edit skill!"
                     ))
     ));
     public static final IntegerConfigPath GUI_RESET_SLOT = new IntegerConfigPath("gui.reset.slot", 5);

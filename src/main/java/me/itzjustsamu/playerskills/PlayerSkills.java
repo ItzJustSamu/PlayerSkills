@@ -35,7 +35,6 @@ public class PlayerSkills extends BasePlugin {
     private final MainConfig mainConfig = new MainConfig(this);
 
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
-    private final Map<String, Skill> disabledSkills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
     public MessageConfig getMessageConfig() {
