@@ -49,6 +49,8 @@ public class SkillsSettings implements Menu {
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
 
+            // Add the purchased skill to slot 10
+            inventory.setItem(10, skill.getDisplayItem(this.player));
         }
 
         return inventory;
@@ -56,7 +58,30 @@ public class SkillsSettings implements Menu {
 
     @Override
     public void onClick(int slot, ClickType event) {
-        if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
+        if (slot == 10) { // Assuming slot 10 is where the skill is placed
+            // Handle click event for the skill in slot 10
+            if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
+                int price = skill.getPriceOverride(skill.getLevel(this.sPlayer) + 1);
+                if (this.sPlayer.getPoints() >= price) {
+                    Runnable callback = () -> {
+                        this.sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(this.sPlayer) + 1);
+                        this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
+                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
+                        this.open(this.player);
+                    };
+
+                    if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
+                        confirmationMenu.open(this.player);
+                    } else {
+                        callback.run();
+                    }
+                } else {
+                    XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                }
+            }
+        } else if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
+            // Handle other click events as before
             Runnable callback = getRunnable();
             if (event == ClickType.RIGHT) {
                 SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this, this.sPlayer);
@@ -68,6 +93,7 @@ public class SkillsSettings implements Menu {
                 callback.run();
             }
         } else if (slot == MainConfig.GUI_RESET_SLOT.getValue()) {
+            // Handle other click events as before
             Runnable callback = null;  // Declare callback as final
             if (event == ClickType.RIGHT) {
                 SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, this, this.sPlayer);
@@ -80,7 +106,7 @@ public class SkillsSettings implements Menu {
                         if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
                             for (String s : this.sPlayer.getSkills().keySet()) {
                                 for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
-                                    this.sPlayer.setPoints(this.sPlayer.getPoints() +  plugin.getSkills().get(s).getPriceOverride(i));
+                                    this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPriceOverride(i));
                                 }
                             }
                         }
@@ -120,6 +146,7 @@ public class SkillsSettings implements Menu {
                 confirmationMenu.open(this.player);
             }
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
+            // Handle other click events as before
             // Open SkillsMenu when clicking the GUI_BACK_SLOT
             SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
             skillsMenu.open(this.player);
