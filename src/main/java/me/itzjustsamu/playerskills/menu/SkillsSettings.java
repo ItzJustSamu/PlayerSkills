@@ -8,7 +8,6 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -50,7 +49,7 @@ public class SkillsSettings implements Menu {
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_ADMIN_SLOT.getValue(), MainConfig.GUI_ADMIN_DISPLAY.getValue().build(this.player));
-            inventory.setItem(10, skill.getDisplayItem(this.player));
+            inventory.setItem(3, skill.getDisplayItem(this.player));
         }
 
         return inventory;
@@ -126,6 +125,28 @@ public class SkillsSettings implements Menu {
             // Open SkillsAdmin when clicking the GUI_ADMIN_SLOT
             SkillsAdmin skillsAdmin = new SkillsAdmin(this.plugin, this.player, this.skill, this, this.sPlayer);
             skillsAdmin.open(this.player);
+        } else if (slot == 3) {
+            // Handle click event for the skill in slot 3
+            if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
+                int price = skill.getPriceOverride(skill.getLevel(this.sPlayer) + 1);
+                if (this.sPlayer.getPoints() >= price) {
+                    Runnable callback = () -> {
+                        this.sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(this.sPlayer) + 1);
+                        this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
+                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
+                        this.open(this.player);
+                    };
+
+                    if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, skill.getDisplayItem(this.player), callback, this);
+                        confirmationMenu.open(this.player);
+                    } else {
+                        callback.run();
+                    }
+                } else {
+                    XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                }
+            }
         }
     }
 

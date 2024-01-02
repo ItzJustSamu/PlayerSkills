@@ -145,7 +145,7 @@ public class MainConfig extends PathableConfig {
                     ))
     ));
 
-    public static final IntegerConfigPath GUI_ADMIN_SLOT = new IntegerConfigPath("gui.admin.slot", 9);
+    public static final IntegerConfigPath GUI_ADMIN_SLOT = new IntegerConfigPath("gui.admin.slot", 8);
     public static final ConfigPath<ItemBuilder> GUI_ADMIN_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.admin.display",
             new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cEdit Skills"))
