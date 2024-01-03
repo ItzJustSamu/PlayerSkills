@@ -73,7 +73,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Skill points price &e{price}.",
+                            "&7Skill points price &e{price} {symbol}.",
                             "&eLeft-Click &7to decrease price.",
                             "&eRight-Click &7 to increase price."
                     ))

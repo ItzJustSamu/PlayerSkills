@@ -39,7 +39,6 @@ public class SkillsPoints implements Menu {
             }
         }
 
-        // Check if skill is not null before using it
         if (skill != null) {
             inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
@@ -49,44 +48,35 @@ public class SkillsPoints implements Menu {
     }
 
     public void onClick(int slot, ClickType clickType) {
-        // Check if it's a left or right click and if the slot matches POINTS_SLOT
         if (slot == MainConfig.POINTS_SLOT.getValue()) {
             if (clickType == ClickType.LEFT) {
-                // Decrease points logic
                 decreasePoints();
             } else if (clickType == ClickType.RIGHT) {
-                // Increase points logic
                 increasePoints();
             }
-        } else if (slot == MainConfig.GUI_BACK_SLOT.getValue() && clickType == ClickType.LEFT) {
-            // Back to SkillsSettings logic
-            SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, sPlayer);
-            skillsSettings.open(this.player);
+        } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
+            SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
+            skillsMenu.open(this.player);
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         }
     }
 
     private void increasePoints() {
-        // Increase points logic
         int currentPoints = MainConfig.POINTS_PRICE.getValue();
+
         int newPoints = currentPoints + 1;
-
-        // Set a limit if needed
-        // int maxPoints = ...;
-        // newPoints = Math.min(newPoints, maxPoints);
-
         MainConfig.POINTS_PRICE.setValue(newPoints);
 
         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
-        player.openInventory(getInventory()); // Update inventory
+        player.openInventory(getInventory());
     }
 
     private void decreasePoints() {
-        // Decrease points logic
         int currentPoints = MainConfig.POINTS_PRICE.getValue();
-        int newPoints = Math.max(1, currentPoints - 1); // Ensure points do not go below 1
+        int newPoints = Math.max(0, currentPoints - 1);
 
         MainConfig.POINTS_PRICE.setValue(newPoints);
-        XSound.ENTITY_ITEM_BREAK.play(player, 1.0F, 0.6F);
-        player.openInventory(getInventory()); // Update inventory
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
     }
 }
