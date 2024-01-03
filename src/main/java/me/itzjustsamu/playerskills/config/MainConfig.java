@@ -127,7 +127,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cPoints Funding"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Funding Source: {symbol}."
+                            "&7Funding Source: &e{symbol}."
                     ))
     ));
     public static final BooleanConfigPath POINTS_DYNAMIC_PRICE_ENABLED = new BooleanConfigPath("points.dynamic-price.enabled", false);
