@@ -4,6 +4,9 @@ import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.fundingsource.FundingSource;
+import me.itzjustsamu.playerskills.fundingsource.VaultFundingSource;
+import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
@@ -12,6 +15,9 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SkillsPoints implements Menu {
 
@@ -43,6 +49,7 @@ public class SkillsPoints implements Menu {
             inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.POINTS_RESET_SLOT.getValue(), MainConfig.POINTS_RESET_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.POINTS_REFUND_SLOT.getValue(), MainConfig.POINTS_REFUND_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.POINTS_FUNDING_SLOT.getValue(), MainConfig.POINTS_FUNDING_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
         }
 
@@ -64,6 +71,8 @@ public class SkillsPoints implements Menu {
             }
         } else if (slot == MainConfig.POINTS_REFUND_SLOT.getValue()) {
             toggleRefundPoints();
+        } else if (slot == MainConfig.POINTS_FUNDING_SLOT.getValue()) {
+            toggleFundingSource();
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
             skillsSettings.open(this.player);
@@ -117,4 +126,17 @@ public class SkillsPoints implements Menu {
         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
+
+    private void toggleFundingSource() {
+        FundingSource currentFundingSource = MainConfig.POINTS_FUNDING_SOURCE.getValue();
+        FundingSource newFundingSource = (currentFundingSource instanceof VaultFundingSource)
+                ? new XPFundingSource()
+                : new VaultFundingSource();
+
+        MainConfig.POINTS_FUNDING_SOURCE.setValue(newFundingSource);
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
+    }
+
+
 }

@@ -102,6 +102,8 @@ public class MainConfig extends PathableConfig {
                             "&7Refund Reset Status &e{refund-status}."
                     ))
     ));
+    public static final IntegerConfigPath POINTS_FUNDING_SLOT = new IntegerConfigPath("points.funding.slot", 3);
+
     public static final ConfigPath<FundingSource> POINTS_FUNDING_SOURCE = new StickyConfigPath<>(
             new AdvancedConfigPath<String, FundingSource>("points.funding-source", new XPFundingSource()) {
                 @Override
@@ -120,6 +122,14 @@ public class MainConfig extends PathableConfig {
                 }
             }
     );
+    public static final ConfigPath<ItemBuilder> POINTS_FUNDING_DISPLAY= new StickyConfigPath<>(new ItemBuilderConfigPath("points.funding.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cPoints Funding"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Funding Source: {symbol}."
+                    ))
+    ));
     public static final BooleanConfigPath POINTS_DYNAMIC_PRICE_ENABLED = new BooleanConfigPath("points.dynamic-price.enabled", false);
     public static final IntegerConfigPath POINTS_DYNAMIC_PRICE_PRICE_INCREASE_PER_POINT = new IntegerConfigPath("points.dynamic-price.price-increase-per-point", 1);
 
