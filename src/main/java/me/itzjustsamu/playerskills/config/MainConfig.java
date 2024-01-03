@@ -65,8 +65,9 @@ public class MainConfig extends PathableConfig {
     ));
     public static final StringConfigPath GUI_PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath("gui.placeholders.skill-price-max", "--");
     public static final StringConfigPath GUI_PLACEHOLDERS_NEXT_MAX = new StringConfigPath("gui.placeholders.next-max", "--");
+    public static final IntegerConfigPath POINTS_SLOT = new IntegerConfigPath("points.slot", 0);
 
-    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 0);
+    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 1);
     public static final ConfigPath<ItemBuilder> POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("points.display",
             new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cSet Points"))

@@ -14,12 +14,17 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class SkillsPoints implements Menu {
+
     private final PlayerSkills plugin;
     private final Player player;
+    private final Skill skill;
+    private final SPlayer sPlayer;
 
-    public SkillsPoints(PlayerSkills plugin, Player player) {
+    public SkillsPoints(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer) {
         this.plugin = plugin;
         this.player = player;
+        this.skill = skill;
+        this.sPlayer = sPlayer;
     }
 
     public @NotNull Inventory getInventory() {
@@ -33,26 +38,30 @@ public class SkillsPoints implements Menu {
                 inventory.setItem(i, background);
             }
         }
-        for (Skill skill : this.plugin.getSkills().values()) {
-            if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
-                skill.setup();
-                inventory.setItem(MainConfig.POINTS_PRICE.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
-                inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
-            }
+
+        // Check if skill is not null before using it
+        if (skill != null) {
+            inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
         }
+
         return inventory;
     }
 
     public void onClick(int slot, ClickType clickType) {
-        // Check if it's a left or right click and if the slot matches POINTS_PRICE
-        if ((clickType == ClickType.LEFT || clickType == ClickType.RIGHT) && slot == MainConfig.POINTS_PRICE.getValue()) {
+        // Check if it's a left or right click and if the slot matches POINTS_SLOT
+        if (slot == MainConfig.POINTS_SLOT.getValue()) {
             if (clickType == ClickType.LEFT) {
                 // Decrease points logic
                 decreasePoints();
-            } else {
+            } else if (clickType == ClickType.RIGHT) {
                 // Increase points logic
                 increasePoints();
             }
+        } else if (slot == MainConfig.GUI_BACK_SLOT.getValue() && clickType == ClickType.LEFT) {
+            // Back to SkillsSettings logic
+            SkillsSettings skillsSettings = new SkillsSettings(this.plugin, this.player, null, sPlayer);
+            skillsSettings.open(this.player);
         }
     }
 
@@ -68,6 +77,7 @@ public class SkillsPoints implements Menu {
         MainConfig.POINTS_PRICE.setValue(newPoints);
 
         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory()); // Update inventory
     }
 
     private void decreasePoints() {
@@ -77,5 +87,6 @@ public class SkillsPoints implements Menu {
 
         MainConfig.POINTS_PRICE.setValue(newPoints);
         XSound.ENTITY_ITEM_BREAK.play(player, 1.0F, 0.6F);
+        player.openInventory(getInventory()); // Update inventory
     }
 }

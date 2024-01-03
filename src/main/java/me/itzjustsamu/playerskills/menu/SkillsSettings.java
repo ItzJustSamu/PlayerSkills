@@ -60,7 +60,7 @@ public class SkillsSettings implements Menu {
         if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
-                SkillsPoints SkillsPoints = new SkillsPoints(this.plugin, this.player);
+                SkillsPoints SkillsPoints = new SkillsPoints(this.plugin, this.player, this.skill, this.sPlayer);
                 SkillsPoints.open(this.player);
             } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
