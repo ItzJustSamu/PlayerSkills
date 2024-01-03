@@ -63,7 +63,7 @@ public class SkillsAdmin implements Menu {
 
         if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             // Open SkillsMenu when clicking the GUI_BACK_SLOT
-            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, this, sPlayer);
+            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
             skillsSettings.open(this.player);
         } else if (slot == MainConfig.GUI_EDIT_TITLE_SLOT.getValue()) {
             // Handle title edit event

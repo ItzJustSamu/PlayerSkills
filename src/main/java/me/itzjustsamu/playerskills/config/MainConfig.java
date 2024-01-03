@@ -65,7 +65,18 @@ public class MainConfig extends PathableConfig {
     ));
     public static final StringConfigPath GUI_PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath("gui.placeholders.skill-price-max", "--");
     public static final StringConfigPath GUI_PLACEHOLDERS_NEXT_MAX = new StringConfigPath("gui.placeholders.next-max", "--");
-    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 1);
+
+    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 0);
+    public static final ConfigPath<ItemBuilder> POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("points.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Skill points price &e{price}.",
+                            "&eLeft-Click &7to decrease price.",
+                            "&eRight-Click &7 to increase price."
+                    ))
+    ));
     public static final IntegerConfigPath POINTS_RESET_PRICE = new IntegerConfigPath("points.reset-price", 1);
     public static final BooleanConfigPath POINTS_REFUND_SKILL_POINTS = new BooleanConfigPath("points.refund-skill-points", true);
     public static final ConfigPath<FundingSource> POINTS_FUNDING_SOURCE = new StickyConfigPath<>(
@@ -90,7 +101,7 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath POINTS_DYNAMIC_PRICE_PRICE_INCREASE_PER_POINT = new IntegerConfigPath("points.dynamic-price.price-increase-per-point", 1);
 
     // Confirmation Menu
-    public static final StringConfigPath GUI_CONFIRMATION_TITLE = new StringConfigPath("gui.title", "&6Skills");
+    public static final StringConfigPath GUI_CONFIRMATION_TITLE = new StringConfigPath("gui.title", "&cSkills");
 
     public static final IntegerConfigPath GUI_CONFIRMATION_SIZE = new IntegerConfigPath("gui-confirmation.size", 27) ;
     public static final BooleanConfigPath GUI_CONFIRMATION_BACKGROUND_ENABLED = new BooleanConfigPath("gui.background.enabled", true);
@@ -118,10 +129,16 @@ public class MainConfig extends PathableConfig {
     ));
 
     // Back Arrow
-    public static final IntegerConfigPath GUI_BACK_SLOT = new IntegerConfigPath("gui.back.slot", 0);
+    public static final IntegerConfigPath GUI_BACK_SLOT = new IntegerConfigPath("gui.back.slot", 45);
     public static final ConfigPath<ItemBuilder> GUI_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.back.display",
             new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
+    ));
+    public static final IntegerConfigPath GUI_NEXT_SLOT = new IntegerConfigPath("gui.next.slot", 53);
+    public static final ConfigPath<ItemBuilder> GUI_NEXT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.back.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&aNEXT"))
                     .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
 
@@ -154,6 +171,8 @@ public class MainConfig extends PathableConfig {
                             "&eClick to edit skill!"
                     ))
     ));
+
+
     public static final IntegerConfigPath GUI_RESET_SLOT = new IntegerConfigPath("gui.reset.slot", 5);
     public static final ConfigPath<ItemBuilder> GUI_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.reset.display",
             new ItemBuilder()

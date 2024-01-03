@@ -39,6 +39,7 @@ public class SkillsMenu implements Menu {
             if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
                 skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(this.player));
+                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player));
             }
         }
         return inventory;
@@ -48,7 +49,7 @@ public class SkillsMenu implements Menu {
         for (Skill skill : this.plugin.getSkills().values()) {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
                 // Handle right-click on skill slot
-                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, this, sPlayer);
+                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
                 skillsSettings.open(this.player);
                 return; // Stop processing further actions
             }
