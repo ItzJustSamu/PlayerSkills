@@ -41,6 +41,8 @@ public class SkillsPoints implements Menu {
 
         if (skill != null) {
             inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.POINTS_RESET_SLOT.getValue(), MainConfig.POINTS_RESET_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.POINTS_REFUND_SLOT.getValue(), MainConfig.POINTS_REFUND_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
         }
 
@@ -54,9 +56,17 @@ public class SkillsPoints implements Menu {
             } else if (clickType == ClickType.RIGHT) {
                 increasePoints();
             }
+        } else if (slot == MainConfig.POINTS_RESET_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreaseResetPoints();
+            } else if (clickType == ClickType.RIGHT) {
+                increaseResetPoints();
+            }
+        } else if (slot == MainConfig.POINTS_REFUND_SLOT.getValue()) {
+            toggleRefundPoints();
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
-            SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
-            skillsMenu.open(this.player);
+            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
+            skillsSettings.open(this.player);
             XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         }
     }
@@ -76,6 +86,34 @@ public class SkillsPoints implements Menu {
         int newPoints = Math.max(0, currentPoints - 1);
 
         MainConfig.POINTS_PRICE.setValue(newPoints);
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
+    }
+
+    private void increaseResetPoints() {
+        int currentResetPoints = MainConfig.POINTS_RESET_PRICE.getValue();
+
+        int newResetPoints = currentResetPoints + 1;
+        MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
+
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
+    }
+
+    private void decreaseResetPoints() {
+        int currentResetPoints = MainConfig.POINTS_RESET_PRICE.getValue();
+        int newResetPoints = Math.max(0, currentResetPoints - 1);
+
+        MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
+    }
+
+    private void toggleRefundPoints() {
+        boolean currentRefundStatus = MainConfig.POINTS_REFUND_POINTS.getValue();
+        boolean newRefundStatus = !currentRefundStatus;
+
+        MainConfig.POINTS_REFUND_POINTS.setValue(newRefundStatus);
         XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }

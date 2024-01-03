@@ -114,7 +114,7 @@ public class SkillsSettings implements Menu {
                 int resetPoint = MainConfig.POINTS_RESET_PRICE.getValue();
                 if (this.sPlayer.getPoints() >= resetPoint) {
                     this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
-                    if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
+                    if (MainConfig.POINTS_REFUND_POINTS.getValue()) {
                         for (String s : this.sPlayer.getSkills().keySet()) {
                             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
                                 this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPriceOverride(i));
@@ -134,7 +134,7 @@ public class SkillsSettings implements Menu {
                 int resetPoint = MainConfig.POINTS_RESET_PRICE.getValue();
                 if (this.sPlayer.getPoints() >= resetPoint) {
                     this.sPlayer.setPoints(this.sPlayer.getPoints() - resetPoint);
-                    if (MainConfig.POINTS_REFUND_SKILL_POINTS.getValue()) {
+                    if (MainConfig.POINTS_REFUND_POINTS.getValue()) {
                         for (String s : this.sPlayer.getSkills().keySet()) {
                             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
                                 this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPriceOverride(i));
