@@ -65,7 +65,7 @@ public class MainConfig extends PathableConfig {
     ));
     public static final StringConfigPath GUI_PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath("gui.placeholders.skill-price-max", "--");
     public static final StringConfigPath GUI_PLACEHOLDERS_NEXT_MAX = new StringConfigPath("gui.placeholders.next-max", "--");
-    public static final IntegerConfigPath POINTS_SLOT = new IntegerConfigPath("points.slot", 0);
+    public static final IntegerConfigPath POINTS_SLOT = new IntegerConfigPath("points.slot", 2);
 
     public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath("points.price", 1);
     public static final ConfigPath<ItemBuilder> POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("points.display",
@@ -78,7 +78,7 @@ public class MainConfig extends PathableConfig {
                             "&eRight-Click &7 to increase price."
                     ))
     ));
-    public static final IntegerConfigPath POINTS_RESET_SLOT = new IntegerConfigPath("points.reset.slot", 1);
+    public static final IntegerConfigPath POINTS_RESET_SLOT = new IntegerConfigPath("points.reset.slot", 3);
 
     public static final IntegerConfigPath POINTS_RESET_PRICE = new IntegerConfigPath("points.reset-price", 1);
     public static final ConfigPath<ItemBuilder> POINTS_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("points.reset.display",
@@ -91,7 +91,7 @@ public class MainConfig extends PathableConfig {
                             "&eRight-Click &7 to increase price."
                     ))
     ));
-    public static final IntegerConfigPath POINTS_REFUND_SLOT = new IntegerConfigPath("points.refund.slot", 2);
+    public static final IntegerConfigPath POINTS_REFUND_SLOT = new IntegerConfigPath("points.refund.slot", 4);
 
     public static final BooleanConfigPath POINTS_REFUND_POINTS = new BooleanConfigPath("points.refund-points", true);
     public static final ConfigPath<ItemBuilder> POINTS_REFUND_DISPLAY= new StickyConfigPath<>(new ItemBuilderConfigPath("points.refund.display",
@@ -102,7 +102,7 @@ public class MainConfig extends PathableConfig {
                             "&7Refund Reset Status &e{refund-status}."
                     ))
     ));
-    public static final IntegerConfigPath POINTS_FUNDING_SLOT = new IntegerConfigPath("points.funding.slot", 3);
+    public static final IntegerConfigPath POINTS_FUNDING_SLOT = new IntegerConfigPath("points.funding.slot", 5);
 
     public static final ConfigPath<FundingSource> POINTS_FUNDING_SOURCE = new StickyConfigPath<>(
             new AdvancedConfigPath<String, FundingSource>("points.funding-source", new XPFundingSource()) {
@@ -130,9 +130,19 @@ public class MainConfig extends PathableConfig {
                             "&7Funding Source: &e{symbol}."
                     ))
     ));
-    public static final BooleanConfigPath POINTS_DYNAMIC_PRICE_ENABLED = new BooleanConfigPath("points.dynamic-price.enabled", false);
-    public static final IntegerConfigPath POINTS_DYNAMIC_PRICE_PRICE_INCREASE_PER_POINT = new IntegerConfigPath("points.dynamic-price.price-increase-per-point", 1);
 
+    public static final IntegerConfigPath POINTS_INCREMENT_SLOT = new IntegerConfigPath("points.price.slot", 6);
+
+    public static final IntegerConfigPath POINTS_INCREMENT_PRICE = new IntegerConfigPath("points.increment.price", 0);
+
+    public static final ConfigPath<ItemBuilder> POINTS_INCREMENT_DISPLAY= new StickyConfigPath<>(new ItemBuilderConfigPath("points.price.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Increment Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Incrementing Price Points: &e{incremented-price}."
+                    ))
+    ));
     // Confirmation Menu
     public static final StringConfigPath GUI_CONFIRMATION_TITLE = new StringConfigPath("gui.title", "&cSkills");
 
@@ -169,7 +179,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
     public static final IntegerConfigPath GUI_NEXT_SLOT = new IntegerConfigPath("gui.next.slot", 53);
-    public static final ConfigPath<ItemBuilder> GUI_NEXT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.back.display",
+    public static final ConfigPath<ItemBuilder> GUI_NEXT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.next.display",
             new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&aNEXT"))
                     .addItemModifier(new XMaterialModifier(XMaterial.ARROW))

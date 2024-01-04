@@ -72,14 +72,11 @@ public class SPlayer {
 
     public int getNextPointPrice() {
         int base = MainConfig.POINTS_PRICE.getValue();
-        if (MainConfig.POINTS_DYNAMIC_PRICE_ENABLED.getValue()) {
             int playerPoints = getPoints();
             for (int i : getSkills().values()) {
                 playerPoints += i;
             }
-            return base + (playerPoints * MainConfig.POINTS_DYNAMIC_PRICE_PRICE_INCREASE_PER_POINT.getValue());
-        } else {
-            return base;
-        }
+            return base + (playerPoints * MainConfig.POINTS_INCREMENT_PRICE.getValue());
+
     }
 }

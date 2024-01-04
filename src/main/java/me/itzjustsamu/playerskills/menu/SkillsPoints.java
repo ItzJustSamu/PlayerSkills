@@ -1,6 +1,7 @@
 package me.itzjustsamu.playerskills.menu;
 
 import com.cryptomorin.xseries.XSound;
+import com.sun.tools.javac.Main;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
@@ -49,6 +50,7 @@ public class SkillsPoints implements Menu {
             inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.POINTS_RESET_SLOT.getValue(), MainConfig.POINTS_RESET_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.POINTS_REFUND_SLOT.getValue(), MainConfig.POINTS_REFUND_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.POINTS_INCREMENT_SLOT.getValue(), MainConfig.POINTS_INCREMENT_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.POINTS_FUNDING_SLOT.getValue(), MainConfig.POINTS_FUNDING_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
         }
@@ -60,23 +62,39 @@ public class SkillsPoints implements Menu {
         if (slot == MainConfig.POINTS_SLOT.getValue()) {
             if (clickType == ClickType.LEFT) {
                 decreasePoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
             } else if (clickType == ClickType.RIGHT) {
                 increasePoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
             }
         } else if (slot == MainConfig.POINTS_RESET_SLOT.getValue()) {
             if (clickType == ClickType.LEFT) {
                 decreaseResetPoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
             } else if (clickType == ClickType.RIGHT) {
                 increaseResetPoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
+
             }
         } else if (slot == MainConfig.POINTS_REFUND_SLOT.getValue()) {
             toggleRefundPoints();
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
         } else if (slot == MainConfig.POINTS_FUNDING_SLOT.getValue()) {
             toggleFundingSource();
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
+        } else if (slot == MainConfig.POINTS_INCREMENT_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreaseIncrementedPoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
+            } else if (clickType == ClickType.RIGHT) {
+                increaseIncrementedPoints();
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
+            }
+        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
             skillsSettings.open(this.player);
-            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
         }
     }
 
@@ -85,8 +103,6 @@ public class SkillsPoints implements Menu {
 
         int newPoints = currentPoints + 1;
         MainConfig.POINTS_PRICE.setValue(newPoints);
-
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
 
@@ -95,7 +111,6 @@ public class SkillsPoints implements Menu {
         int newPoints = Math.max(0, currentPoints - 1);
 
         MainConfig.POINTS_PRICE.setValue(newPoints);
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
 
@@ -105,7 +120,6 @@ public class SkillsPoints implements Menu {
         int newResetPoints = currentResetPoints + 1;
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
 
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
 
@@ -114,7 +128,6 @@ public class SkillsPoints implements Menu {
         int newResetPoints = Math.max(0, currentResetPoints - 1);
 
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
 
@@ -123,7 +136,6 @@ public class SkillsPoints implements Menu {
         boolean newRefundStatus = !currentRefundStatus;
 
         MainConfig.POINTS_REFUND_POINTS.setValue(newRefundStatus);
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
         player.openInventory(getInventory());
     }
 
@@ -134,9 +146,21 @@ public class SkillsPoints implements Menu {
                 : new VaultFundingSource();
 
         MainConfig.POINTS_FUNDING_SOURCE.setValue(newFundingSource);
-        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 1.0F, 1.0F);
+        player.openInventory(getInventory());
+    }
+    private void increaseIncrementedPoints() {
+        int currentPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue();
+
+        int newPoints = currentPoints + 1;
+        MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
     }
 
+    private void decreaseIncrementedPoints() {
+        int currentPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue();
+        int newPoints = Math.max(0, currentPoints - 1);
 
+        MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
+        player.openInventory(getInventory());
+    }
 }
