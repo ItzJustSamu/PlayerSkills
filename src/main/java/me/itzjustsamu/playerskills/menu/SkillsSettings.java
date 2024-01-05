@@ -75,12 +75,6 @@ public class SkillsSettings implements Menu {
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
                 SkillsMenu skillsMenu = new SkillsMenu(this.plugin, this.player, this.sPlayer);
                 skillsMenu.open(this.player);
-        } else if (slot == MainConfig.GUI_ADMIN_SLOT.getValue()) {
-            if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
-                // Open SkillsAdmin when clicking the GUI_ADMIN_SLOT
-                SkillsAdmin skillsAdmin = new SkillsAdmin(this.plugin, this.player, this.skill, this.sPlayer);
-                skillsAdmin.open(this.player);
-            }
         } else if (slot == 3) {
             // Handle click event for the skill in slot 3
             if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
