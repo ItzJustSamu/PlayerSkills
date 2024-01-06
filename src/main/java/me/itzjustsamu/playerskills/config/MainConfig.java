@@ -21,6 +21,8 @@ import me.itzjustsamu.playerskills.util.path.StringListConfigPath;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
 import java.util.Collections;
 
 
@@ -73,7 +75,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Skills points price &e{price} {symbol}.",
+                            "&7Skills Points Price: &e{price} {symbol}",
                             "&eLeft-Click &7to decrease price.",
                             "&eRight-Click &7 to increase price."
                     ))
@@ -83,10 +85,10 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath POINTS_RESET_PRICE = new IntegerConfigPath("points.reset-price", 1);
     public static final ConfigPath<ItemBuilder> POINTS_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("points.reset.display",
             new ItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet Reset Point Price"))
+                    .addItemModifier(new NameModifier().setName("&cSet Reset Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Skills reset points price &e{reset-points}.",
+                            "&7Skills Reset Cost: &e{reset-points}",
                             "&eLeft-Click &7to decrease price.",
                             "&eRight-Click &7 to increase price."
                     ))
