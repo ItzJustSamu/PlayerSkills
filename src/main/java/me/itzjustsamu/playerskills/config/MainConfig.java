@@ -142,7 +142,18 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Increment Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Incrementing Price Points: &e{incremented-price}."
+                            "&7Incrementing Price Points: &e{incremented-points}."
+                    ))
+    ));
+
+    public static final IntegerConfigPath SKILLS_INCREMENT_SLOT = new IntegerConfigPath("skills.price.slot", 9);
+
+    public static final ConfigPath<ItemBuilder> SKILLS_INCREMENT_DISPLAY= new StickyConfigPath<>(new ItemBuilderConfigPath("skills.price.display",
+            new ItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Skills Increment"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Incrementing Price Points: &e{incremented-skill-price}."
                     ))
     ));
     // Confirmation Menu
@@ -197,7 +208,6 @@ public class MainConfig extends PathableConfig {
                             "&eLeft-Click &7to purchase a skill point for &e{price} {symbol}&7."
                     ))
     ));
-    public static final IntegerConfigPath GUI_EDIT_TITLE_SLOT = new IntegerConfigPath("gui.edit.title.slot", 11);
     public static final ConfigPath<ItemBuilder> GUI_EDIT_TITLE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath("gui.edit.title.display",
             new ItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cEdit Title"))

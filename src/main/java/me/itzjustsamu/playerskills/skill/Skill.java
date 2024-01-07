@@ -37,17 +37,23 @@ public abstract class Skill implements Listener {
 
     private ConfigPath<Integer> GET_MAX_LEVEL;
     private ConfigPath<Integer> GET_GUI_SLOT;
+    private ConfigPath<Integer> GET_INCREMENT;
+
 
     private final int MAX_LEVEL;
 
     private final int GUI_SLOT;
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
+    private final int INCREMENT;
+
+
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
         this.GUI_SLOT = SET_GUI_SLOT;
+        this.INCREMENT = SET_INCREMENT;
         this.CONFIG = new SkillConfig(this);
     }
 
@@ -58,6 +64,8 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         this.GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
         GET_GUI_SLOT.setConfig(CONFIG);
+        this.GET_INCREMENT = Paths.integerPath("increment", INCREMENT);
+        GET_INCREMENT.setConfig(CONFIG);
         this.Worlds_Restrictions = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
         Worlds_Restrictions.setConfig(CONFIG);
         this.pointPriceOverridesConfig = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
@@ -103,6 +111,7 @@ public abstract class Skill implements Listener {
         return GET_GUI_SLOT.getValue();
     }
 
+
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Collections.emptyList();
     }
@@ -143,6 +152,7 @@ public abstract class Skill implements Listener {
 
     public abstract String getNextString(SPlayer player);
 
+
     public void enable() {
         // EMPTY
     }
@@ -153,6 +163,10 @@ public abstract class Skill implements Listener {
 
     public int getLevel(SPlayer player) {
         return player.Level(getSkillsConfigName());
+    }
+
+    public int getIncrement() {
+        return GET_INCREMENT.getValue();
     }
 
     public int getPriceOverride(int level) {

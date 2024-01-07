@@ -13,12 +13,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class SkillsMenu implements Menu {
+public class SkillsList implements Menu {
     private final PlayerSkills plugin;
     private final Player player;
     private final SPlayer sPlayer;
 
-    public SkillsMenu(PlayerSkills plugin, Player player, SPlayer sPlayer) {
+    public SkillsList(PlayerSkills plugin, Player player, SPlayer sPlayer) {
         this.plugin = plugin;
         this.player = player;
         this.sPlayer = sPlayer;

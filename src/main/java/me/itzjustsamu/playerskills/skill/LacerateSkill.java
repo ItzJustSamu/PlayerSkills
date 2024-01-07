@@ -41,7 +41,7 @@ public class LacerateSkill extends Skill {
     private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate", 20, 14);
+        super(plugin, "Lacerate", "lacerate", 20, 14,0);
     }
 
     @EventHandler

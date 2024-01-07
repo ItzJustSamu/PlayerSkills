@@ -164,9 +164,6 @@ public class SkillsPoints implements Menu {
     }
 
 
-
-
-
     private void increaseIncrementedPoints() {
         int currentPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue();
         int newPoints = currentPoints + 1;

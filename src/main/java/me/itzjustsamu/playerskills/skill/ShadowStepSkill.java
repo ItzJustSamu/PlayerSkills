@@ -40,7 +40,7 @@ public class ShadowStepSkill extends Skill {
     private final Random random = new Random();
 
     public ShadowStepSkill(PlayerSkills plugin) {
-        super(plugin, "ShadowStep", "shadowstep", 20, 18);
+        super(plugin, "ShadowStep", "shadowstep", 20, 18, 0);
     }
 
     @EventHandler

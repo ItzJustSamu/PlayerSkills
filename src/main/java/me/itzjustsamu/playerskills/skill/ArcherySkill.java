@@ -1,13 +1,11 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
+import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
-import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
@@ -16,17 +14,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Collections;
-import java.util.List;
 
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ArcherySkill extends Skill {
-    private final ConfigPath<Double> DAMAGE_INCREMENT = Paths.doublePath("Damage-increment", 3D);
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 20, 0);
+        super(plugin, "Archery", "archery", 20, 0, 0);
     }
+
+
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
@@ -55,17 +52,11 @@ public class ArcherySkill extends Skill {
         }
 
         if (getLevel(sPlayer) > 0) {
-
             double damage = event.getDamage() / 100;
-            damage = damage * DAMAGE_INCREMENT.getValue();
+            damage = damage * getIncrement();
             double finalDamage = getLevel(sPlayer) * damage;
             event.setDamage(event.getDamage() + finalDamage);
         }
-    }
-
-    @Override
-    public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(DAMAGE_INCREMENT);
     }
 
     @Override
@@ -86,14 +77,14 @@ public class ArcherySkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int playerLevel = getLevel(player);
-        double archery = playerLevel * DAMAGE_INCREMENT.getValue();
+        double archery = playerLevel * getIncrement();
         return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double archery = playerLevel * DAMAGE_INCREMENT.getValue();
+        double archery = playerLevel * getIncrement();
         return getPercentageFormat().format(archery);
     }
 }

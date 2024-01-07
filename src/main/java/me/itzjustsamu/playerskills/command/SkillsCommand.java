@@ -4,7 +4,7 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.itzjustsamu.playerskills.Permissions;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
-import me.itzjustsamu.playerskills.menu.SkillsMenu;
+import me.itzjustsamu.playerskills.menu.SkillsList;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.ChatColor;
@@ -44,7 +44,7 @@ public class SkillsCommand extends Command {
             return true;
         }
 
-        new SkillsMenu(plugin, player, sPlayer).open(player);
+        new SkillsList(plugin, player, sPlayer).open(player);
         return true;
     }
 }
