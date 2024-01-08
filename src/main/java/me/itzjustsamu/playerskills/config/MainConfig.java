@@ -142,7 +142,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Increment Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Incrementing Price Points: &e{incremented-points}."
+                            "&7Incrementing Price Points: &e{incremented-price}."
                     ))
     ));
 

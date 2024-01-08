@@ -1,6 +1,7 @@
 package me.itzjustsamu.playerskills.skill;
 
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import me.hsgamer.hscore.config.path.impl.*;
@@ -17,6 +18,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -165,9 +167,6 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public int getIncrement() {
-        return GET_INCREMENT.getValue();
-    }
 
     public int getPriceOverride(int level) {
         return pointPriceOverridesConfig.getValue().getOrDefault(level, 1);
@@ -187,5 +186,14 @@ public abstract class Skill implements Listener {
             return true;
         }
         return !list.contains(world.getName());
+    }
+
+    public int getIncrement() {
+        return GET_INCREMENT.getValue();
+    }
+    public void setIncrement(int newIncrement) {
+        GET_INCREMENT.setValue(newIncrement);
+        CONFIG.set(GET_INCREMENT.getPath(), newIncrement);
+        CONFIG.save();
     }
 }

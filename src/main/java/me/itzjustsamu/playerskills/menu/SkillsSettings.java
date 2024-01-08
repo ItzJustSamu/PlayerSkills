@@ -1,8 +1,8 @@
 package me.itzjustsamu.playerskills.menu;
 
 import com.cryptomorin.xseries.XSound;
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
-import me.hsgamer.hscore.config.path.ConfigPath;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 import static me.itzjustsamu.playerskills.Permissions.ADMIN;
 
@@ -28,6 +30,8 @@ public class SkillsSettings implements Menu {
         this.player = player;
         this.skill = skill;
         this.sPlayer = sPlayer;
+        BukkitConfig bukkitConfig = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
+        bukkitConfig.setup();
     }
 
     @Override
@@ -100,12 +104,13 @@ public class SkillsSettings implements Menu {
             }
         } else if (slot == MainConfig.SKILLS_INCREMENT_SLOT.getValue()) {
             // Handle click event for the skill in slot 3
-            if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
-                increaseIncrement();
-            } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
-                decreaseIncrement();
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+            if (event == ClickType.RIGHT) {
+                increaseSkillIncrement();
+                XSound.UI_BUTTON_CLICK.play(this.player, 1.0F, 1.0F);
 
+            } else if (event == ClickType.LEFT) {
+                decreaseSkillIncrement();
+                XSound.UI_BUTTON_CLICK.play(this.player, 1.0F, 1.0F);
             }
 
         }
@@ -173,15 +178,17 @@ public class SkillsSettings implements Menu {
         };
     }
 
-    private void increaseIncrement() {
+    private void increaseSkillIncrement() {
         int currentIncrement = skill.getIncrement();
-        int newIncrement = skill.getIncrement() + 1;
+        int newIncrement = Math.max(1, currentIncrement + 1);
+        skill.setIncrement(newIncrement);
         player.openInventory(getInventory());
     }
 
-    private void decreaseIncrement() {
+    private void decreaseSkillIncrement() {
         int currentIncrement = skill.getIncrement();
         int newIncrement = Math.max(0, currentIncrement - 1);
+        skill.setIncrement(newIncrement);
         player.openInventory(getInventory());
     }
 }
