@@ -17,6 +17,7 @@ public class SkillsList implements Menu {
     private final PlayerSkills plugin;
     private final Player player;
     private final SPlayer sPlayer;
+    private Skill clickedSkill;
 
     public SkillsList(PlayerSkills plugin, Player player, SPlayer sPlayer) {
         this.plugin = plugin;
@@ -29,52 +30,55 @@ public class SkillsList implements Menu {
         int size = MainConfig.GUI_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
         if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(this.player);
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
 
             for (int i = 0; i < inventory.getSize(); ++i) {
                 inventory.setItem(i, background);
             }
         }
-        for (Skill skill : this.plugin.getSkills().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
                 skill.setup();
-                inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(this.player));
-                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player));
+                inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
+                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player));
             }
         }
         return inventory;
     }
 
     public void onClick(int slot, ClickType clickType) {
-        for (Skill skill : this.plugin.getSkills().values()) {
+        for (Skill skill : plugin.getSkills().values()) {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
-                // Handle right-click on skill slot
+                clickedSkill = skill;
                 SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
-                skillsSettings.open(this.player);
-                return; // Stop processing further actions
+                skillsSettings.open(player);
+                return;
             }
 
-            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
-                int price = skill.getPriceOverride(skill.getLevel(this.sPlayer) + 1);
-                if (this.sPlayer.getPoints() >= price) {
+            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(sPlayer) < skill.getMaxLevel()) {
+                int price = skill.getPrice(skill.getLevel(sPlayer) + 1);
+                if (sPlayer.getPoints() >= price) {
                     Runnable callback = () -> {
-                        this.sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(this.sPlayer) + 1);
-                        this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
-                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
-                        this.open(this.player);
+                        sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
+                        sPlayer.setPoints(sPlayer.getPoints() - price);
+                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2.0F, 2.0F);
+                        open(player);
                     };
 
                     if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
-                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
-                        confirmationMenu.open(this.player);
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
+                        confirmationMenu.open(player);
                     } else {
                         callback.run();
                     }
                     return;
                 }
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                XSound.ENTITY_ITEM_BREAK.play(player, 1.0F, 0.6F);
             }
         }
+    }
 
+    public Skill getClickedSkill() {
+        return clickedSkill;
     }
 }

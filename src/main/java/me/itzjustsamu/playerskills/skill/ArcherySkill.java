@@ -53,7 +53,7 @@ public class ArcherySkill extends Skill {
 
         if (getLevel(sPlayer) > 0) {
             double damage = event.getDamage() / 100;
-            damage = damage * getIncrement();
+            damage = damage * getIncrement(sPlayer);
             double finalDamage = getLevel(sPlayer) * damage;
             event.setDamage(event.getDamage() + finalDamage);
         }
@@ -77,14 +77,14 @@ public class ArcherySkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int playerLevel = getLevel(player);
-        double archery = playerLevel * getIncrement();
+        double archery = playerLevel * player.getIncrements(getSkillsConfigName());
         return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double archery = playerLevel * getIncrement();
+        double archery = playerLevel * player.getIncrements(getSkillsConfigName());
         return getPercentageFormat().format(archery);
     }
 }

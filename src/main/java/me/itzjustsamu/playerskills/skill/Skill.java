@@ -1,7 +1,6 @@
 package me.itzjustsamu.playerskills.skill;
 
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
-import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import me.hsgamer.hscore.config.path.impl.*;
@@ -18,7 +17,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,23 +37,20 @@ public abstract class Skill implements Listener {
 
     private ConfigPath<Integer> GET_MAX_LEVEL;
     private ConfigPath<Integer> GET_GUI_SLOT;
-    private ConfigPath<Integer> GET_INCREMENT;
 
 
     private final int MAX_LEVEL;
 
     private final int GUI_SLOT;
 
-    private final int INCREMENT;
 
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_MAX_INCREMENT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
         this.GUI_SLOT = SET_GUI_SLOT;
-        this.INCREMENT = SET_INCREMENT;
         this.CONFIG = new SkillConfig(this);
     }
 
@@ -66,8 +61,6 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         this.GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
         GET_GUI_SLOT.setConfig(CONFIG);
-        this.GET_INCREMENT = Paths.integerPath("increment", INCREMENT);
-        GET_INCREMENT.setConfig(CONFIG);
         this.Worlds_Restrictions = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
         Worlds_Restrictions.setConfig(CONFIG);
         this.pointPriceOverridesConfig = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
@@ -81,18 +74,20 @@ public abstract class Skill implements Listener {
         DISPLAY_ITEM.addStringReplacer("skill-properties", (original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
+            int increment = getIncrement(sPlayer);
             int maxLevel = getMaxLevel();
             if (level >= maxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}", getNextString(sPlayer))
-                        .replace("{skillprice}", Integer.toString(getPriceOverride(level + 1)));
+                        .replace("{skillprice}", Integer.toString(getPrice(level + 1)));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
                     .replace("{level}", Integer.toString(level))
-                    .replace("{max}", Integer.toString(maxLevel));
+                    .replace("{max}", Integer.toString(maxLevel))
+                    .replace("{increment}", Integer.toString(increment));
             return original;
         });
 
@@ -167,8 +162,12 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
+    public int getIncrement(SPlayer player) {
+        return player.Increment(getSkillsConfigName());
+    }
 
-    public int getPriceOverride(int level) {
+
+    public int getPrice(int level) {
         return pointPriceOverridesConfig.getValue().getOrDefault(level, 1);
     }
 
@@ -188,12 +187,4 @@ public abstract class Skill implements Listener {
         return !list.contains(world.getName());
     }
 
-    public int getIncrement() {
-        return GET_INCREMENT.getValue();
-    }
-    public void setIncrement(int newIncrement) {
-        GET_INCREMENT.setValue(newIncrement);
-        CONFIG.set(GET_INCREMENT.getPath(), newIncrement);
-        CONFIG.save();
-    }
 }
