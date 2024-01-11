@@ -3,7 +3,8 @@ package me.itzjustsamu.playerskills.skill;
 import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
-import me.hsgamer.hscore.config.path.impl.*;
+import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
+import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
@@ -35,25 +36,22 @@ public abstract class Skill implements Listener {
     private ConfigPath<List<String>> Worlds_Restrictions;
     private ConfigPath<Map<Integer, Integer>> POINT_PRICE;
 
-    private ConfigPath<Integer> GET_INCREMENT;
+    private IntegerConfigPath GET_INCREMENT;
 
     private ItemBuilder DISPLAY_ITEM;
 
-    private ConfigPath<Integer> GET_MAX_LEVEL;
-    private ConfigPath<Integer> GET_GUI_SLOT;
+    private IntegerConfigPath GET_MAX_LEVEL;
+    private IntegerConfigPath GET_GUI_SLOT;
 
     private final int MAX_LEVEL;
 
-    private final int INCREMENT;
-
     private final int GUI_SLOT;
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
-        this.INCREMENT = SET_INCREMENT;
         this.GUI_SLOT = SET_GUI_SLOT;
         this.CONFIG = new SkillConfig(this);
     }
@@ -62,7 +60,7 @@ public abstract class Skill implements Listener {
         CONFIG.setup();
         this.GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
         GET_MAX_LEVEL.setConfig(CONFIG);
-        this.GET_INCREMENT = new StickyConfigPath<>(new IntegerMapConfigPath("increment", Collections.emptyMap()));
+        this.GET_INCREMENT = Paths.integerPath("increment", 0);
         GET_INCREMENT.setConfig(CONFIG);
         this.GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
         GET_GUI_SLOT.setConfig(CONFIG);
@@ -79,7 +77,7 @@ public abstract class Skill implements Listener {
         DISPLAY_ITEM.addStringReplacer("skill-properties", (original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
-            int increment = getSkillIncrement();
+            int increment = getIncrement();
             int maxLevel = getMaxLevel();
             if (level >= maxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
@@ -165,21 +163,16 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public Integer getIncrement() {
+    public void setIncrement(int increment) {
+        GET_INCREMENT.setValue(increment);
+    }
+
+    public int getIncrement() {
         return GET_INCREMENT.getValue();
     }
 
     public void getIncrementPath() {
         GET_INCREMENT.getPath();
-    }
-
-    public void setIncrement(int increment) {
-        GET_INCREMENT.setValue(increment, Objects.requireNonNull(GET_INCREMENT.getConfig()));
-    }
-
-    public int getSkillIncrement() {
-        GET_INCREMENT.getValue(GET_INCREMENT.getConfig(), 0);
-        return 0;
     }
 
     public int getPrice(int level) {

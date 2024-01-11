@@ -16,12 +16,9 @@ public final class CommonStringReplacer {
     public static final StringReplacer PLAYER_PROPERTIES = (original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int price = sPlayer.getNextPointPrice();
-        Map<String, Integer> increments = sPlayer.getSkillIncrement();
+        int skills = Integer.parseInt(skill.getSkillsConfigName());
 
-        Set<String> allSkills = sPlayer.getSkills().keySet();
-        String allSkillsString = String.join(", ", allSkills);
-
-        int skillIncrement = increments.getOrDefault(skill.getSkillsConfigName(), 0); // Use the skill from CommonStringReplacer
+        int skillIncrement = skill.getIncrement();
 
         return original.replace("{price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
@@ -30,7 +27,7 @@ public final class CommonStringReplacer {
                 .replace("{refund-status}", Boolean.toString(MainConfig.POINTS_REFUND_POINTS.getValue()))
                 .replace("{incremented-price}", Integer.toString(MainConfig.POINTS_INCREMENT_PRICE.getValue()))
                 .replace("{incremented-skill-price}", Integer.toString(skillIncrement))
-                .replace("{skill}", allSkillsString);
+                .replace("{skills}", Integer.toString(skills));
     };
 
     public static void setSkill(Skill skill) {

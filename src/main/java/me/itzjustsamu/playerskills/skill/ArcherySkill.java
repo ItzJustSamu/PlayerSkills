@@ -21,7 +21,7 @@ public class ArcherySkill extends Skill {
 
 
     public ArcherySkill(PlayerSkills plugin, Skill skill) {
-        super(plugin, "Archery", "archery", 20, 0, 0);
+        super(plugin, "Archery", "archery", 20, 0);
     }
 
 
