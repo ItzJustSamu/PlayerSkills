@@ -20,11 +20,9 @@ import me.itzjustsamu.playerskills.storage.PlayerStorage;
 import me.itzjustsamu.playerskills.util.Updater;
 import org.bukkit.event.HandlerList;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PlayerSkills extends BasePlugin {
@@ -61,7 +59,7 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
-        registerSkill(new ArcherySkill(this));
+        registerSkill(new ArcherySkill(this, null));
         registerSkill(new BreederSkill(this));
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));

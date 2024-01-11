@@ -190,20 +190,18 @@ public class SkillsSettings implements Menu {
 
     public void increaseSkillsIncrement() {
         if (skill != null) {
-            String skillName = skill.getSkillsConfigName();
-            int currentIncrement = sPlayer.getIncrements(skillName);
+            int currentIncrement = skill.getIncrement();
             int newIncrement = currentIncrement + 1;
-            sPlayer.setIncrement(skillName, newIncrement);
+            skill.setIncrement(newIncrement);
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsIncrement() {
         if (skill != null) {
-            String skillName = skill.getSkillsConfigName();
-            int currentIncrement = sPlayer.getIncrements(skillName);
+            int currentIncrement = skill.getIncrement();
             int newIncrement = Math.max(0, currentIncrement - 1);
-            sPlayer.setIncrement(skillName, newIncrement);
+            skill.setIncrement(newIncrement);
             player.openInventory(getInventory());
         }
     }

@@ -16,7 +16,7 @@ public final class CommonStringReplacer {
     public static final StringReplacer PLAYER_PROPERTIES = (original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int price = sPlayer.getNextPointPrice();
-        Map<String, Integer> increments = sPlayer.getIncrements();
+        Map<String, Integer> increments = sPlayer.getSkillIncrement();
 
         Set<String> allSkills = sPlayer.getSkills().keySet();
         String allSkillsString = String.join(", ", allSkills);

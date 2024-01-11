@@ -19,7 +19,8 @@ import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ArcherySkill extends Skill {
 
-    public ArcherySkill(PlayerSkills plugin) {
+
+    public ArcherySkill(PlayerSkills plugin, Skill skill) {
         super(plugin, "Archery", "archery", 20, 0, 0);
     }
 
@@ -53,7 +54,7 @@ public class ArcherySkill extends Skill {
 
         if (getLevel(sPlayer) > 0) {
             double damage = event.getDamage() / 100;
-            damage = damage * getIncrement(sPlayer);
+            damage = damage * getIncrement();
             double finalDamage = getLevel(sPlayer) * damage;
             event.setDamage(event.getDamage() + finalDamage);
         }
@@ -76,15 +77,16 @@ public class ArcherySkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
+
         int playerLevel = getLevel(player);
-        double archery = playerLevel * player.getIncrements(getSkillsConfigName());
+        double archery = playerLevel * getIncrement();
         return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double archery = playerLevel * player.getIncrements(getSkillsConfigName());
+        double archery = playerLevel * getIncrement();
         return getPercentageFormat().format(archery);
     }
 }

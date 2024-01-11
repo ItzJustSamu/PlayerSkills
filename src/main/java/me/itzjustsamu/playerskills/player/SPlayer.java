@@ -12,13 +12,11 @@ public class SPlayer {
 
     private final UUID player;
     private final Map<String, Integer> skills;
-    private final Map<String, Integer> increments;
     private int points;
 
     public SPlayer(UUID player) {
         this.player = player;
         this.skills = new HashMap<>();
-        this.increments = new HashMap<>();
     }
 
     public static void load(UUID uuid) {
@@ -56,10 +54,6 @@ public class SPlayer {
         return skills;
     }
 
-    public Map<String, Integer> getIncrements() {
-        return increments;
-    }
-
     public int Level(String skill) {
         return skills.getOrDefault(skill, 0);
     }
@@ -68,14 +62,6 @@ public class SPlayer {
         skills.put(skill, level);
     }
 
-    public int getIncrements(String skill) {
-        return increments.getOrDefault(skill, 0);
-    }
-
-
-    public void setIncrement(String skill, int increment) {
-        increments.put(skill, increment);
-    }
 
     public int getPoints() {
         return points;
@@ -88,9 +74,10 @@ public class SPlayer {
     public int getNextPointPrice() {
         int base = MainConfig.POINTS_PRICE.getValue();
         int playerPoints = getPoints();
-        for (int increment : getIncrements().values()) {
-            playerPoints += increment;
+        for (int i : getSkills().values()) {
+            playerPoints += i;
         }
         return base + (playerPoints * MainConfig.POINTS_INCREMENT_PRICE.getValue());
+
     }
 }
