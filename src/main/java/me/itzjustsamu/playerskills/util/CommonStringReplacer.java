@@ -27,7 +27,6 @@ public final class CommonStringReplacer {
     private CommonStringReplacer() {
         // EMPTY
     }
-
     public static void setSkill(Skill skill) {
         CommonStringReplacer.skill = skill;
     }

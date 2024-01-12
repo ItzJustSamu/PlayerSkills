@@ -153,7 +153,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Skills Increment"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Incrementing Price Points: &e{incremented-skill-price}."
+                            "&7Incrementing Price Points: &e{skill} {incremented-skill-price}."
                     ))
     ));
     // Confirmation Menu

@@ -25,13 +25,15 @@ public class SkillsSettings implements Menu {
     private final Skill skill;
     private final SPlayer sPlayer;
     private final BukkitConfig bukkitConfig;
+    private final Skill clickedSkill;
 
-    public SkillsSettings(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer) {
+    public SkillsSettings(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, Skill clickedSkill) {
         this.plugin = plugin;
         this.player = player;
         this.skill = skill;
         this.sPlayer = sPlayer;
         this.bukkitConfig = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
+        this.clickedSkill = clickedSkill;
         bukkitConfig.setup();
     }
 
@@ -48,13 +50,13 @@ public class SkillsSettings implements Menu {
             }
         }
 
-        if (skill != null) {
+        if (clickedSkill != null) {
             inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player));
             inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player));
-            inventory.setItem(3, skill.getDisplayItem(this.player));
+            inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
         return inventory;
@@ -65,7 +67,7 @@ public class SkillsSettings implements Menu {
         if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
-                SkillsPoints skillsPoints = new SkillsPoints(this.plugin, this.player, this.skill, this.sPlayer);
+                SkillsPoints skillsPoints = new SkillsPoints(this.plugin, this.player, this.skill,  this.sPlayer, this.clickedSkill);
                 skillsPoints.open(this.player);
             } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
@@ -88,18 +90,18 @@ public class SkillsSettings implements Menu {
     }
 
     private void handleSkillClick(ClickType event) {
-        if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(this.sPlayer) < skill.getMaxLevel()) {
-            int price = skill.getPrice(skill.getLevel(this.sPlayer) + 1);
+        if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(this.sPlayer) < clickedSkill.getMaxLevel()) {
+            int price = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
             if (this.sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
-                    this.sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(this.sPlayer) + 1);
+                    this.sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(this.sPlayer) + 1);
                     this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
                     XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
                     this.open(this.player);
                 };
 
                 if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, skill.getDisplayItem(this.player), callback, this);
+                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, clickedSkill.getDisplayItem(this.player), callback, this);
                     confirmationMenu.open(this.player);
                 } else {
                     callback.run();
@@ -189,19 +191,19 @@ public class SkillsSettings implements Menu {
     }
 
     public void increaseSkillsIncrement() {
-        if (skill != null) {
-            int currentIncrement = skill.getIncrement();
+        if (clickedSkill != null) {
+            int currentIncrement = clickedSkill.getIncrement();
             int newIncrement = currentIncrement + 1;
-            skill.setIncrement(newIncrement);
+            clickedSkill.setIncrement(newIncrement);
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsIncrement() {
-        if (skill != null) {
-            int currentIncrement = skill.getIncrement();
+        if (clickedSkill != null) {
+            int currentIncrement = clickedSkill.getIncrement();
             int newIncrement = Math.max(0, currentIncrement - 1);
-            skill.setIncrement(newIncrement);
+            clickedSkill.setIncrement(newIncrement);
             player.openInventory(getInventory());
         }
     }

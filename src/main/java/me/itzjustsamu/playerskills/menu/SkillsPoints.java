@@ -27,13 +27,18 @@ public class SkillsPoints implements Menu {
     private final SPlayer sPlayer;
     private final BukkitConfig bukkitConfig;
 
-    public SkillsPoints(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer) {
+    private final Skill clickedSkill;
+
+
+    public SkillsPoints(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, Skill clickedSkill) {
         this.plugin = plugin;
         this.player = player;
         this.skill = skill;
         this.sPlayer = sPlayer;
         this.bukkitConfig = new BukkitConfig(new File(plugin.getDataFolder(), "config.yml"));
         bukkitConfig.setup();
+        this.clickedSkill = clickedSkill;
+
     }
 
     public @NotNull Inventory getInventory() {
@@ -92,7 +97,7 @@ public class SkillsPoints implements Menu {
                 XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
             }
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
-            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
+            SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer, clickedSkill);
             skillsSettings.open(this.player);
             XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 0.8F, 1.0F);
         }

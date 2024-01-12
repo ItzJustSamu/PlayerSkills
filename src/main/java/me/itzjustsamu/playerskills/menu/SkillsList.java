@@ -50,7 +50,7 @@ public class SkillsList implements Menu {
         for (Skill skill : plugin.getSkills().values()) {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
                 clickedSkill = skill;
-                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer);
+                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer, clickedSkill);
                 skillsSettings.open(player);
                 return;
             }
