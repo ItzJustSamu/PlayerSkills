@@ -20,7 +20,7 @@ import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 public class ArcherySkill extends Skill {
 
 
-    public ArcherySkill(PlayerSkills plugin, Skill skill) {
+    public ArcherySkill(PlayerSkills plugin) {
         super(plugin, "Archery", "archery", 20, 0);
     }
 
