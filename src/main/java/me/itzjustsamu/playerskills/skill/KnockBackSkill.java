@@ -26,7 +26,7 @@ public class KnockBackSkill extends Skill {
     private final ConfigPath<Double> knockbackIncrement = Paths.doublePath("knockback-increment", 0.2);
 
     public KnockBackSkill(PlayerSkills plugin) {
-        super(plugin, "Knockback", "knockback", 10, 13,0);
+        super(plugin, "Knockback", "knockback", 10, 13);
     }
 
     @EventHandler

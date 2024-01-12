@@ -77,9 +77,9 @@ public abstract class Skill implements Listener {
         DISPLAY_ITEM.addStringReplacer("skill-properties", (original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
-            int increment = getIncrement();
-            int maxLevel = getMaxLevel();
-            if (level >= maxLevel) {
+            int getMaxLevel = GET_MAX_LEVEL.getValue();
+            int getIncrement = GET_INCREMENT.getValue();
+            if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
@@ -89,8 +89,8 @@ public abstract class Skill implements Listener {
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
                     .replace("{level}", Integer.toString(level))
-                    .replace("{max}", Integer.toString(maxLevel))
-                    .replace("{increment}", Integer.toString(increment));
+                    .replace("{max}", Integer.toString(getMaxLevel))
+                    .replace("{increment}", Integer.toString(getIncrement));
             return original;
         });
 

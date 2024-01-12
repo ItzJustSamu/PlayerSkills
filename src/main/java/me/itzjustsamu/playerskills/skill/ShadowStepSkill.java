@@ -40,7 +40,7 @@ public class ShadowStepSkill extends Skill {
     private final Random random = new Random();
 
     public ShadowStepSkill(PlayerSkills plugin) {
-        super(plugin, "ShadowStep", "shadowstep", 20, 18, 0);
+        super(plugin, "ShadowStep", "shadowstep", 20, 18);
     }
 
     @EventHandler
@@ -98,8 +98,7 @@ public class ShadowStepSkill extends Skill {
     private boolean shouldTeleport(SPlayer sPlayer) {
         double increment = TELEPORT_CHANCE_INCREMENT.getValue();
         int playerLevel = Math.max(0, getLevel(sPlayer));  // Ensure playerLevel is at least 0
-        double chance = playerLevel * increment;
-
+        double chance = playerLevel * getIncrement();
         return random.nextDouble() * 70 < chance;
     }
 

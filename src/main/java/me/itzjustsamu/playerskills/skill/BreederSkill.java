@@ -25,7 +25,7 @@ public class BreederSkill extends Skill {
     private final ConfigPath<Integer> MAX_SPAWN_AMOUNT = Paths.integerPath("max-spawn-amount", 5);
 
     public BreederSkill(PlayerSkills plugin) {
-        super(plugin, "Breeder", "breeder", 25, 1,0);
+        super(plugin, "Breeder", "breeder", 25, 1);
     }
 
     @EventHandler

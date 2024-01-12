@@ -2,7 +2,7 @@ name: PlayerSkills
 version: ${project.version}
 description: Player Skills offers a customizable and engaging skill progression system.
 main: me.itzjustsamu.playerskills.PlayerSkills
-author: lmbishop, ItzJustSamu
+author: HSGamer, HSGamer, ItzJustSamu
 prefix: PlayerSkills
 softdepend: [ Vault ]
 api-version: 1.13

@@ -27,7 +27,7 @@ public class ExtraShotSkill extends Skill {
     private final ConfigPath<Double> ARROW_INCREMENT = Paths.doublePath("arrow-increment", 1.0);
 
     public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 6,0);
+        super(plugin, "ExtraShot", "extrashot", 10, 6);
     }
 
     @EventHandler

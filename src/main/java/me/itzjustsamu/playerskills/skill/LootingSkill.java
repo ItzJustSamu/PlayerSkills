@@ -23,7 +23,7 @@ public class LootingSkill extends Skill {
     private final ConfigPath<Double> lootingIncrement = Paths.doublePath("looting-increment", 0.3D);
 
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 15,0);
+        super(plugin, "Looting", "looting", 20, 15);
     }
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {

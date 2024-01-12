@@ -22,7 +22,7 @@ public class GluttonySkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
 
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony", 20, 9,0);
+        super(plugin, "Gluttony", "gluttony", 20, 9);
     }
 
     @EventHandler

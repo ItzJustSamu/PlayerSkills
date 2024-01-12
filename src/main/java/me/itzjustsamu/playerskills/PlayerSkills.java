@@ -59,7 +59,8 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
-        registerSkill(new ArcherySkill(this, null));
+        Skill Archery = null;
+        registerSkill(new ArcherySkill(this, Archery));
         registerSkill(new BreederSkill(this));
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));

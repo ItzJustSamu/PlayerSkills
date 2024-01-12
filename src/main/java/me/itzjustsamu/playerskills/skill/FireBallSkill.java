@@ -34,7 +34,7 @@ public class FireBallSkill extends Skill implements Listener {
     private final ConfigPath<Integer> FIREBALL_VELOCITY = Paths.integerPath("fireball-velocity", 2);
 
     public FireBallSkill(PlayerSkills plugin) {
-        super(plugin, "FireBall", "fireball", 5, 7,0);
+        super(plugin, "FireBall", "fireball", 5, 7);
     }
 
     @EventHandler

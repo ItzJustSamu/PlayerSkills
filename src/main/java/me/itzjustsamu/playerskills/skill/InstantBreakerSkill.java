@@ -29,7 +29,7 @@ public class InstantBreakerSkill extends Skill {
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public InstantBreakerSkill(PlayerSkills plugin) {
-        super(plugin, "InstantBreaker", "instantbreaker", 10, 12,0);
+        super(plugin, "InstantBreaker", "instantbreaker", 10, 12);
     }
 
     @EventHandler

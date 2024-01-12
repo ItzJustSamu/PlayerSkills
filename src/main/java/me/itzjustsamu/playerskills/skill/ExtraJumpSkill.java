@@ -38,7 +38,7 @@ public class ExtraJumpSkill extends Skill {
     private final HashMap<Player, Boolean> HasDoubleJumped = new HashMap<>();
 
     public ExtraJumpSkill(PlayerSkills plugin) {
-        super(plugin, "DoubleJump", "doublejump", 5, 5,0);
+        super(plugin, "DoubleJump", "doublejump", 5, 5);
     }
 
     @EventHandler
