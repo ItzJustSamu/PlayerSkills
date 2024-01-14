@@ -6,6 +6,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.util.CommonStringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -52,6 +53,7 @@ public class SkillsList implements Menu {
                 clickedSkill = skill;
                 SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer, clickedSkill);
                 skillsSettings.open(player);
+                CommonStringReplacer.setSkill(clickedSkill);
                 return;
             }
 
