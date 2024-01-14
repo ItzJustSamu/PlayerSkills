@@ -21,7 +21,7 @@ public class ArcherySkill extends Skill {
 
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 20, 0);
+        super(plugin, "Archery", "archery", 20, 0,0);
     }
 
 
@@ -53,8 +53,9 @@ public class ArcherySkill extends Skill {
         }
 
         if (getLevel(sPlayer) > 0) {
+            int increment = getIncrement().getValue();
             double damage = event.getDamage() / 100;
-            damage = damage * getIncrement();
+            damage = damage * increment;
             double finalDamage = getLevel(sPlayer) * damage;
             event.setDamage(event.getDamage() + finalDamage);
         }
@@ -77,16 +78,18 @@ public class ArcherySkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-
         int playerLevel = getLevel(player);
-        double archery = playerLevel * getIncrement();
+        int increment = getIncrement().getValue();
+        double archery = playerLevel * increment;
         return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double archery = playerLevel * getIncrement();
+        int increment = getIncrement().getValue();
+        double archery = playerLevel * increment;
         return getPercentageFormat().format(archery);
     }
+
 }

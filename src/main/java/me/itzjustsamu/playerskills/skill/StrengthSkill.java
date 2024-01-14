@@ -22,7 +22,7 @@ public class StrengthSkill extends Skill {
     private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 5D);
 
     public StrengthSkill(PlayerSkills plugin) {
-        super(plugin, "Strength", "strength", 20, 19);
+        super(plugin, "Strength", "strength", 20, 19,0);
     }
 
     @EventHandler

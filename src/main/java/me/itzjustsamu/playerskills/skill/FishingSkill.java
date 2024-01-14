@@ -24,7 +24,7 @@ public class FishingSkill extends Skill {
     private final ConfigPath<Double> catchChanceIncrease = Paths.doublePath("catch-chance-increase", 2.0);
 
     public FishingSkill(PlayerSkills plugin) {
-        super(plugin, "Fishing", "fishing", 20, 8);
+        super(plugin, "Fishing", "fishing", 20, 8,0);
     }
 
     @EventHandler

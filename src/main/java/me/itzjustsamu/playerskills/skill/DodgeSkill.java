@@ -30,7 +30,7 @@ public class DodgeSkill extends Skill {
     private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     public DodgeSkill(PlayerSkills plugin) {
-        super(plugin, "Dodge", "dodge", 20, 3);
+        super(plugin, "Dodge", "dodge", 20, 3,0);
     }
 
     @EventHandler

@@ -6,6 +6,7 @@ import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -192,20 +193,23 @@ public class SkillsSettings implements Menu {
 
     public void increaseSkillsIncrement() {
         if (clickedSkill != null) {
-            int currentIncrement = clickedSkill.getIncrement();
+            IntegerConfigPath incrementedSkill = clickedSkill.getIncrement();
+            int currentIncrement = incrementedSkill.getValue();
             int newIncrement = currentIncrement + 1;
-            clickedSkill.setIncrement(clickedSkill, newIncrement);
+            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsIncrement() {
         if (clickedSkill != null) {
-            int currentIncrement = clickedSkill.getIncrement();
+            IntegerConfigPath incrementedSkill = clickedSkill.getIncrement();
+            int currentIncrement = incrementedSkill.getValue();
             int newIncrement = Math.max(0, currentIncrement - 1);
-            clickedSkill.setIncrement(clickedSkill, newIncrement);
+            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
-
 }

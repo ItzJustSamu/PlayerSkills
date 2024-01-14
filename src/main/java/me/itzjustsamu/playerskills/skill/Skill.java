@@ -35,7 +35,7 @@ public abstract class Skill implements Listener {
     private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
     private final ConfigPath<Map<Integer, Integer>> POINT_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
 
-    private final ConfigPath<Map<Integer, Integer>> GET_INCREMENT = new StickyConfigPath<>(new IntegerMapConfigPath("increment", Collections.emptyMap()));;
+    private IntegerConfigPath GET_INCREMENT;
 
     private ItemBuilder DISPLAY_ITEM;
 
@@ -46,12 +46,15 @@ public abstract class Skill implements Listener {
 
     private final int GUI_SLOT;
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
+    private final int INCREMENT;
+
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
         this.GUI_SLOT = SET_GUI_SLOT;
+        this.INCREMENT = SET_INCREMENT;
         this.CONFIG = new SkillConfig(this);
     }
 
@@ -60,6 +63,7 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
         GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
         GET_MAX_LEVEL.setConfig(CONFIG);
+        GET_INCREMENT = Paths.integerPath("increment", INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
         WORLDS_RESTRICTIONS.setConfig(CONFIG);
@@ -74,7 +78,7 @@ public abstract class Skill implements Listener {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
-            int increment = getIncrement();
+            IntegerConfigPath increment = getIncrement();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
@@ -86,7 +90,7 @@ public abstract class Skill implements Listener {
                     .replace("{prev}", getPreviousString(sPlayer))
                     .replace("{level}", Integer.toString(level))
                     .replace("{max}", Integer.toString(getMaxLevel))
-                    .replace("{increment}", Integer.toString(increment));
+                    .replace("{increment}", Integer.toString(increment.getValue()));
             return original;
         });
 
@@ -159,24 +163,14 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public int getIncrement() {
-        return GET_INCREMENT.getValue().getOrDefault(1, 1);
-
-    }
-
-    public void setIncrement(Skill skill, int increment) {
-        if (skill != null) {
-            Map<Integer, Integer> incrementedSkillMap = skill.getIncrementPath().getValue();
-            incrementedSkillMap.put(1, increment);
-            skill.getIncrementPath().setValue(incrementedSkillMap, skill.getConfig());
-        }
-    }
-
-
-    public ConfigPath<Map<Integer, Integer>> getIncrementPath() {
+    public IntegerConfigPath getIncrement() {
         return GET_INCREMENT;
+
     }
 
+    public void setIncrement(int increment) {
+        GET_INCREMENT.setValue(increment, getConfig());
+    }
 
     public int getPrice(int level) {
         return POINT_PRICE.getValue().getOrDefault(level, 1);
