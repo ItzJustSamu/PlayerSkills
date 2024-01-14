@@ -194,7 +194,7 @@ public class SkillsSettings implements Menu {
         if (clickedSkill != null) {
             int currentIncrement = clickedSkill.getIncrement();
             int newIncrement = currentIncrement + 1;
-            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.setIncrement(clickedSkill, newIncrement);
             player.openInventory(getInventory());
         }
     }
@@ -203,8 +203,9 @@ public class SkillsSettings implements Menu {
         if (clickedSkill != null) {
             int currentIncrement = clickedSkill.getIncrement();
             int newIncrement = Math.max(0, currentIncrement - 1);
-            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.setIncrement(clickedSkill, newIncrement);
             player.openInventory(getInventory());
         }
     }
+
 }

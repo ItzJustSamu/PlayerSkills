@@ -89,8 +89,4 @@ public class ArcherySkill extends Skill {
         double archery = playerLevel * getIncrement();
         return getPercentageFormat().format(archery);
     }
-
-    public int getIncrement(Skill Archery) {
-        return Archery.getIncrement();
-    }
 }
