@@ -21,12 +21,14 @@ public final class CommonStringReplacer {
                 .replace("{reset-points}", Integer.toString(MainConfig.POINTS_RESET_PRICE.getValue()))
                 .replace("{refund-status}", Boolean.toString(MainConfig.POINTS_REFUND_POINTS.getValue()))
                 .replace("{incremented-price}", Integer.toString(MainConfig.POINTS_INCREMENT_PRICE.getValue()))
-                .replace("{incremented-skill-price}", Integer.toString(skillsIncrement));
+                .replace("{incremented-skill-price}", Integer.toString(skillsIncrement))
+                .replace("{skill}", (skill != null) ? skill.getSkillsName() : "");
     };
 
     private CommonStringReplacer() {
         // EMPTY
     }
+
     public static void setSkill(Skill skill) {
         CommonStringReplacer.skill = skill;
     }
