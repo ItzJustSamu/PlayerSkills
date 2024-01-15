@@ -1,11 +1,12 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.itzjustsamu.playerskills.config.MainConfig;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.itzjustsamu.playerskills.PlayerSkills;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
@@ -13,7 +14,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-
+import org.bukkit.inventory.ItemStack;
 
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
@@ -21,9 +22,8 @@ public class ArcherySkill extends Skill {
 
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 20, 0,0);
+        super(plugin, "Archery", "archery", 20, 0, 0);
     }
-
 
 
     @EventHandler
@@ -62,8 +62,8 @@ public class ArcherySkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cArchery Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BOW))
                 .addItemModifier(new LoreModifier().setLore(

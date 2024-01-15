@@ -1,13 +1,10 @@
 package me.itzjustsamu.playerskills.command;
 
 import com.google.common.collect.ImmutableList;
-
-import java.util.*;
-
-import me.itzjustsamu.playerskills.skill.Skill;
 import me.itzjustsamu.playerskills.Permissions;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,10 +13,15 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 public class SkillsAdminCommand extends Command implements TabCompleter {
 
-    private final PlayerSkills plugin;
     private static final List<String> SUBCOMMANDS = List.of("setskill", "givepoints", "view", "fullreset", "settings");
+    private final PlayerSkills plugin;
 
     public SkillsAdminCommand(PlayerSkills plugin) {
         super("skillsadmin", "Admin control for PlayerSkills", "/skillsadmin", SUBCOMMANDS);

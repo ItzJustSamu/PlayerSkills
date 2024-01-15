@@ -1,11 +1,13 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -17,12 +19,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+
 import java.util.List;
 
 public class ExplosiveArrowsSkill extends Skill {
-    private final ConfigPath<Double> EXPLOSION_RADIUS = Paths.doublePath("explosion-radius", 3D);
-    private final ConfigPath<Double> EXPLOSION_DAMAGE = Paths.doublePath("explosion-damage", 5D);
+    private final ConfigPath<Double> EXPLOSION_RADIUS = Paths.doublePath(new PathString("explosion-radius"), 3D);
+    private final ConfigPath<Double> EXPLOSION_DAMAGE = Paths.doublePath(new PathString("explosion-damage"), 5D);
 
     public ExplosiveArrowsSkill(PlayerSkills plugin) {
         super(plugin, "ExplosiveArrows", "explosivearrows", 20, 4, 0);
@@ -105,8 +109,8 @@ public class ExplosiveArrowsSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cExplosive Arrows"))
                 .addItemModifier(new XMaterialModifier(XMaterial.SPECTRAL_ARROW))
                 .addItemModifier(new LoreModifier().setLore(

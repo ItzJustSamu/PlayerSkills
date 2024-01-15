@@ -1,15 +1,16 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -20,8 +21,9 @@ import java.util.List;
 
 public class LootingSkill extends Skill {
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 15,0);
+        super(plugin, "Looting", "looting", 20, 15, 0);
     }
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
@@ -52,14 +54,16 @@ public class LootingSkill extends Skill {
                 }
             }
         }
-    } @Override
+    }
+
+    @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Collections.singletonList(getIncrement());
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cLooting Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BONE))
                 .addItemModifier(new LoreModifier().setLore(
@@ -81,7 +85,7 @@ public class LootingSkill extends Skill {
 
     @Override
     public String getNextString(SPlayer player) {
-        int lootingLevel = getLevel(player)+1;
+        int lootingLevel = getLevel(player) + 1;
         double lootBonus = lootingLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }

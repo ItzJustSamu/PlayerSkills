@@ -1,11 +1,13 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -21,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -29,15 +32,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExtraJumpSkill extends Skill {
-    private final ConfigPath<Long> COOLDOWN = Paths.longPath("cooldown", 30000L); // Default: 30 seconds
-    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cDoubleJump cooldown: &e{remaining_time} seconds.");
+    private final ConfigPath<Long> COOLDOWN = Paths.longPath(new PathString("cooldown"), 30000L); // Default: 30 seconds
+    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath(new PathString("cooldown-message"), "&cDoubleJump cooldown: &e{remaining_time} seconds.");
 
     private final HashMap<Player, Boolean> coolDown = new HashMap<>();
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
     private final HashMap<Player, Boolean> HasDoubleJumped = new HashMap<>();
 
     public ExtraJumpSkill(PlayerSkills plugin) {
-        super(plugin, "DoubleJump", "doublejump", 5, 5,0);
+        super(plugin, "DoubleJump", "doublejump", 5, 5, 0);
     }
 
     @EventHandler
@@ -136,8 +139,8 @@ public class ExtraJumpSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cDouble Jump Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.LEATHER_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(

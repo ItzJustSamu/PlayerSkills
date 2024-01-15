@@ -11,7 +11,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>4.2.19</core.version>
+        <core.version>4.3.26</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>9.3.1</version>
+            <version>9.8.1</version>
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
@@ -138,6 +138,11 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-common</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-collections</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>

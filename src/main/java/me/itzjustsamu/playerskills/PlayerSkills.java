@@ -20,7 +20,10 @@ import me.itzjustsamu.playerskills.storage.PlayerStorage;
 import me.itzjustsamu.playerskills.util.Updater;
 import org.bukkit.event.HandlerList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
@@ -110,7 +113,7 @@ public class PlayerSkills extends BasePlugin {
                     SPlayer.save(player);
                 }
             };
-            Scheduler.CURRENT.runTaskTimer(this, runnable, ticks, ticks, async);
+            Scheduler.current().runner(async).runTaskTimer(runnable, ticks, ticks);
         }
     }
 

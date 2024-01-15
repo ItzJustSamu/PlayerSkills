@@ -1,25 +1,28 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,18 +33,18 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BooleanSupplier;
 
 public class LacerateSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath("percent-increase", 3D);
-    private final ConfigPath<Integer> bleedCycles = Paths.integerPath("bleed-cycles", 8);
-    private final ConfigPath<Long> bleedInterval = Paths.longPath("bleed-interval", 50L);
-    private final ConfigPath<Integer> bleedDamage = Paths.integerPath("bleed-damage", 2);
-    private final ConfigPath<Boolean> applyToNonPlayers = Paths.booleanPath("apply-to-non-players", false);
-    private final ConfigPath<String> bleedingEnemy = Paths.stringPath("bleeding-enemy-message", "&a*** ENEMY BLEEDING ***");
-    private final ConfigPath<String> bleedingSelf = Paths.stringPath("bleeding-self-message", "&c*** YOU ARE BLEEDING ***");
+    private final ConfigPath<Double> percentIncrease = Paths.doublePath(new PathString("percent-increase"), 3D);
+    private final ConfigPath<Integer> bleedCycles = Paths.integerPath(new PathString("bleed-cycles"), 8);
+    private final ConfigPath<Long> bleedInterval = Paths.longPath(new PathString("bleed-interval"), 50L);
+    private final ConfigPath<Integer> bleedDamage = Paths.integerPath(new PathString("bleed-damage"), 2);
+    private final ConfigPath<Boolean> applyToNonPlayers = Paths.booleanPath(new PathString("apply-to-non-players"), false);
+    private final ConfigPath<String> bleedingEnemy = Paths.stringPath(new PathString("bleeding-enemy-message"), "&a*** ENEMY BLEEDING ***");
+    private final ConfigPath<String> bleedingSelf = Paths.stringPath(new PathString("bleeding-self-message"), "&c*** YOU ARE BLEEDING ***");
 
     private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate", 20, 14,0);
+        super(plugin, "Lacerate", "lacerate", 20, 14, 0);
     }
 
     @EventHandler
@@ -102,7 +105,7 @@ public class LacerateSkill extends Skill {
                 return true;
             }
         };
-        Task task = Scheduler.CURRENT.runEntityTaskTimer(getPlugin(), player, runnable, bleedInterval.getValue(), bleedInterval.getValue(), false);
+        Task task = Scheduler.plugin(getPlugin()).sync().runEntityTaskTimer(player, runnable, bleedInterval.getValue(), bleedInterval.getValue());
         cutEntities.put(player, task);
     }
 
@@ -137,8 +140,8 @@ public class LacerateSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cLacerate Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.REDSTONE))
                 .addItemModifier(new LoreModifier().setLore(

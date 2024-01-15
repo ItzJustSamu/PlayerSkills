@@ -38,14 +38,14 @@ public class ConfirmationMenu implements Menu {
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (MainConfig.GUI_CONFIRMATION_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_CONFIRMATION_BACKGROUND_DISPLAY.getValue().build(player);
+            ItemStack background = MainConfig.GUI_CONFIRMATION_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        ItemStack yes = MainConfig.GUI_CONFIRMATION_ACCEPT.getValue().build(player);
-        ItemStack no = MainConfig.GUI_CONFIRMATION_DENY.getValue().build(player);
+        ItemStack yes = MainConfig.GUI_CONFIRMATION_ACCEPT.getValue().build(player.getUniqueId());
+        ItemStack no = MainConfig.GUI_CONFIRMATION_DENY.getValue().build(player.getUniqueId());
 
         inventory.setItem(10, no);
         inventory.setItem(11, no);
@@ -77,7 +77,7 @@ public class ConfirmationMenu implements Menu {
     @Override
     public void onClose() {
         if (superMenu != null) {
-            Scheduler.CURRENT.runEntityTask(plugin, player, () -> superMenu.open(player), false);
+            Scheduler.plugin(plugin).sync().runEntityTask(player, () -> superMenu.open(player));
         }
     }
 
