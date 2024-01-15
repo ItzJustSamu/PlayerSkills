@@ -21,8 +21,8 @@ public final class CommonStringReplacer {
                 .replace("{reset-points}", Integer.toString(MainConfig.POINTS_RESET_PRICE.getValue()))
                 .replace("{refund-status}", Boolean.toString(MainConfig.POINTS_REFUND_POINTS.getValue()))
                 .replace("{incremented-price}", Integer.toString(MainConfig.POINTS_INCREMENT_PRICE.getValue()))
-                .replace("{incremented-skill-price}", Integer.toString(skillsIncrement))
-                .replace("{skill}", (skill != null) ? skill.getSkillsName() : "");
+                .replace("{incremented-skill-points}", Integer.toString(skillsIncrement))
+                .replace("{skill}", (skill != null) ? skill.getSkillsConfigName() : "");
     };
 
     private CommonStringReplacer() {

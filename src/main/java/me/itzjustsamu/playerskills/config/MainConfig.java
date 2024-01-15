@@ -150,10 +150,10 @@ public class MainConfig extends PathableConfig {
 
     public static final ConfigPath<ItemBuilder> SKILLS_INCREMENT_DISPLAY= new StickyConfigPath<>(new ItemBuilderConfigPath("skills.price.display",
             new ItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet Skills Increment"))
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Increment"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Incrementing Price Points: &e{skill} {incremented-skill-price}."
+                            "&7Points: &e{incremented-skill-points}."
                     ))
     ));
     // Confirmation Menu
