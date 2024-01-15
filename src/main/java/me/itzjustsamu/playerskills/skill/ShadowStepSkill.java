@@ -98,7 +98,7 @@ public class ShadowStepSkill extends Skill {
     private boolean shouldTeleport(SPlayer sPlayer) {
         double increment = TELEPORT_CHANCE_INCREMENT.getValue();
         int playerLevel = Math.max(0, getLevel(sPlayer));  // Ensure playerLevel is at least 0
-        double chance = playerLevel * getIncrement();
+        double chance = playerLevel * getIncrement().getValue();
         return random.nextDouble() * 70 < chance;
     }
 

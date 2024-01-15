@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CriticalsSkill extends Skill {
-    private final ConfigPath<Double> CRITICAL_INCREMENT = Paths.doublePath("percent-increase", 2D);
     private final ConfigPath<Double> CRITICAL_MULTIPLIER = Paths.doublePath("critical-multiplier", 1.5D);
     private final ConfigPath<String> CRITICAL_MESSAGE = Paths.stringPath("critical-message", "&a*** CRITICAL HIT ***");
 
@@ -52,7 +51,7 @@ public class CriticalsSkill extends Skill {
 
         int criticalLevel = getLevel(sPlayer);
 
-        double chance = criticalLevel * CRITICAL_INCREMENT.getValue();
+        double chance = criticalLevel * getIncrement().getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = CRITICAL_MESSAGE.getValue();
@@ -66,7 +65,7 @@ public class CriticalsSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(CRITICAL_INCREMENT, CRITICAL_MULTIPLIER);
+        return Arrays.asList(getIncrement(), CRITICAL_MULTIPLIER);
     }
 
     @Override
@@ -92,14 +91,14 @@ public class CriticalsSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int criticalLevel = getLevel(player);
-        double damage = criticalLevel * CRITICAL_INCREMENT.getValue();
+        double damage = criticalLevel * getIncrement().getValue();;
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int criticalLevel = getLevel(player) + 1;
-        double damage = criticalLevel * CRITICAL_INCREMENT.getValue();
+        double damage = criticalLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

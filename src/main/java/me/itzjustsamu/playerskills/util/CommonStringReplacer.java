@@ -13,7 +13,7 @@ public final class CommonStringReplacer {
     public static final StringReplacer PLAYER_PROPERTIES = (original, uuid) -> {
 
         SPlayer sPlayer = SPlayer.get(uuid);
-        int skillsIncrement = (skill != null) ? skill.getIncrement() : 0;
+        int skillsIncrement = (skill != null) ? skill.getIncrement().getValue() : 0;
         int price = sPlayer.getNextPointPrice();
         return original.replace("{price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
