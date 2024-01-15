@@ -56,7 +56,6 @@ public class SkillsSettings implements Menu {
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
-            inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
@@ -87,6 +86,8 @@ public class SkillsSettings implements Menu {
             handleSkillClick(event);
         } else if (slot == MainConfig.SKILLS_INCREMENT_SLOT.getValue()) {
             handleIncrementClick(event);
+        } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
+            playUIButtonClickSound(player);
         }
     }
 

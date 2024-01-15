@@ -45,7 +45,6 @@ public class SkillsList implements Menu {
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
             }
         }
-        inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player.getUniqueId()));
         return inventory;
     }
 
@@ -78,12 +77,9 @@ public class SkillsList implements Menu {
                     return;
                 }
                 playItemBreakSound(player);
-            } else if (slot == MainConfig.GUI_NEXT_SLOT.getValue()) {
-                playItemBreakSound(player);
             }
         }
     }
-
     public Skill getClickedSkill() {
         return clickedSkill;
     }
