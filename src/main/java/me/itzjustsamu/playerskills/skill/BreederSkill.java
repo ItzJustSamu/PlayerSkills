@@ -1,11 +1,13 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -17,15 +19,16 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class BreederSkill extends Skill {
-    private final ConfigPath<Integer> SPAWN_CHANCE_INCREASE = Paths.integerPath("spawn-chance-increase", 25);
-    private final ConfigPath<Integer> MAX_SPAWN_AMOUNT = Paths.integerPath("max-spawn-amount", 5);
+    private final ConfigPath<Integer> SPAWN_CHANCE_INCREASE = Paths.integerPath(new PathString("spawn-chance-increase"), 25);
+    private final ConfigPath<Integer> MAX_SPAWN_AMOUNT = Paths.integerPath(new PathString("max-spawn-amount"), 5);
 
     public BreederSkill(PlayerSkills plugin) {
-        super(plugin, "Breeder", "breeder", 25, 1,0);
+        super(plugin, "Breeder", "breeder", 25, 1, 0);
     }
 
     @EventHandler
@@ -84,8 +87,8 @@ public class BreederSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&6Breeder Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.RED_BED))
                 .addItemModifier(new LoreModifier().setLore(

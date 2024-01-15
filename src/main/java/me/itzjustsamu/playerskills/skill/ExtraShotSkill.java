@@ -1,20 +1,22 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Collections;
@@ -24,7 +26,7 @@ import java.util.UUID;
 public class ExtraShotSkill extends Skill {
 
     public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 6,0);
+        super(plugin, "ExtraShot", "extrashot", 10, 6, 0);
     }
 
     @EventHandler
@@ -73,17 +75,14 @@ public class ExtraShotSkill extends Skill {
     }
 
 
-
-
-
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         return Collections.singletonList(getIncrement());
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cArrows Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
                 .addItemModifier(new LoreModifier().setLore(

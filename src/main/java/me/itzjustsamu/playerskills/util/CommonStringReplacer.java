@@ -1,17 +1,15 @@
 package me.itzjustsamu.playerskills.util;
 
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
-import me.hsgamer.hscore.common.interfaces.StringReplacer;
+import me.hsgamer.hscore.common.StringReplacer;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 
 public final class CommonStringReplacer {
+    public static final StringReplacer COLORIZE = ColorUtils::colorize;
     private static Skill skill;
-
-    public static final StringReplacer COLORIZE = (original, uuid) -> ColorUtils.colorize(original);
-    public static final StringReplacer PLAYER_PROPERTIES = (original, uuid) -> {
-
+    public static final StringReplacer PLAYER_PROPERTIES = StringReplacer.of((original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int skillsIncrement = (skill != null) ? skill.getIncrement().getValue() : 0;
         int price = sPlayer.getNextPointPrice();
@@ -23,7 +21,7 @@ public final class CommonStringReplacer {
                 .replace("{incremented-price}", Integer.toString(MainConfig.POINTS_INCREMENT_PRICE.getValue()))
                 .replace("{incremented-skill-points}", Integer.toString(skillsIncrement))
                 .replace("{skill}", (skill != null) ? skill.getSkillsConfigName() : "");
-    };
+    });
 
     private CommonStringReplacer() {
         // EMPTY

@@ -1,12 +1,14 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -20,26 +22,23 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ShadowStepSkill extends Skill {
-    private final ConfigPath<String> TELEPORT_MESSAGE = Paths.stringPath("teleport-message", "&a*** SNEAK ATTACK ***");
-    private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath("cooldown-duration", 5000L); // 5000 milliseconds (5 seconds)
-    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cShadowStep cooldown: {remaining_time} seconds.");
+    private final ConfigPath<String> TELEPORT_MESSAGE = Paths.stringPath(new PathString("teleport-message"), "&a*** SNEAK ATTACK ***");
+    private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath(new PathString("cooldown-duration"), 5000L); // 5000 milliseconds (5 seconds)
+    private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath(new PathString("cooldown-message"), "&cShadowStep cooldown: {remaining_time} seconds.");
 
     private final Map<UUID, Long> cooldowns = new HashMap<>();
     private final Random random = new Random();
 
     public ShadowStepSkill(PlayerSkills plugin) {
-        super(plugin, "ShadowStep", "shadowstep", 20, 18,0);
+        super(plugin, "ShadowStep", "shadowstep", 20, 18, 0);
     }
 
     @EventHandler
@@ -128,8 +127,8 @@ public class ShadowStepSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cShadow Step"))
                 .addItemModifier(new XMaterialModifier(XMaterial.NETHER_STAR))
                 .addItemModifier(new LoreModifier().setLore(

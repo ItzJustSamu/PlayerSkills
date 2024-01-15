@@ -1,19 +1,20 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
-import me.itzjustsamu.playerskills.config.MainConfig;
-import me.itzjustsamu.playerskills.util.Utils;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 public class StrengthSkill extends Skill {
 
     public StrengthSkill(PlayerSkills plugin) {
-        super(plugin, "Strength", "strength", 20, 19,0);
+        super(plugin, "Strength", "strength", 20, 19, 0);
     }
 
     @EventHandler
@@ -58,8 +59,8 @@ public class StrengthSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cStrength Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_SWORD))
                 .addItemModifier(new LoreModifier().setLore(

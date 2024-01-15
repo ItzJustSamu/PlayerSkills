@@ -1,11 +1,11 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -17,9 +17,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -32,7 +32,7 @@ import java.util.List;
 public class FireBallSkill extends Skill implements Listener {
 
     public FireBallSkill(PlayerSkills plugin) {
-        super(plugin, "FireBall", "fireball", 5, 7,0);
+        super(plugin, "FireBall", "fireball", 5, 7, 0);
     }
 
     @EventHandler
@@ -137,8 +137,8 @@ public class FireBallSkill extends Skill implements Listener {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cFireBall Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.FIRE_CHARGE))
                 .addItemModifier(new LoreModifier().setLore(

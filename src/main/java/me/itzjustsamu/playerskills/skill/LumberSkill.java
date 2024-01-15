@@ -1,20 +1,22 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.itzjustsamu.playerskills.config.MainConfig;
-import me.itzjustsamu.playerskills.util.Utils;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
+import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
 public class LumberSkill extends Skill {
 
     public LumberSkill(PlayerSkills plugin) {
-        super(plugin, "Lumber", "lumber", 1, 16,0);
+        super(plugin, "Lumber", "lumber", 1, 16, 0);
     }
 
     @EventHandler
@@ -72,8 +74,8 @@ public class LumberSkill extends Skill {
     }
 
     private void breakBlock(Block block) {
-            block.breakNaturally();
-        }
+        block.breakNaturally();
+    }
 
     private boolean isLog(Material material) {
         return material.toString().endsWith("_LOG");
@@ -92,8 +94,8 @@ public class LumberSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cLumber Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.DIAMOND_AXE))
                 .addItemModifier(new LoreModifier().setLore(

@@ -31,7 +31,7 @@ public class SkillsList implements Menu {
         int size = MainConfig.GUI_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
         if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
 
             for (int i = 0; i < inventory.getSize(); ++i) {
                 inventory.setItem(i, background);
@@ -41,7 +41,7 @@ public class SkillsList implements Menu {
             if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
                 skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
-                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player));
+                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player.getUniqueId()));
             }
         }
         return inventory;

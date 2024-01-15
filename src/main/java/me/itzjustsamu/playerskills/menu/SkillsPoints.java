@@ -46,7 +46,7 @@ public class SkillsPoints implements Menu {
         int size = MainConfig.GUI_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
         if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(this.player);
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(this.player.getUniqueId());
 
             for (int i = 0; i < inventory.getSize(); ++i) {
                 inventory.setItem(i, background);
@@ -54,12 +54,12 @@ public class SkillsPoints implements Menu {
         }
 
         if (skill != null) {
-            inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.POINTS_RESET_SLOT.getValue(), MainConfig.POINTS_RESET_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.POINTS_REFUND_SLOT.getValue(), MainConfig.POINTS_REFUND_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.POINTS_INCREMENT_SLOT.getValue(), MainConfig.POINTS_INCREMENT_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.POINTS_FUNDING_SLOT.getValue(), MainConfig.POINTS_FUNDING_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_RESET_SLOT.getValue(), MainConfig.POINTS_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_REFUND_SLOT.getValue(), MainConfig.POINTS_REFUND_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_INCREMENT_SLOT.getValue(), MainConfig.POINTS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_FUNDING_SLOT.getValue(), MainConfig.POINTS_FUNDING_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
         }
 
         return inventory;
@@ -108,7 +108,7 @@ public class SkillsPoints implements Menu {
         int newPoints = currentPoints + 1;
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
         bukkitConfig.save();
     }
 
@@ -117,7 +117,7 @@ public class SkillsPoints implements Menu {
         int newPoints = Math.max(0, currentPoints - 1);
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
         bukkitConfig.save();
     }
 
@@ -126,7 +126,7 @@ public class SkillsPoints implements Menu {
         int newResetPoints = currentResetPoints + 1;
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
+        bukkitConfig.set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
         bukkitConfig.save();
     }
 
@@ -135,7 +135,7 @@ public class SkillsPoints implements Menu {
         int newResetPoints = Math.max(0, currentResetPoints - 1);
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
+        bukkitConfig.set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
         bukkitConfig.save();
     }
 
@@ -144,7 +144,7 @@ public class SkillsPoints implements Menu {
         boolean newRefundStatus = !currentRefundStatus;
         MainConfig.POINTS_REFUND_POINTS.setValue(newRefundStatus);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_REFUND_POINTS.getPath(), newRefundStatus);
+        bukkitConfig.set(MainConfig.POINTS_REFUND_POINTS.getPath(), newRefundStatus);
         bukkitConfig.save();
     }
 
@@ -164,7 +164,7 @@ public class SkillsPoints implements Menu {
         player.openInventory(getInventory());
 
         // Save the new funding source identifier to the configuration
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_FUNDING_SOURCE.getPath(), newFundingSourceIdentifier);
+        bukkitConfig.set(MainConfig.POINTS_FUNDING_SOURCE.getPath(), newFundingSourceIdentifier);
         bukkitConfig.save();
     }
 
@@ -174,7 +174,7 @@ public class SkillsPoints implements Menu {
         int newPoints = currentPoints + 1;
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
         bukkitConfig.save();
     }
 
@@ -183,7 +183,7 @@ public class SkillsPoints implements Menu {
         int newPoints = Math.max(0, currentPoints - 1);
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.getOriginal().set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
         bukkitConfig.save();
     }
 }

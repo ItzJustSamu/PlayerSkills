@@ -1,11 +1,13 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
@@ -21,10 +23,10 @@ import java.util.List;
 
 public class FishingSkill extends Skill {
 
-    private final ConfigPath<Double> catchChanceIncrease = Paths.doublePath("catch-chance-increase", 2.0);
+    private final ConfigPath<Double> catchChanceIncrease = Paths.doublePath(new PathString("catch-chance-increase"), 2.0);
 
     public FishingSkill(PlayerSkills plugin) {
-        super(plugin, "Fishing", "fishing", 20, 8,0);
+        super(plugin, "Fishing", "fishing", 20, 8, 0);
     }
 
     @EventHandler
@@ -66,8 +68,8 @@ public class FishingSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cFishing Mastery"))
                 .addItemModifier(new XMaterialModifier(XMaterial.TROPICAL_FISH))
                 .addItemModifier(new LoreModifier().setLore(

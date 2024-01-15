@@ -1,19 +1,22 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.player.SPlayer;
-import org.bukkit.event.EventHandler;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,10 +24,10 @@ import java.util.UUID;
 
 public class SwiftSkill extends Skill {
 
-    private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath("default-speed", 0.2);
+    private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath(new PathString("default-speed"), 0.2);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 5, 20,0);
+        super(plugin, "Swift", "swift", 5, 20, 0);
     }
 
 
@@ -66,8 +69,8 @@ public class SwiftSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cSpeed Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(
@@ -89,7 +92,7 @@ public class SwiftSkill extends Skill {
 
     @Override
     public String getNextString(SPlayer player) {
-        int swiftLevel=getLevel(player)+1;
+        int swiftLevel = getLevel(player) + 1;
         double swift = 1.0 + (swiftLevel * getIncrement().getValue());
         return Utils.getPercentageFormat().format(swift);
     }

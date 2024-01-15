@@ -1,11 +1,13 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
@@ -17,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -26,16 +29,16 @@ import java.util.List;
 
 public class GrapplingSkill extends Skill {
 
-    private final ConfigPath<Boolean> airGrappling = Paths.booleanPath("air-grappling", true);
-    private final ConfigPath<Boolean> entityGrappling = Paths.booleanPath("entity-grappling", true);
-    private final ConfigPath<String> cooldownMessage = Paths.stringPath("cooldown-message", "&cGrappling cooldown: &e{remaining_time} seconds.");
-    private final ConfigPath<Long> cooldownDuration = Paths.longPath("cooldown-duration", 30000L); // 3000 milliseconds cooldown (adjust as needed)
+    private final ConfigPath<Boolean> airGrappling = Paths.booleanPath(new PathString("air-grappling"), true);
+    private final ConfigPath<Boolean> entityGrappling = Paths.booleanPath(new PathString("entity-grappling"), true);
+    private final ConfigPath<String> cooldownMessage = Paths.stringPath(new PathString("cooldown-message"), "&cGrappling cooldown: &e{remaining_time} seconds.");
+    private final ConfigPath<Long> cooldownDuration = Paths.longPath(new PathString("cooldown-duration"), 30000L); // 3000 milliseconds cooldown (adjust as needed)
 
     private final double scalingFactor = 0.3;
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public GrapplingSkill(PlayerSkills plugin) {
-        super(plugin, "Grappling", "grappling", 3, 10,0);
+        super(plugin, "Grappling", "grappling", 3, 10, 0);
     }
 
     @EventHandler
@@ -94,8 +97,8 @@ public class GrapplingSkill extends Skill {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder()
+    public ItemBuilder<ItemStack> getDefaultItem() {
+        return new BukkitItemBuilder()
                 .addItemModifier(new NameModifier().setName("&cGrappling Hook"))
                 .addItemModifier(new XMaterialModifier(XMaterial.FISHING_ROD))
                 .addItemModifier(new LoreModifier().setLore(

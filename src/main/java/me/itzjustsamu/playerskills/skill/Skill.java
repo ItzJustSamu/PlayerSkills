@@ -1,10 +1,12 @@
 package me.itzjustsamu.playerskills.skill;
 
-import me.hsgamer.hscore.bukkit.item.ItemBuilder;
+import me.hsgamer.hscore.common.StringReplacer;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
+import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
@@ -29,24 +31,16 @@ public abstract class Skill implements Listener {
     private final PlayerSkills PLUGIN;
     private final String NAME;
     private final String SKILL;
-
+    private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
+    private final ConfigPath<Map<Integer, Integer>> POINT_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price-override"), Collections.emptyMap()));
+    private final int MAX_LEVEL;
+    private final int GUI_SLOT;
+    private final int INCREMENT;
     private ItemBuilderConfigPath ITEM_CONFIG;
-
-    private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath("only-in-worlds", Collections.emptyList()));
-    private final ConfigPath<Map<Integer, Integer>> POINT_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath("price-override", Collections.emptyMap()));
-
     private IntegerConfigPath GET_INCREMENT;
-
-    private ItemBuilder DISPLAY_ITEM;
-
+    private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
     private IntegerConfigPath GET_GUI_SLOT;
-
-    private final int MAX_LEVEL;
-
-    private final int GUI_SLOT;
-
-    private final int INCREMENT;
 
     public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
         this.PLUGIN = PlayerSkills;
@@ -60,21 +54,21 @@ public abstract class Skill implements Listener {
 
     public final void setup() {
         CONFIG.setup();
-        GET_MAX_LEVEL = Paths.integerPath("max-level", MAX_LEVEL);
-        GET_GUI_SLOT = Paths.integerPath("gui-slot", GUI_SLOT);
+        GET_MAX_LEVEL = Paths.integerPath(new PathString("max-level"), MAX_LEVEL);
+        GET_GUI_SLOT = Paths.integerPath(new PathString("gui-slot"), GUI_SLOT);
         GET_MAX_LEVEL.setConfig(CONFIG);
-        GET_INCREMENT = Paths.integerPath("increment", INCREMENT);
+        GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
         WORLDS_RESTRICTIONS.setConfig(CONFIG);
         POINT_PRICE.setConfig(CONFIG);
         getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(CONFIG));
-        ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath("display", getDefaultItem());
+        ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath(new PathString("display"), getDefaultItem());
         itemBuilderConfigPath.setConfig(CONFIG);
         CONFIG.save();
 
         DISPLAY_ITEM = itemBuilderConfigPath.getValue();
-        DISPLAY_ITEM.addStringReplacer("skill-properties", (original, uuid) -> {
+        DISPLAY_ITEM.addStringReplacer(StringReplacer.of((original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
@@ -92,7 +86,7 @@ public abstract class Skill implements Listener {
                     .replace("{max}", Integer.toString(getMaxLevel))
                     .replace("{increment}", Integer.toString(increment.getValue()));
             return original;
-        });
+        }));
 
         List<ConfigPath<?>> messageConfigPaths = getMessageConfigPaths();
         if (!messageConfigPaths.isEmpty()) {
@@ -119,9 +113,9 @@ public abstract class Skill implements Listener {
         return Collections.emptyList();
     }
 
-    public ItemBuilder getDefaultItem() {
+    public ItemBuilder<ItemStack> getDefaultItem() {
         if (ITEM_CONFIG == null) {
-            ITEM_CONFIG = new ItemBuilderConfigPath("display", null);
+            ITEM_CONFIG = new ItemBuilderConfigPath(new PathString("display"), null);
             ITEM_CONFIG.setConfig(CONFIG);
         }
         return ITEM_CONFIG.getValue();
@@ -144,7 +138,7 @@ public abstract class Skill implements Listener {
     }
 
     public ItemStack getDisplayItem(Player player) {
-        return DISPLAY_ITEM.build(player);
+        return DISPLAY_ITEM.build(player.getUniqueId());
     }
 
     public abstract String getPreviousString(SPlayer player);

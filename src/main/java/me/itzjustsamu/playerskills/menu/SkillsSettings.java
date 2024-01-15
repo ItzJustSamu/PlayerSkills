@@ -3,10 +3,10 @@ package me.itzjustsamu.playerskills.menu;
 import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
+import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
-import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,18 +45,18 @@ public class SkillsSettings implements Menu {
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player);
+            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
         if (clickedSkill != null) {
-            inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player));
-            inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player));
+            inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
@@ -68,7 +68,7 @@ public class SkillsSettings implements Menu {
         if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
-                SkillsPoints skillsPoints = new SkillsPoints(this.plugin, this.player, this.skill,  this.sPlayer, this.clickedSkill);
+                SkillsPoints skillsPoints = new SkillsPoints(this.plugin, this.player, this.skill, this.sPlayer, this.clickedSkill);
                 skillsPoints.open(this.player);
             } else if (event == ClickType.LEFT && MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, this.player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
@@ -78,7 +78,7 @@ public class SkillsSettings implements Menu {
             }
         } else if (slot == MainConfig.GUI_RESET_SLOT.getValue()) {
             Runnable callback = getRunnable(event);
-            ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player), callback, this);
+            ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()), callback, this);
             confirmationMenu.open(this.player);
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             SkillsList skillsList = new SkillsList(this.plugin, this.player, this.sPlayer);
@@ -145,7 +145,7 @@ public class SkillsSettings implements Menu {
                 XSound.ENTITY_GENERIC_EXPLODE.play(this.player, 1.0F, 1.0F);
                 this.open(this.player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()), null, this);
                 confirmationMenu.open(this.player);
             }
         };

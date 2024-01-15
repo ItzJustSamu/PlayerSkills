@@ -1,6 +1,7 @@
 package me.itzjustsamu.playerskills.util.path;
 
 import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,13 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IntegerMapConfigPath extends AdvancedConfigPath<Map<String, Object>, Map<Integer, Integer>> {
-    public IntegerMapConfigPath(@NotNull String path, @Nullable Map<Integer, Integer> def) {
+    public IntegerMapConfigPath(@NotNull PathString path, @Nullable Map<Integer, Integer> def) {
         super(path, def);
     }
 
     @Override
     public @Nullable Map<String, Object> getFromConfig(@NotNull Config config) {
-        return config.getNormalizedValues(getPath(), false);
+        return PathString.toPathMap(config.getNormalizedValues(getPath(), false));
     }
 
     @Override
