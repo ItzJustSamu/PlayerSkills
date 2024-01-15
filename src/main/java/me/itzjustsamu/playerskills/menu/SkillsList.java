@@ -1,6 +1,5 @@
 package me.itzjustsamu.playerskills.menu;
 
-import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
@@ -13,6 +12,9 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import static me.itzjustsamu.playerskills.menu.Sounds.playExperienceOrbPickupSound;
+import static me.itzjustsamu.playerskills.menu.Sounds.playItemBreakSound;
 
 public class SkillsList implements Menu {
     private final PlayerSkills plugin;
@@ -41,9 +43,9 @@ public class SkillsList implements Menu {
             if (!skill.isSkillDisabled()) {
                 skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
-                inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player.getUniqueId()));
             }
         }
+        inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player.getUniqueId()));
         return inventory;
     }
 
@@ -63,7 +65,7 @@ public class SkillsList implements Menu {
                     Runnable callback = () -> {
                         sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
                         sPlayer.setPoints(sPlayer.getPoints() - price);
-                        XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player, 2.0F, 2.0F);
+                        playExperienceOrbPickupSound(player);
                         open(player);
                     };
 
@@ -75,7 +77,9 @@ public class SkillsList implements Menu {
                     }
                     return;
                 }
-                XSound.ENTITY_ITEM_BREAK.play(player, 1.0F, 0.6F);
+                playItemBreakSound(player);
+            } else if (slot == MainConfig.GUI_NEXT_SLOT.getValue()) {
+                playItemBreakSound(player);
             }
         }
     }

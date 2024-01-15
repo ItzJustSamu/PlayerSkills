@@ -1,6 +1,5 @@
 package me.itzjustsamu.playerskills.menu;
 
-import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 import static me.itzjustsamu.playerskills.Permissions.ADMIN;
+import static me.itzjustsamu.playerskills.menu.Sounds.*;
 
 public class SkillsSettings implements Menu {
 
@@ -97,7 +97,7 @@ public class SkillsSettings implements Menu {
                 Runnable callback = () -> {
                     this.sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(this.sPlayer) + 1);
                     this.sPlayer.setPoints(this.sPlayer.getPoints() - price);
-                    XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(this.player, 2.0F, 2.0F);
+                    playExperienceOrbPickupSound(player);
                     this.open(this.player);
                 };
 
@@ -108,18 +108,20 @@ public class SkillsSettings implements Menu {
                     callback.run();
                 }
             } else {
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                playItemBreakSound(player);
+                this.open(this.player);
             }
         }
     }
 
+
     private void handleIncrementClick(ClickType event) {
         if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
             increaseSkillsIncrement();
-            XSound.UI_BUTTON_CLICK.play(this.player, 1.0F, 1.0F);
+            playUIButtonClickSound(player);
         } else if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
             decreaseSkillsIncrement();
-            XSound.UI_BUTTON_CLICK.play(this.player, 1.0F, 1.0F);
+            playUIButtonClickSound(player);
         }
     }
 
@@ -142,7 +144,7 @@ public class SkillsSettings implements Menu {
                     refundPointsForReset();
                 }
                 this.sPlayer.getSkills().clear();
-                XSound.ENTITY_GENERIC_EXPLODE.play(this.player, 1.0F, 1.0F);
+                playGenericExplodeSound(player);
                 this.open(this.player);
             } else {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()), null, this);
@@ -169,10 +171,11 @@ public class SkillsSettings implements Menu {
                     refundPointsForReset();
                 }
                 this.sPlayer.getSkills().clear();
-                XSound.ENTITY_GENERIC_EXPLODE.play(this.player, 1.0F, 1.0F);
+                playGenericExplodeSound(player);
                 this.open(this.player);
             } else {
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                playItemBreakSound(player);
+                this.open(this.player);
             }
         };
     }
@@ -183,10 +186,10 @@ public class SkillsSettings implements Menu {
         return () -> {
             if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(this.sPlayer, price, this.player)) {
                 this.sPlayer.setPoints(this.sPlayer.getPoints() + 1);
-                XSound.UI_BUTTON_CLICK.play(this.player, 1.0F, 1.0F);
+                playUIButtonClickSound(player);
                 this.open(this.player);
             } else {
-                XSound.ENTITY_ITEM_BREAK.play(this.player, 1.0F, 0.6F);
+                playItemBreakSound(player);
             }
         };
     }
