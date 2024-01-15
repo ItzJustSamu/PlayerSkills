@@ -4,9 +4,11 @@ import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
+import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
+import me.hsgamer.hscore.config.path.impl.StringConfigPath;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
@@ -38,6 +40,7 @@ public abstract class Skill implements Listener {
     private final int INCREMENT;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
+    private BooleanConfigPath DISABLE_SKILL = new BooleanConfigPath("disable-skill", false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
     private IntegerConfigPath GET_GUI_SLOT;
@@ -59,6 +62,7 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
+        DISABLE_SKILL.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
         WORLDS_RESTRICTIONS.setConfig(CONFIG);
         POINT_PRICE.setConfig(CONFIG);
@@ -184,5 +188,9 @@ public abstract class Skill implements Listener {
             return true;
         }
         return !list.contains(world.getName());
+    }
+
+    public boolean isSkillDisabled() {
+        return DISABLE_SKILL.getValue();
     }
 }

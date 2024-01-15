@@ -38,7 +38,7 @@ public class SkillsList implements Menu {
             }
         }
         for (Skill skill : plugin.getSkills().values()) {
-            if (!MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
+            if (!skill.isSkillDisabled()) {
                 skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
                 inventory.setItem(MainConfig.GUI_NEXT_SLOT.getValue(), MainConfig.GUI_NEXT_DISPLAY.getValue().build(player.getUniqueId()));
