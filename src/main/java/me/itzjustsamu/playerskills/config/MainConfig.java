@@ -37,9 +37,6 @@ public class MainConfig extends PathableConfig {
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath(new PathString("options", "verbose"), false);
     public static final StringListConfigPath OPTIONS_MENU_Worlds_Restrictions = new StringListConfigPath(new PathString("options", "menu-world-restriction"), Collections.emptyList());
 
-    public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
-    public static final StringListConfigPath OPTIONS_MENU_Worlds_Restrictions = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
-
     public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(
             new AdvancedConfigPath<String, PlayerStorage>(new PathString("options", "player-storage"), new FlatFileStorage()) {
                 @Override

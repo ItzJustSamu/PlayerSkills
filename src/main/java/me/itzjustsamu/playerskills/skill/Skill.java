@@ -40,7 +40,7 @@ public abstract class Skill implements Listener {
     private final int INCREMENT;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
-    private BooleanConfigPath DISABLE_SKILL = new BooleanConfigPath("disable-skill", false);
+    private final BooleanConfigPath DISABLE_SKILL = new BooleanConfigPath(new PathString("disable-skill"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
     private IntegerConfigPath GET_GUI_SLOT;
