@@ -134,12 +134,19 @@ public class PlayerSkills extends BasePlugin {
     }
 
     public void registerSkill(Skill skill) {
-        if (MainConfig.OPTIONS_DISABLED_SKILLS.getValue().contains(skill.getSkillsConfigName())) {
+        if (skill.isSkillDisabled()) {
+            logger.info("Skipping registration of disabled skill: " + skill.getSkillsConfigName());
             return;
         }
+
+        if (skills.containsKey(skill.getSkillsConfigName())) {
+            logger.warning("Attempted to register duplicate skill: " + skill.getSkillsConfigName());
+            return;
+        }
+
         skills.put(skill.getSkillsConfigName(), skill);
         skill.setup();
         skill.enable();
+        logger.info("Registered skill: " + skill.getSkillsConfigName());
     }
-
 }

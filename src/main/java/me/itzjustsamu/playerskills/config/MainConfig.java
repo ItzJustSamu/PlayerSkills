@@ -29,8 +29,6 @@ import java.util.Collections;
 public class MainConfig extends PathableConfig {
     // Skill-related configurations
 
-    public static final StringListConfigPath OPTIONS_DISABLED_SKILLS = new StringListConfigPath("options.disabled-skills", Collections.emptyList());
-
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath("options.verbose", false);
     public static final StringListConfigPath OPTIONS_MENU_Worlds_Restrictions = new StringListConfigPath("options.menu-world-restriction", Collections.emptyList());
     public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(
@@ -153,7 +151,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet {skill} Increment"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{incremented-skill-points}."
+                            "&7Points: &e{incremented-skill-points}"
                     ))
     ));
     // Confirmation Menu
