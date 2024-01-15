@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InstantBreakerSkill extends Skill {
-    private final ConfigPath<Integer> COOLDOWN_INCREMENT = Paths.integerPath("cooldown-increment", 5); // Default: 5 seconds
     private final ConfigPath<Integer> COOLDOWN_MAX = Paths.integerPath("cooldown-max", 30); // Default: 30 seconds
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
@@ -61,7 +60,7 @@ public class InstantBreakerSkill extends Skill {
 
     private boolean hasCooldown(Player player, SPlayer sPlayer) {
         long currentTime = System.currentTimeMillis();
-        long cooldown = Math.min((long) getLevel(sPlayer) * COOLDOWN_INCREMENT.getValue(), COOLDOWN_MAX.getValue());
+        long cooldown = Math.min((long) getLevel(sPlayer) * getIncrement().getValue(), COOLDOWN_MAX.getValue());
 
         if (cooldownMap.containsKey(player) && currentTime < cooldownMap.get(player)) {
             sendActionBar(player, String.valueOf(cooldownMap.get(player) - currentTime));
@@ -72,13 +71,13 @@ public class InstantBreakerSkill extends Skill {
     }
 
     private void setCooldown(Player player, SPlayer sPlayer) {
-        long cooldown = Math.min((long) getLevel(sPlayer) * COOLDOWN_INCREMENT.getValue(), COOLDOWN_MAX.getValue());
+        long cooldown = Math.min((long) getLevel(sPlayer) * getIncrement().getValue(), COOLDOWN_MAX.getValue());
         cooldownMap.put(player, System.currentTimeMillis() + cooldown);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(COOLDOWN_INCREMENT);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -99,13 +98,13 @@ public class InstantBreakerSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int playerLevel = getLevel(player);
-        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * COOLDOWN_INCREMENT.getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * COOLDOWN_INCREMENT.getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     private void sendActionBar(Player player, String message) {

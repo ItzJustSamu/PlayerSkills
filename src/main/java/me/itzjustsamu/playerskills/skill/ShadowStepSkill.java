@@ -31,7 +31,6 @@ import java.util.UUID;
 import static me.itzjustsamu.playerskills.util.Utils.getPercentageFormat;
 
 public class ShadowStepSkill extends Skill {
-    private final ConfigPath<Double> TELEPORT_CHANCE_INCREMENT = Paths.doublePath("teleport-chance-increment", 2.0D);
     private final ConfigPath<String> TELEPORT_MESSAGE = Paths.stringPath("teleport-message", "&a*** SNEAK ATTACK ***");
     private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath("cooldown-duration", 5000L); // 5000 milliseconds (5 seconds)
     private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cShadowStep cooldown: {remaining_time} seconds.");
@@ -96,7 +95,6 @@ public class ShadowStepSkill extends Skill {
     }
 
     private boolean shouldTeleport(SPlayer sPlayer) {
-        double increment = TELEPORT_CHANCE_INCREMENT.getValue();
         int playerLevel = Math.max(0, getLevel(sPlayer));  // Ensure playerLevel is at least 0
         double chance = playerLevel * getIncrement().getValue();
         return random.nextDouble() * 70 < chance;
@@ -126,7 +124,7 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(TELEPORT_CHANCE_INCREMENT, TELEPORT_MESSAGE, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
+        return List.of(getIncrement(), TELEPORT_MESSAGE, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -146,7 +144,7 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double increment = TELEPORT_CHANCE_INCREMENT.getValue();
+        double increment = getIncrement().getValue();
         int playerLevel = Math.max(0, getLevel(player) - 1);  // Ensure playerLevel is at least 0
         double chance = playerLevel * increment;
         return getPercentageFormat().format(chance);
@@ -155,7 +153,7 @@ public class ShadowStepSkill extends Skill {
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        double increment = TELEPORT_CHANCE_INCREMENT.getValue();
+        double increment = getIncrement().getValue();
         double chance = playerLevel * increment;
         return getPercentageFormat().format(chance);
     }

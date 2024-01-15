@@ -51,9 +51,9 @@ public class SkillsList implements Menu {
         for (Skill skill : plugin.getSkills().values()) {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
                 clickedSkill = skill;
+                CommonStringReplacer.setSkill(clickedSkill);
                 SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer, clickedSkill);
                 skillsSettings.open(player);
-                CommonStringReplacer.setSkill(clickedSkill);
                 return;
             }
 

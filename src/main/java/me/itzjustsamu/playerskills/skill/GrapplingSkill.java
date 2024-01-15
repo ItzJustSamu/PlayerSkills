@@ -26,7 +26,6 @@ import java.util.List;
 
 public class GrapplingSkill extends Skill {
 
-    private final ConfigPath<Double> grapplingStrength = Paths.doublePath("grappling-strength", 2.0);
     private final ConfigPath<Boolean> airGrappling = Paths.booleanPath("air-grappling", true);
     private final ConfigPath<Boolean> entityGrappling = Paths.booleanPath("entity-grappling", true);
     private final ConfigPath<String> cooldownMessage = Paths.stringPath("cooldown-message", "&cGrappling cooldown: &e{remaining_time} seconds.");
@@ -69,7 +68,7 @@ public class GrapplingSkill extends Skill {
             }
         }
 
-        double originalStrength = grapplingStrength.getValue() * getLevel(sPlayer);
+        double originalStrength = getIncrement().getValue() * getLevel(sPlayer);
         double scaledStrength = originalStrength * scalingFactor;
 
         Vector direction = player.getLocation().getDirection();
@@ -86,7 +85,7 @@ public class GrapplingSkill extends Skill {
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         List<ConfigPath<?>> additionalPaths = new ArrayList<>(super.getAdditionalConfigPaths());
-        additionalPaths.add(grapplingStrength);
+        additionalPaths.add(getIncrement());
         additionalPaths.add(airGrappling);
         additionalPaths.add(entityGrappling);
         additionalPaths.add(cooldownMessage);
@@ -111,14 +110,14 @@ public class GrapplingSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double originalStrength = grapplingStrength.getValue() * getLevel(player);
+        double originalStrength = getIncrement().getValue() * getLevel(player);
         double scaledStrength = originalStrength * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double originalStrength = grapplingStrength.getValue() * (getLevel(player) + 1);
+        double originalStrength = getIncrement().getValue() * (getLevel(player) + 1);
         double scaledStrength = originalStrength * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }

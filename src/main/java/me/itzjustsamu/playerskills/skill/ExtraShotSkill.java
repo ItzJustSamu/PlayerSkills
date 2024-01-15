@@ -5,7 +5,6 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
@@ -23,8 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class ExtraShotSkill extends Skill {
-
-    private final ConfigPath<Double> ARROW_INCREMENT = Paths.doublePath("arrow-increment", 1.0);
 
     public ExtraShotSkill(PlayerSkills plugin) {
         super(plugin, "ExtraShot", "extrashot", 10, 6,0);
@@ -81,7 +78,7 @@ public class ExtraShotSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(ARROW_INCREMENT);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -102,14 +99,14 @@ public class ExtraShotSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int arrowLevel = getLevel(player);
-        double arrows = arrowLevel * ARROW_INCREMENT.getValue();
+        double arrows = arrowLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int arrowLevel = getLevel(player) + 1;
-        double arrows = arrowLevel * ARROW_INCREMENT.getValue();
+        double arrows = arrowLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 }

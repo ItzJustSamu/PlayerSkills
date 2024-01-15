@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExtraJumpSkill extends Skill {
-    private final ConfigPath<Double> VELOCITY = Paths.doublePath("Velocity-increment", 0.5);
     private final ConfigPath<Long> COOLDOWN = Paths.longPath("cooldown", 30000L); // Default: 30 seconds
     private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath("cooldown-message", "&cDoubleJump cooldown: &e{remaining_time} seconds.");
 
@@ -97,7 +96,7 @@ public class ExtraJumpSkill extends Skill {
             int jumpLevel = getLevel(sPlayer);
 
             if (jumpLevel > 0) {
-                double jumpHeight = jumpLevel * VELOCITY.getValue();
+                double jumpHeight = jumpLevel * getIncrement().getValue();
                 cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue());
                 Vector direction = player.getLocation().getDirection();
                 player.setVelocity(direction.multiply(jumpHeight));
@@ -133,7 +132,7 @@ public class ExtraJumpSkill extends Skill {
     }
 
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(VELOCITY, COOLDOWN, COOLDOWN_MESSAGE);
+        return Arrays.asList(getIncrement(), COOLDOWN, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -154,14 +153,14 @@ public class ExtraJumpSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int jumpLevel = getLevel(player);
-        double jumpHeight = jumpLevel * VELOCITY.getValue();
+        double jumpHeight = jumpLevel * getIncrement().getValue();
         return String.valueOf(jumpHeight);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int jumpLevel = getLevel(player) + 1;
-        double jumpHeight = jumpLevel * VELOCITY.getValue();
+        double jumpHeight = jumpLevel * getIncrement().getValue();
         return String.valueOf(jumpHeight);
     }
 

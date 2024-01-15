@@ -31,8 +31,6 @@ import java.util.List;
 
 public class FireBallSkill extends Skill implements Listener {
 
-    private final ConfigPath<Integer> FIREBALL_VELOCITY = Paths.integerPath("fireball-velocity", 2);
-
     public FireBallSkill(PlayerSkills plugin) {
         super(plugin, "FireBall", "fireball", 5, 7,0);
     }
@@ -60,7 +58,6 @@ public class FireBallSkill extends Skill implements Listener {
             Action action = event.getAction();
 
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                // Left-click logic (if needed)
                 return;
             }
 
@@ -68,15 +65,13 @@ public class FireBallSkill extends Skill implements Listener {
                 int skillLevel = getLevel(sPlayer);
 
                 if (skillLevel > 0) {
-                    event.setCancelled(true); // Cancel the default behavior
+                    event.setCancelled(true);
                     summonFireballAtLocation(player);
 
-                    // Consume the item by setting its amount to 0
                     int itemAmount = item.getAmount();
                     if (itemAmount > 1) {
                         item.setAmount(itemAmount - 1);
                     } else {
-                        // If there's only one item, set the amount to 0 to remove it
                         player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
                     }
                 }
@@ -88,7 +83,6 @@ public class FireBallSkill extends Skill implements Listener {
         Location eyeLocation = player.getEyeLocation();
         Vector initialVelocity = new Vector(0, 0, 0);
 
-        // Calculate the spawn location one block in front of the player's view direction
         Location spawnLocation = eyeLocation.add(eyeLocation.getDirection());
         World world = spawnLocation.getWorld();
 
@@ -98,7 +92,7 @@ public class FireBallSkill extends Skill implements Listener {
 
         Fireball fireball = (Fireball) world.spawnEntity(spawnLocation, org.bukkit.entity.EntityType.FIREBALL);
         fireball.setVelocity(initialVelocity);
-        fireball.setIsIncendiary(false); // Disable fire upon explosion
+        fireball.setIsIncendiary(false);
         fireball.setShooter(player);
     }
 
@@ -113,22 +107,21 @@ public class FireBallSkill extends Skill implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Fireball) {
-            Player player = (Player) event.getDamager();
+            event.getDamager();
             Fireball fireball = (Fireball) event.getEntity();
 
             if (!(fireball.getShooter() instanceof LivingEntity)) {
-                return; // Ensure the shooter is a LivingEntity
+                return;
             }
 
             LivingEntity shooter = (LivingEntity) fireball.getShooter();
 
-            // Update the fireball's velocity based on the shooter's aim
             setFireballVelocity(fireball, shooter.getLocation().getDirection());
         }
     }
 
     public void setFireballVelocity(Fireball fireball, Vector velocity) {
-        fireball.setVelocity(velocity.multiply(FIREBALL_VELOCITY.getValue()));
+        fireball.setVelocity(velocity.multiply(getIncrement().getValue()));
     }
 
     private void explodeFireball(Fireball fireball) {
@@ -140,7 +133,7 @@ public class FireBallSkill extends Skill implements Listener {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(FIREBALL_VELOCITY);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -158,11 +151,11 @@ public class FireBallSkill extends Skill implements Listener {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        return String.valueOf(FIREBALL_VELOCITY.getValue());
+        return String.valueOf(getIncrement().getValue());
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        return String.valueOf(FIREBALL_VELOCITY.getValue() + 1);
+        return String.valueOf(getIncrement().getValue() + 1);
     }
 }

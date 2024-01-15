@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class StrengthSkill extends Skill {
-    private final ConfigPath<Double> damageIncrement = Paths.doublePath("damage-increment", 5D);
 
     public StrengthSkill(PlayerSkills plugin) {
         super(plugin, "Strength", "strength", 20, 19,0);
@@ -48,14 +47,14 @@ public class StrengthSkill extends Skill {
         int strengthLevel = getLevel(sPlayer);
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * damageIncrement.getValue();
+        percentile = percentile * getIncrement().getValue();
         double weightedDamage = strengthLevel * percentile;
         event.setDamage(event.getDamage() + weightedDamage);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(damageIncrement);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -76,14 +75,14 @@ public class StrengthSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int strengthLevel = getLevel(player);
-        double damage = strengthLevel * damageIncrement.getValue();
+        double damage = strengthLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int strengthLevel = getLevel(player) + 1;
-        double damage = strengthLevel * damageIncrement.getValue();
+        double damage = strengthLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

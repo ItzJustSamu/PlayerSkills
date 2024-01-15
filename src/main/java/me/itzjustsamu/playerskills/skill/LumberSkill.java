@@ -5,7 +5,6 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -21,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class LumberSkill extends Skill {
-    private final ConfigPath<Double> lumberUpgrade = Paths.doublePath("lumber-upgrade", 1.0);
 
     public LumberSkill(PlayerSkills plugin) {
         super(plugin, "Lumber", "lumber", 1, 16,0);
@@ -55,7 +53,7 @@ public class LumberSkill extends Skill {
     private void breakTree(Player player, Block block) {
         Material blockMaterial = block.getType();
         if (isLog(blockMaterial) && isAxe(player)) {
-            breakBlock(player, block);
+            breakBlock(block);
 
             // Recursively break connected logs
             for (int x = -1; x <= 1; x++) {
@@ -73,7 +71,7 @@ public class LumberSkill extends Skill {
         }
     }
 
-    private void breakBlock(Player player, Block block) {
+    private void breakBlock(Block block) {
             block.breakNaturally();
         }
 
@@ -90,7 +88,7 @@ public class LumberSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(lumberUpgrade);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -111,14 +109,14 @@ public class LumberSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int lumberLevel = getLevel(player);
-        double lumber = lumberLevel * lumberUpgrade.getValue();
+        double lumber = lumberLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int lumberLevel = getLevel(player) + 1;
-        double lumber = lumberLevel * lumberUpgrade.getValue();
+        double lumber = lumberLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 }

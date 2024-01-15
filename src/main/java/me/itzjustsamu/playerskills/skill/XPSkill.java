@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class XPSkill extends Skill {
-    private final ConfigPath<Double> XP_Increment = Paths.doublePath("xp-increment", 0.2);
 
     public XPSkill(PlayerSkills plugin) {
         super(plugin, "XP", "xp", 20, 21,0);
@@ -50,7 +49,7 @@ public class XPSkill extends Skill {
             return;
         }
 
-        double increment = XP_Increment.getValue();
+        double increment = getIncrement().getValue();
 
         // Calculate additional XP from killing an entity
         int xpLevel = (int) (getLevel(sPlayer) * increment);
@@ -83,7 +82,7 @@ public class XPSkill extends Skill {
         }
 
         int xpSkillLevel = getLevel(sPlayer);
-        double XPIncrement = XP_Increment.getValue();
+        double XPIncrement = getIncrement().getValue();
 
         // Check if the mined block should yield experience
         if (blockDropsExperience(block.getType())) {
@@ -108,7 +107,7 @@ public class XPSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(XP_Increment);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -129,14 +128,14 @@ public class XPSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int xpLevel = getLevel(player);
-        double xp = xpLevel * XP_Increment.getValue();
+        double xp = xpLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(xp);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int xpLevel = getLevel(player) + 1;
-        double xp = xpLevel * XP_Increment.getValue();
+        double xp = xpLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(xp);
     }
 }

@@ -5,7 +5,6 @@ import me.hsgamer.hscore.bukkit.item.ItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
@@ -20,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class LootingSkill extends Skill {
-    private final ConfigPath<Double> lootingIncrement = Paths.doublePath("looting-increment", 0.3D);
-
     public LootingSkill(PlayerSkills plugin) {
         super(plugin, "Looting", "looting", 20, 15,0);
     }
@@ -45,7 +42,7 @@ public class LootingSkill extends Skill {
             int lootingLevel = getLevel(sPlayer);
 
             if (lootingLevel > 0) {
-                double lootingIncrementValue = lootingIncrement.getValue();
+                double lootingIncrementValue = getIncrement().getValue();
                 List<ItemStack> drops = event.getDrops();
 
                 for (ItemStack drop : drops) {
@@ -57,7 +54,7 @@ public class LootingSkill extends Skill {
         }
     } @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(lootingIncrement);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -78,14 +75,14 @@ public class LootingSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int lootingLevel = getLevel(player);
-        double lootBonus = lootingLevel * lootingIncrement.getValue();
+        double lootBonus = lootingLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int lootingLevel = getLevel(player)+1;
-        double lootBonus = lootingLevel * lootingIncrement.getValue();
+        double lootBonus = lootingLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 }

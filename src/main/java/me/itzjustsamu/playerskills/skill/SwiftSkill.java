@@ -23,9 +23,6 @@ public class SwiftSkill extends Skill {
 
     private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath("default-speed", 0.2);
 
-
-    private final ConfigPath<Double> swiftIncrement = Paths.doublePath("swift-increment", 0.05);
-
     public SwiftSkill(PlayerSkills plugin) {
         super(plugin, "Swift", "swift", 5, 20,0);
     }
@@ -56,7 +53,7 @@ public class SwiftSkill extends Skill {
             float defaultSpeedFloat = (float) defaultSpeed;
             player.setWalkSpeed(defaultSpeedFloat);
         } else {
-            double speedMultiplier = 0.1 + (speedLevel * swiftIncrement.getValue());
+            double speedMultiplier = 0.1 + (speedLevel * getIncrement().getValue());
             float validSpeed = (float) Math.max(-1.0, Math.min(1.0, speedMultiplier));
             player.setWalkSpeed(validSpeed);
         }
@@ -65,7 +62,7 @@ public class SwiftSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(swiftIncrement);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -86,14 +83,14 @@ public class SwiftSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int swiftLevel = getLevel(player);
-        double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
+        double swift = 1.0 + (swiftLevel * getIncrement().getValue());
         return Utils.getPercentageFormat().format(swift);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int swiftLevel=getLevel(player)+1;
-        double swift = 1.0 + (swiftLevel * swiftIncrement.getValue());
+        double swift = 1.0 + (swiftLevel * getIncrement().getValue());
         return Utils.getPercentageFormat().format(swift);
     }
 }

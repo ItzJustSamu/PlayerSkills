@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import java.util.List;
 
 public class BreederSkill extends Skill {
+    private final ConfigPath<Integer> SPAWN_CHANCE_INCREASE = Paths.integerPath("spawn-chance-increase", 25);
     private final ConfigPath<Integer> MAX_SPAWN_AMOUNT = Paths.integerPath("max-spawn-amount", 5);
 
     public BreederSkill(PlayerSkills plugin) {
@@ -52,7 +53,7 @@ public class BreederSkill extends Skill {
             if (getLevel(sPlayer) > 0) {
 
                 // Increase the chances of spawning multiple animals
-                handleBreeding(event, getIncrement().getValue());
+                handleBreeding(event, SPAWN_CHANCE_INCREASE.getValue());
             }
         }
     }
@@ -79,7 +80,7 @@ public class BreederSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(getIncrement(), MAX_SPAWN_AMOUNT);
+        return List.of(SPAWN_CHANCE_INCREASE, MAX_SPAWN_AMOUNT);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class BreederSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int prevSpawnChanceIncrease = getIncrement().getValue();;
+        int prevSpawnChanceIncrease = SPAWN_CHANCE_INCREASE.getValue();
         int prevMaxSpawnAmount = MAX_SPAWN_AMOUNT.getValue();
         return String.format("+%s%% / %s", prevSpawnChanceIncrease, prevMaxSpawnAmount);
     }
@@ -110,7 +111,7 @@ public class BreederSkill extends Skill {
     @Override
     public String getNextString(SPlayer player) {
         int playerLevel = getLevel(player) + 1;
-        int nextSpawnChanceIncrease = playerLevel * getIncrement().getValue();;
+        int nextSpawnChanceIncrease = playerLevel * SPAWN_CHANCE_INCREASE.getValue();
         int nextMaxSpawnAmount = playerLevel * MAX_SPAWN_AMOUNT.getValue();
         return String.format("+%s%% / %s", nextSpawnChanceIncrease, nextMaxSpawnAmount);
     }

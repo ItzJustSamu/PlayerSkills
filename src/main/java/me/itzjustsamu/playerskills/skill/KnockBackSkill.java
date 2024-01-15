@@ -22,9 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class KnockBackSkill extends Skill {
-
-    private final ConfigPath<Double> knockbackIncrement = Paths.doublePath("knockback-increment", 0.2);
-
+    
     public KnockBackSkill(PlayerSkills plugin) {
         super(plugin, "Knockback", "knockback", 10, 13,0);
     }
@@ -51,7 +49,7 @@ public class KnockBackSkill extends Skill {
         }
 
         int knockbackLevel = getLevel(sPlayer);
-        double knockbackIncrementValue = knockbackIncrement.getValue();
+        double knockbackIncrementValue = getIncrement().getValue();
 
         // Check if the values are finite
         if (!isFinite(knockbackLevel) || !isFinite(knockbackIncrementValue)) {
@@ -90,7 +88,7 @@ public class KnockBackSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(knockbackIncrement);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -111,14 +109,14 @@ public class KnockBackSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int knockbackLevel = getLevel(player);
-        double knockback = knockbackLevel * knockbackIncrement.getValue();
+        double knockback = knockbackLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int knockbackLevel = getLevel(player) + 1;
-        double knockback = knockbackLevel * knockbackIncrement.getValue();
+        double knockback = knockbackLevel * getIncrement().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 }
