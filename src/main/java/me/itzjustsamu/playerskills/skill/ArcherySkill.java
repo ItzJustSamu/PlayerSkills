@@ -22,7 +22,7 @@ public class ArcherySkill extends Skill {
 
 
     public ArcherySkill(PlayerSkills plugin) {
-        super(plugin, "Archery", "archery", 20, 0, 0);
+        super(plugin, "Archery", "archery", 20, 0);
     }
 
 
@@ -67,7 +67,7 @@ public class ArcherySkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cArchery Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BOW))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill increases damage dealt using bows.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

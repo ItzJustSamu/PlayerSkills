@@ -31,7 +31,7 @@ public class HealthSkill extends Skill {
     private Task task;
 
     public HealthSkill(PlayerSkills plugin) {
-        super(plugin, "Health", "health", 20, 11, 0);
+        super(plugin, "Health", "health", 20, 11);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class HealthSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cHealth Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.APPLE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill increases the amount of health you have.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

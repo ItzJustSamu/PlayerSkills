@@ -21,7 +21,7 @@ import java.util.List;
 
 public class LootingSkill extends Skill {
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 15, 0);
+        super(plugin, "Looting", "looting", 20, 15);
     }
 
     @EventHandler
@@ -67,7 +67,7 @@ public class LootingSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cLooting Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BONE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill increases loot drop rates.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

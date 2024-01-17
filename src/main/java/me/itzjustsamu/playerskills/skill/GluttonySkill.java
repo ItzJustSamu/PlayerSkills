@@ -25,7 +25,7 @@ public class GluttonySkill extends Skill {
     private final ConfigPath<Double> percentIncrease = Paths.doublePath(new PathString("percent-increase"), 3D);
 
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony", 20, 9, 0);
+        super(plugin, "Gluttony", "gluttony", 20, 9);
     }
 
     @EventHandler
@@ -68,7 +68,7 @@ public class GluttonySkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cGluttony Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.WHEAT))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill increases the amount of food ingested from a single item.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

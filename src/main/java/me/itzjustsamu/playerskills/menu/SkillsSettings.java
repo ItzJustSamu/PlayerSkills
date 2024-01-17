@@ -157,7 +157,7 @@ public class SkillsSettings implements Menu {
     private void refundPointsForReset() {
         for (String s : this.sPlayer.getSkills().keySet()) {
             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
-                this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPrice(i));
+                this.sPlayer.setPoints(this.sPlayer.getPoints() + plugin.getSkills().get(s).getPrice());
             }
         }
     }

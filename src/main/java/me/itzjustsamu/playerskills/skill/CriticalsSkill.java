@@ -29,7 +29,7 @@ public class CriticalsSkill extends Skill {
     private final ConfigPath<String> CRITICAL_MESSAGE = Paths.stringPath(new PathString("critical-message"), "&a*** CRITICAL HIT ***");
 
     public CriticalsSkill(PlayerSkills plugin) {
-        super(plugin, "Criticals", "criticals", 20, 2, 0);
+        super(plugin, "Criticals", "criticals", 20, 2);
     }
 
     @EventHandler
@@ -82,7 +82,7 @@ public class CriticalsSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cCriticals Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BLAZE_POWDER))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill gives a chance to deal a critical (150%) shot.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

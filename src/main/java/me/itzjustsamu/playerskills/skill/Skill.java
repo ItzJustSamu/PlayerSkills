@@ -8,13 +8,11 @@ import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
-import me.hsgamer.hscore.config.path.impl.StringConfigPath;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.config.SkillConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
-import me.itzjustsamu.playerskills.util.path.IntegerMapConfigPath;
 import me.itzjustsamu.playerskills.util.path.ItemBuilderConfigPath;
 import me.itzjustsamu.playerskills.util.path.StringListConfigPath;
 import org.bukkit.Bukkit;
@@ -25,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Skill implements Listener {
 
@@ -34,24 +31,25 @@ public abstract class Skill implements Listener {
     private final String NAME;
     private final String SKILL;
     private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
-    private final ConfigPath<Map<Integer, Integer>> POINT_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price-override"), Collections.emptyMap()));
+
     private final int MAX_LEVEL;
     private final int GUI_SLOT;
-    private final int INCREMENT;
+    private int INCREMENT;
+    private int PRICE;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
+    private IntegerConfigPath GET_PRICE;
     private final BooleanConfigPath DISABLE_SKILL = new BooleanConfigPath(new PathString("disable-skill"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
     private IntegerConfigPath GET_GUI_SLOT;
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT, int SET_INCREMENT) {
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
         this.MAX_LEVEL = SET_MAX_LEVEL;
         this.GUI_SLOT = SET_GUI_SLOT;
-        this.INCREMENT = SET_INCREMENT;
         this.CONFIG = new SkillConfig(this);
     }
 
@@ -62,10 +60,11 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
+        GET_PRICE = Paths.integerPath(new PathString("price"), PRICE);
+        GET_PRICE.setConfig(CONFIG);
         DISABLE_SKILL.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
         WORLDS_RESTRICTIONS.setConfig(CONFIG);
-        POINT_PRICE.setConfig(CONFIG);
         getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(CONFIG));
         ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath(new PathString("display"), getDefaultItem());
         itemBuilderConfigPath.setConfig(CONFIG);
@@ -77,12 +76,13 @@ public abstract class Skill implements Listener {
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
             IntegerConfigPath increment = getIncrement();
+            IntegerConfigPath price = getPrice();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}", getNextString(sPlayer))
-                        .replace("{skillprice}", Integer.toString(getPrice(level + 1)));
+                        .replace("{skill-points-price}", Integer.toString(price.getValue(getConfig())));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
@@ -161,22 +161,18 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
+    public IntegerConfigPath getPrice() {
+        return GET_PRICE;
+    }
+
     public IntegerConfigPath getIncrement() {
         return GET_INCREMENT;
-
     }
 
     public void setIncrement(int increment) {
         GET_INCREMENT.setValue(increment, getConfig());
     }
 
-    public int getPrice(int level) {
-        return POINT_PRICE.getValue().getOrDefault(level, 1);
-    }
-
-    public Map<Integer, Integer> getPointPrice() {
-        return POINT_PRICE.getValue();
-    }
 
     public boolean Worlds_Restriction(Player player) {
         List<String> list = WORLDS_RESTRICTIONS.getValue();

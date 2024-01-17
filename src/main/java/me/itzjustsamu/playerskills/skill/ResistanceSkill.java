@@ -25,7 +25,7 @@ public class ResistanceSkill extends Skill {
     private final ConfigPath<Double> damageDrop = Paths.doublePath(new PathString("damage-drop"), 3D);
 
     public ResistanceSkill(PlayerSkills plugin) {
-        super(plugin, "Resistance", "resistance", 20, 17, 0);
+        super(plugin, "Resistance", "resistance", 20, 17);
     }
 
     @EventHandler
@@ -67,7 +67,7 @@ public class ResistanceSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cResistance Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_CHESTPLATE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill decreases damage received.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

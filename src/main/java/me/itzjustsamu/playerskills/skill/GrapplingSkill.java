@@ -38,7 +38,7 @@ public class GrapplingSkill extends Skill {
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public GrapplingSkill(PlayerSkills plugin) {
-        super(plugin, "Grappling", "grappling", 3, 10, 0);
+        super(plugin, "Grappling", "grappling", 3, 10);
     }
 
     @EventHandler
@@ -102,7 +102,7 @@ public class GrapplingSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cGrappling Hook"))
                 .addItemModifier(new XMaterialModifier(XMaterial.FISHING_ROD))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill allows you to use a grappling hook for fast movement.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

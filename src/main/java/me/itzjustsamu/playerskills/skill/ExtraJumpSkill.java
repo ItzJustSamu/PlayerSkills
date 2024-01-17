@@ -40,7 +40,7 @@ public class ExtraJumpSkill extends Skill {
     private final HashMap<Player, Boolean> HasDoubleJumped = new HashMap<>();
 
     public ExtraJumpSkill(PlayerSkills plugin) {
-        super(plugin, "DoubleJump", "doublejump", 5, 5, 0);
+        super(plugin, "DoubleJump", "doublejump", 5, 5);
     }
 
     @EventHandler
@@ -144,7 +144,7 @@ public class ExtraJumpSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cDouble Jump Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.LEATHER_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill allows you to perform a double jump with cooldown based on skill level.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

@@ -44,7 +44,7 @@ public class LacerateSkill extends Skill {
     private final Map<LivingEntity, Task> cutEntities = new ConcurrentHashMap<>();
 
     public LacerateSkill(PlayerSkills plugin) {
-        super(plugin, "Lacerate", "lacerate", 20, 14, 0);
+        super(plugin, "Lacerate", "lacerate", 20, 14);
     }
 
     @EventHandler
@@ -145,7 +145,7 @@ public class LacerateSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cLacerate Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.REDSTONE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill increases the chance of making an enemy bleed.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

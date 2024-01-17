@@ -31,7 +31,7 @@ public class InstantBreakerSkill extends Skill {
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public InstantBreakerSkill(PlayerSkills plugin) {
-        super(plugin, "InstantBreaker", "instantbreaker", 10, 12, 0);
+        super(plugin, "InstantBreaker", "instantbreaker", 10, 12);
     }
 
     @EventHandler
@@ -89,7 +89,7 @@ public class InstantBreakerSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cInstant Breaker Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.DIAMOND_PICKAXE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skillprice} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
                         "&7This skill allows you to instantly break blocks with a cooldown based on skill level.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
