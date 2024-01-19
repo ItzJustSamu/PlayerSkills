@@ -6,7 +6,6 @@ import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
-import me.hsgamer.hscore.config.path.impl.MapConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -14,6 +13,7 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.config.SkillConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
+import me.itzjustsamu.playerskills.util.path.IntegerMapConfigPath;
 import me.itzjustsamu.playerskills.util.path.ItemBuilderConfigPath;
 import me.itzjustsamu.playerskills.util.path.StringListConfigPath;
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ public abstract class Skill implements Listener {
     private int PRICE;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
-    private ConfigPath<Map<Integer, Integer>> GET_PRICE = new MapConfigPath(new PathString("price"), Collections.emptyMap());
+    private ConfigPath<Map<Integer, Integer>> GET_PRICE;
     private final BooleanConfigPath GET_DISABLED = new BooleanConfigPath(new PathString("disable"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
@@ -62,7 +62,7 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
-        GET_PRICE = Paths.integerPath(new PathString("price"), PRICE);
+        GET_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price", Collections.emptyMap())));
         GET_PRICE.setConfig(CONFIG);
         GET_DISABLED.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
@@ -78,12 +78,12 @@ public abstract class Skill implements Listener {
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
             IntegerConfigPath increment = getIncrement();
-            IntegerConfigPath price = getPrice();
+            ConfigPath<Map<Integer, Integer>> price = getPrice();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
-                original = original.replace("{next}", getNextString(sPlayer))
+                original = original.replace("{next}",  getNextString(sPlayer))
                         .replace("{skill-points-price}", Integer.toString(price.getValue(getConfig())));
             }
             original = original
@@ -163,7 +163,7 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public IntegerConfigPath getPrice() {
+    public ConfigPath<Map<Integer, Integer>> getPrice() {
         return GET_PRICE;
     }
 
@@ -189,6 +189,6 @@ public abstract class Skill implements Listener {
     }
 
     public boolean isSkillDisabled() {
-        return DISABLE_SKILL.getValue();
+        return GET_DISABLED.getValue();
     }
 }
