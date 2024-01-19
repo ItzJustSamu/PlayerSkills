@@ -6,6 +6,7 @@ import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
 import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
+import me.hsgamer.hscore.config.path.impl.MapConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -23,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Skill implements Listener {
 
@@ -38,8 +40,8 @@ public abstract class Skill implements Listener {
     private int PRICE;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
-    private IntegerConfigPath GET_PRICE;
-    private final BooleanConfigPath DISABLE_SKILL = new BooleanConfigPath(new PathString("disable-skill"), false);
+    private ConfigPath<Map<Integer, Integer>> GET_PRICE = new MapConfigPath(new PathString("price"), Collections.emptyMap());
+    private final BooleanConfigPath GET_DISABLED = new BooleanConfigPath(new PathString("disable"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
     private IntegerConfigPath GET_GUI_SLOT;
@@ -62,7 +64,7 @@ public abstract class Skill implements Listener {
         GET_INCREMENT.setConfig(CONFIG);
         GET_PRICE = Paths.integerPath(new PathString("price"), PRICE);
         GET_PRICE.setConfig(CONFIG);
-        DISABLE_SKILL.setConfig(CONFIG);
+        GET_DISABLED.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
         WORLDS_RESTRICTIONS.setConfig(CONFIG);
         getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(CONFIG));
