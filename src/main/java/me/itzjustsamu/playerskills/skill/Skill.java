@@ -62,7 +62,7 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
-        GET_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price", Collections.emptyMap())));
+        GET_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price"), Collections.emptyMap()));
         GET_PRICE.setConfig(CONFIG);
         GET_DISABLED.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
@@ -78,13 +78,12 @@ public abstract class Skill implements Listener {
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
             IntegerConfigPath increment = getIncrement();
-            ConfigPath<Map<Integer, Integer>> price = getPrice();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
-                        .replace("{skill-points-price}", Integer.toString(price.getValue(getConfig())));
+                        .replace("{price}", Integer.toString(getPrice(level + 1)));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
@@ -163,8 +162,12 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public ConfigPath<Map<Integer, Integer>> getPrice() {
-        return GET_PRICE;
+    public int getPrice(int points) {
+        return GET_PRICE.getValue().getOrDefault(points, 1);
+    }
+
+    public Map<Integer, Integer> getPriceOverride() {
+        return GET_PRICE.getValue();
     }
 
     public IntegerConfigPath getIncrement() {
