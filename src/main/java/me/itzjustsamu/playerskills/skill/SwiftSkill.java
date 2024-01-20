@@ -74,7 +74,7 @@ public class SwiftSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cSpeed Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases your movement speed.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

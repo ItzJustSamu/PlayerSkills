@@ -80,7 +80,7 @@ public abstract class Skill implements Listener {
             IntegerConfigPath increment = getIncrement();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
-                        .replace("{skillprice}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
+                        .replace("{price}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
                         .replace("{price}", Integer.toString(getPrice(level + 1)));
@@ -178,6 +178,11 @@ public abstract class Skill implements Listener {
         GET_INCREMENT.setValue(increment, getConfig());
     }
 
+    public void setPrice(int level, int price) {
+        Map<Integer, Integer> priceMap = GET_PRICE.getValue();
+        priceMap.put(level, price);
+        GET_PRICE.setValue(priceMap, getConfig());
+    }
 
     public boolean Worlds_Restriction(Player player) {
         List<String> list = WORLDS_RESTRICTIONS.getValue();

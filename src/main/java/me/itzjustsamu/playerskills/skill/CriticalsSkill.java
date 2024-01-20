@@ -82,7 +82,7 @@ public class CriticalsSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cCriticals Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BLAZE_POWDER))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill gives a chance to deal a critical (150%) shot.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

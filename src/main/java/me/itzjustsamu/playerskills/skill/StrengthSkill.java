@@ -64,7 +64,7 @@ public class StrengthSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cStrength Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_SWORD))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases damage dealt to other players.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

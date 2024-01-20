@@ -56,6 +56,7 @@ public class SkillsSettings implements Menu {
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_PRICE_SLOT.getValue(), MainConfig.SKILLS_PRICE_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
@@ -88,6 +89,8 @@ public class SkillsSettings implements Menu {
             handleIncrementClick(event);
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
             playUIButtonClickSound(player);
+        } else if (slot == MainConfig.SKILLS_PRICE_SLOT.getValue()) {
+            handlePriceClick(event);
         }
     }
 
@@ -122,6 +125,16 @@ public class SkillsSettings implements Menu {
             playUIButtonClickSound(player);
         } else if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
             decreaseSkillsIncrement();
+            playUIButtonClickSound(player);
+        }
+    }
+
+    private void handlePriceClick(ClickType event) {
+        if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
+            increaseSkillsPrice();
+            playUIButtonClickSound(player);
+        } else if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
+            decreaseSkillsPrice();
             playUIButtonClickSound(player);
         }
     }
@@ -212,6 +225,26 @@ public class SkillsSettings implements Menu {
             int currentIncrement = incrementedSkill.getValue();
             int newIncrement = Math.max(0, currentIncrement - 1);
             clickedSkill.setIncrement(newIncrement);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
+    }
+
+    public void decreaseSkillsPrice() {
+        if (clickedSkill != null) {
+            int currentPrice = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
+            int newPrice = Math.max(0, currentPrice - 1);
+            clickedSkill.setPrice(clickedSkill.getLevel(this.sPlayer) + 1, newPrice);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
+    }
+
+    public void increaseSkillsPrice() {
+        if (clickedSkill != null) {
+            int currentPrice = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
+            int newPrice = currentPrice + 1;
+            clickedSkill.setPrice(clickedSkill.getLevel(this.sPlayer) + 1, newPrice);
             clickedSkill.getConfig().save();
             player.openInventory(getInventory());
         }

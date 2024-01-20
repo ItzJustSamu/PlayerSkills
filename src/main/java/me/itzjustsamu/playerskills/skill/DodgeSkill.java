@@ -100,7 +100,7 @@ public class DodgeSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cDodge Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.SUGAR))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill gives a chance to completely dodge attacks.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

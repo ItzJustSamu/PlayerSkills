@@ -144,7 +144,7 @@ public class ExtraJumpSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cDouble Jump Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.LEATHER_BOOTS))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-points-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill allows you to perform a double jump with cooldown based on skill level.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
