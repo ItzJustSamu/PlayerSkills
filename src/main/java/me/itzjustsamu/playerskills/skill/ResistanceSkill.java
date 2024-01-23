@@ -67,7 +67,7 @@ public class ResistanceSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cResistance Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.IRON_CHESTPLATE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill decreases damage received.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

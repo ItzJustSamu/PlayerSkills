@@ -114,7 +114,7 @@ public class ExplosiveArrowsSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cExplosive Arrows"))
                 .addItemModifier(new XMaterialModifier(XMaterial.SPECTRAL_ARROW))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill allows you to shoot explosive arrows.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

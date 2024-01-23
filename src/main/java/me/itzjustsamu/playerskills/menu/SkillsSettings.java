@@ -96,7 +96,7 @@ public class SkillsSettings implements Menu {
 
     private void handleSkillClick(ClickType event) {
         if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(this.sPlayer) < clickedSkill.getMaxLevel()) {
-            int price = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
+            int price = clickedSkill.getPrice();
             if (this.sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
                     this.sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(this.sPlayer) + 1);
@@ -170,7 +170,7 @@ public class SkillsSettings implements Menu {
     private void refundPointsForReset() {
         for (String s : this.sPlayer.getSkills().keySet()) {
             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
-                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice(i));
+                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice());
             }
         }
     }
@@ -196,7 +196,7 @@ public class SkillsSettings implements Menu {
 
     @NotNull
     private Runnable getRunnable() {
-        int price = this.sPlayer.getNextPointPrice();
+        int price = this.sPlayer.getPointPrice();
         return () -> {
             if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(this.sPlayer, price, this.player)) {
                 this.sPlayer.setPoints(this.sPlayer.getPoints() + 1);
@@ -232,9 +232,9 @@ public class SkillsSettings implements Menu {
 
     public void decreaseSkillsPrice() {
         if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
+            int currentPrice = clickedSkill.getPrice();
             int newPrice = Math.max(0, currentPrice - 1);
-            clickedSkill.setPrice(clickedSkill.getLevel(this.sPlayer) + 1, newPrice);
+            clickedSkill.setPrice(newPrice);
             clickedSkill.getConfig().save();
             player.openInventory(getInventory());
         }
@@ -242,9 +242,9 @@ public class SkillsSettings implements Menu {
 
     public void increaseSkillsPrice() {
         if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice(clickedSkill.getLevel(this.sPlayer) + 1);
+            int currentPrice = clickedSkill.getPrice();
             int newPrice = currentPrice + 1;
-            clickedSkill.setPrice(clickedSkill.getLevel(this.sPlayer) + 1, newPrice);
+            clickedSkill.setPrice(newPrice);
             clickedSkill.getConfig().save();
             player.openInventory(getInventory());
         }

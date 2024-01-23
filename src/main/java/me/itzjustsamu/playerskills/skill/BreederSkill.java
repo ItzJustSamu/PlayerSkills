@@ -92,7 +92,7 @@ public class BreederSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&6Breeder Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.RED_BED))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill increases the chances of spawning up to a maximum of 5 animals at once",
                         "&7during the breeding process.",
                         "&7Level: &e{level}&7/&e{max}&7",

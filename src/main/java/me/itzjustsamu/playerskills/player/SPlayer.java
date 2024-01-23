@@ -71,7 +71,7 @@ public class SPlayer {
         this.points = points;
     }
 
-    public int getNextPointPrice() {
+    public int getPointPrice() {
         int base = MainConfig.POINTS_PRICE.getValue();
         int playerPoints = getPoints();
         for (int i : getSkills().values()) {

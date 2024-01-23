@@ -117,7 +117,7 @@ public class XPSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cXPSkill Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.EXPERIENCE_BOTTLE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill increases the amount of XP gained per hit.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

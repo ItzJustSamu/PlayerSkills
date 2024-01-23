@@ -142,7 +142,7 @@ public class FireBallSkill extends Skill implements Listener {
                 .addItemModifier(new NameModifier().setName("&cFireBall Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.FIRE_CHARGE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill allows you to summon a fireball at the location where the fire charge was used.",
                         "&7When the fireball hits a surface, it will explode.",
                         "&7Level: &e{level}&7/&e{max}&7"

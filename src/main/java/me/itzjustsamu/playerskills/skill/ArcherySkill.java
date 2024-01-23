@@ -67,7 +67,7 @@ public class ArcherySkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cArchery Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BOW))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill increases damage dealt using bows.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

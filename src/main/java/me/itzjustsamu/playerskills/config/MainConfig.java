@@ -154,7 +154,7 @@ public class MainConfig extends PathableConfig {
 
     public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} Increment"))
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} upgrade increment"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
                             "&7Points: &e{incremented-skill-points}",
@@ -166,12 +166,23 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath SKILLS_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 10);
     public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} Price"))
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} point price"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Price: &e{skill-price}",
-                            "&eLeft-Click &7to decrease price.",
-                            "&eRight-Click &7to increase price."
+                            "&7Points: &e{skill-price}",
+                            "&eLeft-Click &7to decrease points.",
+                            "&eRight-Click &7to increase points."
+                    ))
+    ));
+    public static final IntegerConfigPath SKILLS_INCREMENTED_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 11);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENTED_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} point price increment"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Points: &e{skill-incremented-price}",
+                            "&eLeft-Click &7to decrease points.",
+                            "&eRight-Click &7to increase points."
                     ))
     ));
     // Confirmation Menu

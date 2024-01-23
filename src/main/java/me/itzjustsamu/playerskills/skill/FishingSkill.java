@@ -73,7 +73,7 @@ public class FishingSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cFishing Mastery"))
                 .addItemModifier(new XMaterialModifier(XMaterial.TROPICAL_FISH))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
                         "&7This skill increases chances of obtaining rare items and overall catch while fishing.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

@@ -24,7 +24,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Skill implements Listener {
 
@@ -40,7 +39,7 @@ public abstract class Skill implements Listener {
     private int PRICE;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
-    private ConfigPath<Map<Integer, Integer>> GET_PRICE;
+    private IntegerConfigPath GET_PRICE;
     private final BooleanConfigPath GET_DISABLED = new BooleanConfigPath(new PathString("disable"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
     private IntegerConfigPath GET_MAX_LEVEL;
@@ -62,7 +61,7 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
-        GET_PRICE = new StickyConfigPath<>(new IntegerMapConfigPath(new PathString("price"), Collections.emptyMap()));
+        GET_PRICE = Paths.integerPath(new PathString("price"), PRICE);
         GET_PRICE.setConfig(CONFIG);
         GET_DISABLED.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
@@ -83,7 +82,7 @@ public abstract class Skill implements Listener {
                         .replace("{price}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
-                        .replace("{price}", Integer.toString(getPrice(level + 1)));
+                        .replace("{price}", Integer.toString(getPrice()));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
@@ -162,11 +161,7 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public int getPrice(int points) {
-        return GET_PRICE.getValue().getOrDefault(points, 1);
-    }
-
-    public Map<Integer, Integer> getPriceOverride() {
+    public int getPrice() {
         return GET_PRICE.getValue();
     }
 
@@ -178,11 +173,10 @@ public abstract class Skill implements Listener {
         GET_INCREMENT.setValue(increment, getConfig());
     }
 
-    public void setPrice(int level, int price) {
-        Map<Integer, Integer> priceMap = GET_PRICE.getValue();
-        priceMap.put(level, price);
-        GET_PRICE.setValue(priceMap, getConfig());
+    public void setPrice(int price) {
+        GET_PRICE.setValue(price, getConfig());
     }
+
 
     public boolean Worlds_Restriction(Player player) {
         List<String> list = WORLDS_RESTRICTIONS.getValue();
