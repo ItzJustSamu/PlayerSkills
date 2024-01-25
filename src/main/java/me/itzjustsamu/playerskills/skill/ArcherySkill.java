@@ -78,18 +78,13 @@ public class ArcherySkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int playerLevel = getLevel(player);
-        int increment = getIncrement().getValue();
-        double archery = playerLevel * increment;
+        double archery = getLevel(player) * getIncrement().getValue();
         return getPercentageFormat().format(archery);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int playerLevel = getLevel(player) + 1;
-        int increment = getIncrement().getValue();
-        double archery = playerLevel * increment;
+        double archery = (getLevel(player) + 1) * getIncrement().getValue();
         return getPercentageFormat().format(archery);
     }
-
 }

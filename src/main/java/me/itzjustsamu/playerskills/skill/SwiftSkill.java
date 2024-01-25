@@ -85,15 +85,13 @@ public class SwiftSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int swiftLevel = getLevel(player);
-        double swift = 1.0 + (swiftLevel * getIncrement().getValue());
+        double swift = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(swift);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int swiftLevel = getLevel(player) + 1;
-        double swift = 1.0 + (swiftLevel * getIncrement().getValue());
+        double swift = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(swift);
     }
 }

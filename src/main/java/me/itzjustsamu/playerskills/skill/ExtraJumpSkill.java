@@ -155,15 +155,13 @@ public class ExtraJumpSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int jumpLevel = getLevel(player);
-        double jumpHeight = jumpLevel * getIncrement().getValue();
+        double jumpHeight = getLevel(player) * getIncrement().getValue();
         return String.valueOf(jumpHeight);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int jumpLevel = getLevel(player) + 1;
-        double jumpHeight = jumpLevel * getIncrement().getValue();
+        double jumpHeight = (getLevel(player) + 1) * getIncrement().getValue();
         return String.valueOf(jumpHeight);
     }
 

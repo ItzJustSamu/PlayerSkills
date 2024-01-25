@@ -75,15 +75,13 @@ public class StrengthSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int strengthLevel = getLevel(player);
-        double damage = strengthLevel * getIncrement().getValue();
+        double damage = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int strengthLevel = getLevel(player) + 1;
-        double damage = strengthLevel * getIncrement().getValue();
+        double damage = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

@@ -96,7 +96,7 @@ public class SkillsAdmin implements Menu {
 
     private void handleSkillClick(ClickType event) {
         if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(this.sPlayer) < clickedSkill.getMaxLevel()) {
-            int price = clickedSkill.getPrice();
+            int price = clickedSkill.getPrice().getValue();
             if (this.sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
                     this.sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(this.sPlayer) + 1);
@@ -170,7 +170,7 @@ public class SkillsAdmin implements Menu {
     private void refundPointsForReset() {
         for (String s : this.sPlayer.getSkills().keySet()) {
             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
-                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice());
+                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice().getValue());
             }
         }
     }
@@ -232,7 +232,7 @@ public class SkillsAdmin implements Menu {
 
     public void decreaseSkillsPrice() {
         if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice();
+            int currentPrice = clickedSkill.getPrice().getValue();
             int newPrice = Math.max(0, currentPrice - 1);
             clickedSkill.setPrice(newPrice);
             clickedSkill.getConfig().save();
@@ -242,7 +242,7 @@ public class SkillsAdmin implements Menu {
 
     public void increaseSkillsPrice() {
         if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice();
+            int currentPrice = clickedSkill.getPrice().getValue();
             int newPrice = currentPrice + 1;
             clickedSkill.setPrice(newPrice);
             clickedSkill.getConfig().save();

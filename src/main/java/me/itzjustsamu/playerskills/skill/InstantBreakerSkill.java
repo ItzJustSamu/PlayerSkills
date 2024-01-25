@@ -100,14 +100,12 @@ public class InstantBreakerSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int playerLevel = getLevel(player);
-        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) getLevel(player) * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int playerLevel = getLevel(player) + 1;
-        return Utils.getPercentageFormat().format(Math.min((long) playerLevel * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) (getLevel(player) + 1) * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     private void sendActionBar(Player player, String message) {

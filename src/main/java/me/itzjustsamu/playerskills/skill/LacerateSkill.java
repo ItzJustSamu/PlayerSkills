@@ -156,15 +156,13 @@ public class LacerateSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int lacerateLevel = getLevel(player);
-        double damage = lacerateLevel * percentIncrease.getValue();
+        double damage = getLevel(player) * percentIncrease.getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int lacerateLevel = getLevel(player) + 1;
-        double damage = lacerateLevel * percentIncrease.getValue();
+        double damage = (getLevel(player) + 1) * percentIncrease.getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

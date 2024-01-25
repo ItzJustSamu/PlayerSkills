@@ -77,13 +77,13 @@ public abstract class Skill implements Listener {
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
             IntegerConfigPath increment = getIncrement();
-            int price = getPrice();
+            IntegerConfigPath price = getPrice();
             if (level >= getMaxLevel) {
                 original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{price}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
-                        .replace("{price}", Integer.toString(price));
+                        .replace("{price}", Integer.toString(price.getValue()));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
@@ -162,8 +162,8 @@ public abstract class Skill implements Listener {
         return player.Level(getSkillsConfigName());
     }
 
-    public int getPrice() {
-        return GET_PRICE.getValue();
+    public IntegerConfigPath getPrice() {
+        return GET_PRICE;
     }
 
     public IntegerConfigPath getIncrement() {

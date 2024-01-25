@@ -128,15 +128,13 @@ public class XPSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int xpLevel = getLevel(player);
-        double xp = xpLevel * getIncrement().getValue();
+        double xp = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(xp);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int xpLevel = getLevel(player) + 1;
-        double xp = xpLevel * getIncrement().getValue();
+        double xp = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(xp);
     }
 }

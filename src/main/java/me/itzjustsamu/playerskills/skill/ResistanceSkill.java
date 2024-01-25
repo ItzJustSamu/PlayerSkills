@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class ResistanceSkill extends Skill {
-    private final ConfigPath<Double> damageDrop = Paths.doublePath(new PathString("damage-drop"), 3D);
 
     public ResistanceSkill(PlayerSkills plugin) {
         super(plugin, "Resistance", "resistance", 20, 17);
@@ -51,14 +50,14 @@ public class ResistanceSkill extends Skill {
         int resistanceLevel = getLevel(sPlayer);
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * damageDrop.getValue();
+        percentile = percentile * getIncrement().getValue();
         double weightedDamage = resistanceLevel * percentile;
         event.setDamage(event.getDamage() - weightedDamage);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(damageDrop);
+        return Collections.singletonList(getIncrement());
     }
 
     @Override
@@ -78,15 +77,13 @@ public class ResistanceSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int resistanceLevel = getLevel(player);
-        double damage = 100 - (resistanceLevel * damageDrop.getValue());
+        double damage = 100 - (getLevel(player) * getIncrement().getValue());
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int resistanceLevel = getLevel(player) + 1;
-        double damage = 100 - (resistanceLevel * damageDrop.getValue());
+        double damage = 100 - ((getLevel(player) + 1) * getIncrement().getValue());
         return Utils.getPercentageFormat().format(damage);
     }
 }

@@ -93,15 +93,13 @@ public class CriticalsSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int criticalLevel = getLevel(player);
-        double damage = criticalLevel * getIncrement().getValue();
+        double damage = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int criticalLevel = getLevel(player) + 1;
-        double damage = criticalLevel * getIncrement().getValue();
+        double damage = getLevel(player) + getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

@@ -113,15 +113,13 @@ public class GrapplingSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double originalStrength = getIncrement().getValue() * getLevel(player);
-        double scaledStrength = originalStrength * scalingFactor;
+        double scaledStrength = getIncrement().getValue() * getLevel(player) * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double originalStrength = getIncrement().getValue() * (getLevel(player) + 1);
-        double scaledStrength = originalStrength * scalingFactor;
+        double scaledStrength = getIncrement().getValue() * (getLevel(player) + 1) * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }
 

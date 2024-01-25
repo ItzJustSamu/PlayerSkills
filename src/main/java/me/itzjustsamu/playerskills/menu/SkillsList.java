@@ -29,6 +29,7 @@ public class SkillsList implements Menu {
     }
 
     public @NotNull Inventory getInventory() {
+        CommonStringReplacer.resetSkill();
         String title = ColorUtils.colorize(MainConfig.GUI_TITLE.getValue());
         int size = MainConfig.GUI_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
@@ -59,7 +60,7 @@ public class SkillsList implements Menu {
             }
 
             if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(sPlayer) < skill.getMaxLevel()) {
-                int price = skill.getPrice();
+                int price = skill.getPrice().getValue();
                 if (sPlayer.getPoints() >= price) {
                     Runnable callback = () -> {
                         sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
@@ -80,6 +81,7 @@ public class SkillsList implements Menu {
             }
         }
     }
+
     public Skill getClickedSkill() {
         return clickedSkill;
     }

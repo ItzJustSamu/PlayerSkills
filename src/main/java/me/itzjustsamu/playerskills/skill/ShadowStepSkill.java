@@ -143,17 +143,13 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double increment = getIncrement().getValue();
-        int playerLevel = Math.max(0, getLevel(player) - 1);  // Ensure playerLevel is at least 0
-        double chance = playerLevel * increment;
+        double chance = getLevel(player) * getIncrement().getValue();
         return getPercentageFormat().format(chance);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int playerLevel = getLevel(player) + 1;
-        double increment = getIncrement().getValue();
-        double chance = playerLevel * increment;
+        double chance = (getLevel(player) + 1) * getIncrement().getValue();
         return getPercentageFormat().format(chance);
     }
 

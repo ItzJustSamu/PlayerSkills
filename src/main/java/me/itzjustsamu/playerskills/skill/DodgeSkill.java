@@ -111,15 +111,13 @@ public class DodgeSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int dodgeLevel = getLevel(player);
-        double damage = dodgeLevel * percentIncrease.getValue();
+        double damage = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int dodgeLevel = getLevel(player) + 1;
-        double damage = dodgeLevel * percentIncrease.getValue();
+        double damage = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

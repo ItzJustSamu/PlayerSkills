@@ -4,9 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
@@ -22,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class FishingSkill extends Skill {
-
-    private final ConfigPath<Double> catchChanceIncrease = Paths.doublePath(new PathString("catch-chance-increase"), 2.0);
 
     public FishingSkill(PlayerSkills plugin) {
         super(plugin, "Fishing", "fishing", 20, 8);
@@ -45,7 +41,7 @@ public class FishingSkill extends Skill {
         }
 
         int fishingLevel = getLevel(sPlayer);
-        double catchChanceMultiplier = catchChanceIncrease.getValue() * fishingLevel;
+        double catchChanceMultiplier = getIncrement().getValue() * fishingLevel;
 
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
             if (event.getCaught() instanceof org.bukkit.entity.Item) {
@@ -84,20 +80,18 @@ public class FishingSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(catchChanceIncrease);
+        return List.of(getIncrement());
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int fishingLevel = getLevel(player);
-        double catchChanceMultiplier = catchChanceIncrease.getValue() * fishingLevel;
+        double catchChanceMultiplier = getIncrement().getValue() * getLevel(player);
         return Utils.getPercentageFormat().format(catchChanceMultiplier);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int fishingLevel = getLevel(player) + 1;
-        double catchChanceMultiplier = catchChanceIncrease.getValue() * fishingLevel;
+        double catchChanceMultiplier = getIncrement().getValue() * getLevel(player) + 1;
         return Utils.getPercentageFormat().format(catchChanceMultiplier);
     }
 }

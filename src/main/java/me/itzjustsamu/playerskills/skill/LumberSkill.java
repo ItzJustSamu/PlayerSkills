@@ -110,15 +110,13 @@ public class LumberSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int lumberLevel = getLevel(player);
-        double lumber = lumberLevel * getIncrement().getValue();
+        double lumber = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int lumberLevel = getLevel(player) + 1;
-        double lumber = lumberLevel * getIncrement().getValue();
+        double lumber = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 }

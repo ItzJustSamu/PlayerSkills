@@ -109,15 +109,13 @@ public class KnockBackSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int knockbackLevel = getLevel(player);
-        double knockback = knockbackLevel * getIncrement().getValue();
+        double knockback = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int knockbackLevel = getLevel(player) + 1;
-        double knockback = knockbackLevel * getIncrement().getValue();
+        double knockback = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 }

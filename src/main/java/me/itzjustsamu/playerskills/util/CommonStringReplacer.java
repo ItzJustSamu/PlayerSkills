@@ -12,7 +12,7 @@ public final class CommonStringReplacer {
     public static final StringReplacer PLAYER_PROPERTIES = StringReplacer.of((original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int skillsIncrement = (skill != null) ? skill.getIncrement().getValue() : 0;
-        int skillPrice = (skill != null) ? skill.getPrice() : 0;
+        int skillPrice = (skill != null) ? skill.getPrice().getValue() : 0;
         int price = sPlayer.getPointPrice();
         return original.replace("{price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
@@ -34,6 +34,7 @@ public final class CommonStringReplacer {
     }
 
     public static void resetSkill() {
-        CommonStringReplacer.skill = null;
+        // Restore previous value before skill is set
     }
+
 }

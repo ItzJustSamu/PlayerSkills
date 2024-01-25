@@ -126,15 +126,13 @@ public class HealthSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int healthLevel = getLevel(player);
-        int hp = healthLevel * getIncrement().getValue();
+        int hp = getLevel(player) * getIncrement().getValue();
         return Integer.toString(hp);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int healthLevel = getLevel(player) + 1;
-        int hp = healthLevel * getIncrement().getValue();
+        int hp = (getLevel(player) + 1) * getIncrement().getValue();
         return Integer.toString(hp);
     }
 }

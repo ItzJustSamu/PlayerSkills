@@ -97,15 +97,13 @@ public class ExtraShotSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int arrowLevel = getLevel(player);
-        double arrows = arrowLevel * getIncrement().getValue();
+        double arrows = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int arrowLevel = getLevel(player) + 1;
-        double arrows = arrowLevel * getIncrement().getValue();
+        double arrows = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 }

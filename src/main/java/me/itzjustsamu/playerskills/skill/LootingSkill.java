@@ -78,15 +78,13 @@ public class LootingSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int lootingLevel = getLevel(player);
-        double lootBonus = lootingLevel * getIncrement().getValue();
+        double lootBonus = getLevel(player) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int lootingLevel = getLevel(player) + 1;
-        double lootBonus = lootingLevel * getIncrement().getValue();
+        double lootBonus = (getLevel(player) + 1) * getIncrement().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 }

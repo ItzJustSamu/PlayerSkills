@@ -95,7 +95,7 @@ public class SkillsSettings implements Menu {
 
     private void handleSkillClick(ClickType event) {
         if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(this.sPlayer) < clickedSkill.getMaxLevel()) {
-            int price = clickedSkill.getPrice();
+            int price = clickedSkill.getPrice().getValue();
             if (this.sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
                     this.sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(this.sPlayer) + 1);
@@ -148,7 +148,7 @@ public class SkillsSettings implements Menu {
     private void refundPointsForReset() {
         for (String s : this.sPlayer.getSkills().keySet()) {
             for (int i = 1; i <= this.sPlayer.Level(s); ++i) {
-                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice());
+                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice().getValue());
             }
         }
     }
