@@ -1,6 +1,5 @@
 package me.itzjustsamu.playerskills.menu;
 
-import com.cryptomorin.xseries.XSound;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
@@ -11,7 +10,6 @@ import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -105,8 +103,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void increasePoints() {
-        int currentPoints = MainConfig.POINTS_PRICE.getValue();
-        int newPoints = currentPoints + 1;
+        int newPoints = MainConfig.POINTS_PRICE.getValue() + 1;
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
@@ -114,8 +111,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void decreasePoints() {
-        int currentPoints = MainConfig.POINTS_PRICE.getValue();
-        int newPoints = Math.max(0, currentPoints - 1);
+        int newPoints = Math.max(0, MainConfig.POINTS_PRICE.getValue() - 1);
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
@@ -123,8 +119,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void increaseResetPoints() {
-        int currentResetPoints = MainConfig.POINTS_RESET_PRICE.getValue();
-        int newResetPoints = currentResetPoints + 1;
+        int newResetPoints = MainConfig.POINTS_RESET_PRICE.getValue() + 1;
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
@@ -132,8 +127,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void decreaseResetPoints() {
-        int currentResetPoints = MainConfig.POINTS_RESET_PRICE.getValue();
-        int newResetPoints = Math.max(0, currentResetPoints - 1);
+        int newResetPoints = Math.max(0, MainConfig.POINTS_RESET_PRICE.getValue() - 1);
         MainConfig.POINTS_RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_RESET_PRICE.getPath(), newResetPoints);
@@ -141,8 +135,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void toggleRefundPoints() {
-        boolean currentRefundStatus = MainConfig.POINTS_REFUND_POINTS.getValue();
-        boolean newRefundStatus = !currentRefundStatus;
+        boolean newRefundStatus = !MainConfig.POINTS_REFUND_POINTS.getValue();
         MainConfig.POINTS_REFUND_POINTS.setValue(newRefundStatus);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_REFUND_POINTS.getPath(), newRefundStatus);
@@ -166,8 +159,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void increaseIncrementedPoints() {
-        int currentPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue();
-        int newPoints = currentPoints + 1;
+        int newPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue() + 1;
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
@@ -175,8 +167,7 @@ public class SkillsPoints implements Menu {
     }
 
     private void decreaseIncrementedPoints() {
-        int currentPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue();
-        int newPoints = Math.max(0, currentPoints - 1);
+        int newPoints = Math.max(0, MainConfig.POINTS_INCREMENT_PRICE.getValue() - 1);
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
         bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);

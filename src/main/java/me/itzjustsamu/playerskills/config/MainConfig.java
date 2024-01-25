@@ -79,7 +79,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Skills Points Price: &e{price} {symbol}",
+                            "&7Points Price: &e{points-price} {symbol}",
                             "&eLeft-Click &7to decrease price.",
                             "&eRight-Click &7 to increase price."
                     ))
@@ -146,41 +146,41 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&cSet Increment Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Incrementing Price Points: &e{incremented-price}."
+                            "&7Incrementing Price Points: &e{points-increment-price}."
                     ))
     ));
 
-    public static final IntegerConfigPath SKILLS_INCREMENT_SLOT = new IntegerConfigPath(new PathString("skills", "increment", "slot"), 9);
+    public static final IntegerConfigPath SKILLS_UPGRADE_SLOT = new IntegerConfigPath(new PathString("skills", "increment", "slot"), 9);
 
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
+    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_UPGRADE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} upgrade increment"))
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Upgrade"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{incremented-skill-points}",
+                            "&7Points: &e{skills-upgrade-price}",
                             "&eLeft-Click &7to decrease points.",
                             "&eRight-Click &7to increase points."
                     ))
     ));
 
-    public static final IntegerConfigPath SKILLS_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 10);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
+    public static final IntegerConfigPath SKILLS_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 10);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} point price"))
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Point's price"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{skill-price}",
+                            "&7Points: &e{skill-point-price}",
                             "&eLeft-Click &7to decrease points.",
                             "&eRight-Click &7to increase points."
                     ))
     ));
-    public static final IntegerConfigPath SKILLS_INCREMENTED_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 11);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENTED_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
+    public static final IntegerConfigPath SKILLS_INCREMENT_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 11);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENT_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cSet {skill} point price increment"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{skill-incremented-price}",
+                            "&7Points: &e{skills-increment-point-price}",
                             "&eLeft-Click &7to decrease points.",
                             "&eRight-Click &7to increase points."
                     ))
@@ -227,14 +227,14 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
 
-    public static final IntegerConfigPath GUI_POINTS_SLOT = new IntegerConfigPath(new PathString("gui", "points", "slot"), 4);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "points", "display"),
+    public static final IntegerConfigPath PURCHASE_POINTS_SLOT = new IntegerConfigPath(new PathString("gui", "points", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> PURCHASE_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "points", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSkill Points"))
+                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7You have &e{points} &7points.",
-                            "&eLeft-Click &7to purchase a skill point for &e{price} {symbol}&7."
+                            "&7You have &e{player-points} &7points.",
+                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
                     ))
     ));
 

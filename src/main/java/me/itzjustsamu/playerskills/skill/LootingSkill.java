@@ -67,7 +67,7 @@ public class LootingSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cLooting Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.BONE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases loot drop rates.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

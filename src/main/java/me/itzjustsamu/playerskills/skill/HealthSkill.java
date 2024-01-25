@@ -115,7 +115,7 @@ public class HealthSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cHealth Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.APPLE))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the amount of health you have.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

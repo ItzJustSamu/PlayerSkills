@@ -93,7 +93,7 @@ public class KnockBackSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cKnockback Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.STICK))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases knockback strength.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",

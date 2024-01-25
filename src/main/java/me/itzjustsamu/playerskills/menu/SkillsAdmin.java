@@ -53,11 +53,11 @@ public class SkillsAdmin implements Menu {
         }
 
         if (clickedSkill != null) {
-            inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.PURCHASE_POINTS_SLOT.getValue(), MainConfig.PURCHASE_POINTS_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
-            inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
-            inventory.setItem(MainConfig.SKILLS_PRICE_SLOT.getValue(), MainConfig.SKILLS_PRICE_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_UPGRADE_SLOT.getValue(), MainConfig.SKILLS_UPGRADE_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_POINT_PRICE_SLOT.getValue(), MainConfig.SKILLS_POINT_PRICE_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
@@ -66,7 +66,7 @@ public class SkillsAdmin implements Menu {
 
     @Override
     public void onClick(int slot, ClickType event) {
-        if (slot == MainConfig.GUI_POINTS_SLOT.getValue()) {
+        if (slot == MainConfig.PURCHASE_POINTS_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
                 SkillsPoints skillsPoints = new SkillsPoints(this.plugin, this.player, this.skill, this.sPlayer, this.clickedSkill);
@@ -87,9 +87,9 @@ public class SkillsAdmin implements Menu {
             playUIButtonClickSound(player);
         } else if (slot == 3) {
             handleSkillClick(event);
-        } else if (slot == MainConfig.SKILLS_INCREMENT_SLOT.getValue()) {
+        } else if (slot == MainConfig.SKILLS_UPGRADE_SLOT.getValue()) {
             handleIncrementClick(event);
-        } else if (slot == MainConfig.SKILLS_PRICE_SLOT.getValue()) {
+        } else if (slot == MainConfig.SKILLS_POINT_PRICE_SLOT.getValue()) {
             handlePriceClick(event);
         }
     }

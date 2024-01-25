@@ -86,7 +86,7 @@ public class ExtraShotSkill extends Skill {
                 .addItemModifier(new NameModifier().setName("&cArrows Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
                 .addItemModifier(new LoreModifier().setLore(
-                        "&eLeft-Click &7to upgrade this skill using &e{skill-price} &7point(s).",
+                        "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the amount of arrows shot.",
                         "&7Level: &e{level}&7/&e{max}&7",
                         " ",
