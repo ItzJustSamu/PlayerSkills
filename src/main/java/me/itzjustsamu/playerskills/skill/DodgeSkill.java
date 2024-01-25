@@ -25,7 +25,6 @@ import java.util.concurrent.ThreadLocalRandom;
 // ... (other imports and package declaration)
 
 public class DodgeSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath(new PathString("percent-increase"), 2D);
     private final ConfigPath<String> dodgeMessage = Paths.stringPath(new PathString("dodge-message"), "&a*** ATTACK DODGED ***");
     private final ConfigPath<Long> COOLDOWN_DURATION = Paths.longPath(new PathString("cooldown-duration"), 5000L); // 5000 milliseconds (5 seconds)
     private final ConfigPath<String> COOLDOWN_MESSAGE = Paths.stringPath(new PathString("cooldown-message"), "&cDodge cooldown: &e{remaining_time} seconds.");
@@ -70,7 +69,7 @@ public class DodgeSkill extends Skill {
 
         int dodgeLevel = getLevel(sPlayer);
 
-        double chance = dodgeLevel * percentIncrease.getValue();
+        double chance = dodgeLevel * getIncrement().getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = dodgeMessage.getValue();
@@ -86,7 +85,7 @@ public class DodgeSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(percentIncrease, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
+        return Arrays.asList(getIncrement(), COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override
