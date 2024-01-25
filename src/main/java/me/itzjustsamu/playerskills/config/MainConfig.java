@@ -237,14 +237,6 @@ public class MainConfig extends PathableConfig {
                             "&eLeft-Click &7to purchase a skill point for &e{price} {symbol}&7."
                     ))
     ));
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_EDIT_TITLE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "edit", "title", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cEdit Title"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&eClick to edit skill title!"
-                    ))
-    ));
 
     public static final IntegerConfigPath GUI_ADMIN_SLOT = new IntegerConfigPath(new PathString("gui", "admin", "slot"), 8);
     public static final ConfigPath<ItemBuilder<ItemStack>> GUI_ADMIN_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "admin", "display"),
@@ -255,7 +247,6 @@ public class MainConfig extends PathableConfig {
                             "&eClick to edit skill!"
                     ))
     ));
-
 
     public static final IntegerConfigPath GUI_RESET_SLOT = new IntegerConfigPath(new PathString("gui", "reset", "slot"), 5);
     public static final ConfigPath<ItemBuilder<ItemStack>> GUI_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "reset", "display"),

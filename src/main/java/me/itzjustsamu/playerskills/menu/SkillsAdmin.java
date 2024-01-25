@@ -8,7 +8,6 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
-import me.itzjustsamu.playerskills.util.CommonStringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -21,7 +20,7 @@ import java.io.File;
 import static me.itzjustsamu.playerskills.Permissions.ADMIN;
 import static me.itzjustsamu.playerskills.menu.Sounds.*;
 
-public class SkillsSettings implements Menu {
+public class SkillsAdmin implements Menu {
 
     private final PlayerSkills plugin;
     private final Player player;
@@ -30,7 +29,7 @@ public class SkillsSettings implements Menu {
     private final BukkitConfig bukkitConfig;
     private final Skill clickedSkill;
 
-    public SkillsSettings(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, Skill clickedSkill) {
+    public SkillsAdmin(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, Skill clickedSkill) {
         this.plugin = plugin;
         this.player = player;
         this.skill = skill;
@@ -57,7 +56,9 @@ public class SkillsSettings implements Menu {
             inventory.setItem(MainConfig.GUI_POINTS_SLOT.getValue(), MainConfig.GUI_POINTS_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_RESET_SLOT.getValue(), MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()));
             inventory.setItem(MainConfig.GUI_BACK_SLOT.getValue(), MainConfig.GUI_BACK_DISPLAY.getValue().build(this.player.getUniqueId()));
-            inventory.setItem(MainConfig.GUI_ADMIN_SLOT.getValue(), MainConfig.GUI_ADMIN_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_INCREMENT_SLOT.getValue(), MainConfig.SKILLS_INCREMENT_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(MainConfig.SKILLS_PRICE_SLOT.getValue(), MainConfig.SKILLS_PRICE_DISPLAY.getValue().build(this.player.getUniqueId()));
+            inventory.setItem(3, clickedSkill.getDisplayItem(this.player));
         }
 
         return inventory;
@@ -81,15 +82,15 @@ public class SkillsSettings implements Menu {
             ConfirmationMenu confirmationMenu = new ConfirmationMenu(this.plugin, this.player, MainConfig.GUI_RESET_DISPLAY.getValue().build(this.player.getUniqueId()), callback, this);
             confirmationMenu.open(this.player);
         } else if (slot == MainConfig.GUI_BACK_SLOT.getValue()) {
-            SkillsList skillsList = new SkillsList(this.plugin, this.player, this.sPlayer);
-            skillsList.open(this.player);
+            SkillsSettings SkillsSettings = new SkillsSettings(this.plugin, this.player, this.skill,this.sPlayer, this.clickedSkill);
+            SkillsSettings.open(this.player);
             playUIButtonClickSound(player);
-            CommonStringReplacer.resetSkill();
         } else if (slot == 3) {
             handleSkillClick(event);
-        } else if (slot == MainConfig.GUI_ADMIN_SLOT.getValue()) {
-            SkillsAdmin SkillsAdmin = new SkillsAdmin(this.plugin, this.player, this.skill, this.sPlayer, this.clickedSkill);
-            SkillsAdmin.open(this.player);
+        } else if (slot == MainConfig.SKILLS_INCREMENT_SLOT.getValue()) {
+            handleIncrementClick(event);
+        } else if (slot == MainConfig.SKILLS_PRICE_SLOT.getValue()) {
+            handlePriceClick(event);
         }
     }
 
@@ -114,6 +115,27 @@ public class SkillsSettings implements Menu {
                 playItemBreakSound(player);
                 this.open(this.player);
             }
+        }
+    }
+
+
+    private void handleIncrementClick(ClickType event) {
+        if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
+            increaseSkillsIncrement();
+            playUIButtonClickSound(player);
+        } else if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
+            decreaseSkillsIncrement();
+            playUIButtonClickSound(player);
+        }
+    }
+
+    private void handlePriceClick(ClickType event) {
+        if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
+            increaseSkillsPrice();
+            playUIButtonClickSound(player);
+        } else if (event == ClickType.LEFT && player.hasPermission(ADMIN)) {
+            decreaseSkillsPrice();
+            playUIButtonClickSound(player);
         }
     }
 
@@ -184,5 +206,47 @@ public class SkillsSettings implements Menu {
                 playItemBreakSound(player);
             }
         };
+    }
+
+    public void increaseSkillsIncrement() {
+        if (clickedSkill != null) {
+            IntegerConfigPath incrementedSkill = clickedSkill.getIncrement();
+            int currentIncrement = incrementedSkill.getValue();
+            int newIncrement = currentIncrement + 1;
+            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
+    }
+
+    public void decreaseSkillsIncrement() {
+        if (clickedSkill != null) {
+            IntegerConfigPath incrementedSkill = clickedSkill.getIncrement();
+            int currentIncrement = incrementedSkill.getValue();
+            int newIncrement = Math.max(0, currentIncrement - 1);
+            clickedSkill.setIncrement(newIncrement);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
+    }
+
+    public void decreaseSkillsPrice() {
+        if (clickedSkill != null) {
+            int currentPrice = clickedSkill.getPrice();
+            int newPrice = Math.max(0, currentPrice - 1);
+            clickedSkill.setPrice(newPrice);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
+    }
+
+    public void increaseSkillsPrice() {
+        if (clickedSkill != null) {
+            int currentPrice = clickedSkill.getPrice();
+            int newPrice = currentPrice + 1;
+            clickedSkill.setPrice(newPrice);
+            clickedSkill.getConfig().save();
+            player.openInventory(getInventory());
+        }
     }
 }
