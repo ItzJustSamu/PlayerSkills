@@ -99,7 +99,7 @@ public class ExtraJumpSkill extends Skill {
             int jumpLevel = getLevel(sPlayer);
 
             if (jumpLevel > 0) {
-                double jumpHeight = jumpLevel * getIncrement().getValue();
+                double jumpHeight = jumpLevel * getUpgrade().getValue();
                 cooldownMap.put(player, System.currentTimeMillis() + COOLDOWN.getValue());
                 Vector direction = player.getLocation().getDirection();
                 player.setVelocity(direction.multiply(jumpHeight));
@@ -135,7 +135,7 @@ public class ExtraJumpSkill extends Skill {
     }
 
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(getIncrement(), COOLDOWN, COOLDOWN_MESSAGE);
+        return Arrays.asList(getUpgrade(), COOLDOWN, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -155,13 +155,13 @@ public class ExtraJumpSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double jumpHeight = getLevel(player) * getIncrement().getValue();
+        double jumpHeight = getLevel(player) * getUpgrade().getValue();
         return String.valueOf(jumpHeight);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double jumpHeight = (getLevel(player) + 1) * getIncrement().getValue();
+        double jumpHeight = (getLevel(player) + 1) * getUpgrade().getValue();
         return String.valueOf(jumpHeight);
     }
 

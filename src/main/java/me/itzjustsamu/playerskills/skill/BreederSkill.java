@@ -107,12 +107,12 @@ public class BreederSkill extends Skill {
     @Override
     public String getPreviousString(SPlayer player) {
         int prevMaxSpawnAmount = MAX_SPAWN_AMOUNT.getValue();
-        return String.format("+%s%% / %s", getIncrement().getValue(), prevMaxSpawnAmount);
+        return String.format("+%s%% / %s", getUpgrade().getValue(), prevMaxSpawnAmount);
     }
 
     @Override
     public String getNextString(SPlayer player) {
         int nextMaxSpawnAmount = (getLevel(player) + 1) * MAX_SPAWN_AMOUNT.getValue();
-        return String.format("+%s%% / %s", getIncrement().getValue(), nextMaxSpawnAmount);
+        return String.format("+%s%% / %s", getUpgrade().getValue(), nextMaxSpawnAmount);
     }
 }

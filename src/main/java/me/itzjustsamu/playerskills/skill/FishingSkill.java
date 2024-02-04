@@ -41,7 +41,7 @@ public class FishingSkill extends Skill {
         }
 
         int fishingLevel = getLevel(sPlayer);
-        double catchChanceMultiplier = getIncrement().getValue() * fishingLevel;
+        double catchChanceMultiplier = getUpgrade().getValue() * fishingLevel;
 
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
             if (event.getCaught() instanceof org.bukkit.entity.Item) {
@@ -80,18 +80,18 @@ public class FishingSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(getIncrement());
+        return List.of(getUpgrade());
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double catchChanceMultiplier = getIncrement().getValue() * getLevel(player);
+        double catchChanceMultiplier = getUpgrade().getValue() * getLevel(player);
         return Utils.getPercentageFormat().format(catchChanceMultiplier);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double catchChanceMultiplier = getIncrement().getValue() * getLevel(player) + 1;
+        double catchChanceMultiplier = getUpgrade().getValue() * getLevel(player) + 1;
         return Utils.getPercentageFormat().format(catchChanceMultiplier);
     }
 }

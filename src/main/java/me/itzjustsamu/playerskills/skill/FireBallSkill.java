@@ -121,7 +121,7 @@ public class FireBallSkill extends Skill implements Listener {
     }
 
     public void setFireballVelocity(Fireball fireball, Vector velocity) {
-        fireball.setVelocity(velocity.multiply(getIncrement().getValue()));
+        fireball.setVelocity(velocity.multiply(getUpgrade().getValue()));
     }
 
     private void explodeFireball(Fireball fireball) {
@@ -133,7 +133,7 @@ public class FireBallSkill extends Skill implements Listener {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -151,11 +151,11 @@ public class FireBallSkill extends Skill implements Listener {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        return String.valueOf(getIncrement().getValue());
+        return String.valueOf(getUpgrade().getValue());
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        return String.valueOf(getIncrement().getValue() + 1);
+        return String.valueOf(getUpgrade().getValue() + 1);
     }
 }

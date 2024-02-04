@@ -5,7 +5,7 @@ import me.itzjustsamu.playerskills.Permissions;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
-import me.itzjustsamu.playerskills.menu.SkillsList;
+import me.itzjustsamu.playerskills.menu.SkillsMenu;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,7 +19,6 @@ import java.util.List;
 public class SkillsCommand extends Command {
 
     private final PlayerSkills plugin;
-
     public SkillsCommand(PlayerSkills plugin) {
         super("skills", "Open skills menu", "/skills", Arrays.asList("s", "skills", "skill"));
         setPermission(Permissions.COMMAND.getName());
@@ -44,7 +43,7 @@ public class SkillsCommand extends Command {
             return true;
         }
 
-        new SkillsList(plugin, player, sPlayer).open(player);
+        new SkillsMenu(plugin, player, sPlayer).open(player);
         return true;
     }
 }

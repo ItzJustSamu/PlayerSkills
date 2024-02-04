@@ -69,7 +69,7 @@ public class DodgeSkill extends Skill {
 
         int dodgeLevel = getLevel(sPlayer);
 
-        double chance = dodgeLevel * getIncrement().getValue();
+        double chance = dodgeLevel * getUpgrade().getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = dodgeMessage.getValue();
@@ -85,7 +85,7 @@ public class DodgeSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(getIncrement(), COOLDOWN_DURATION, COOLDOWN_MESSAGE);
+        return Arrays.asList(getUpgrade(), COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -110,13 +110,13 @@ public class DodgeSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double damage = getLevel(player) * getIncrement().getValue();
+        double damage = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double damage = (getLevel(player) + 1) * getIncrement().getValue();
+        double damage = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

@@ -90,7 +90,7 @@ public class LumberSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -110,13 +110,13 @@ public class LumberSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double lumber = getLevel(player) * getIncrement().getValue();
+        double lumber = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double lumber = (getLevel(player) + 1) * getIncrement().getValue();
+        double lumber = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(lumber);
     }
 }

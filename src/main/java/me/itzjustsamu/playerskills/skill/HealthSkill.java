@@ -50,7 +50,7 @@ public class HealthSkill extends Skill {
                     clearPlayer(player);
                     return;
                 }
-                int hpNeeded = getLevel(sPlayer) * (getIncrement().getValue() * 2);
+                int hpNeeded = getLevel(sPlayer) * (getUpgrade().getValue() * 2);
                 if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
                     clearPlayer(player);
                     if (hpNeeded > 0) {
@@ -106,7 +106,7 @@ public class HealthSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(getIncrement(), compatibilityMode);
+        return Arrays.asList(getUpgrade(), compatibilityMode);
     }
 
     @Override
@@ -126,13 +126,13 @@ public class HealthSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        int hp = getLevel(player) * getIncrement().getValue();
+        int hp = getLevel(player) * getUpgrade().getValue();
         return Integer.toString(hp);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        int hp = (getLevel(player) + 1) * getIncrement().getValue();
+        int hp = (getLevel(player) + 1) * getUpgrade().getValue();
         return Integer.toString(hp);
     }
 }

@@ -95,7 +95,7 @@ public class ShadowStepSkill extends Skill {
 
     private boolean shouldTeleport(SPlayer sPlayer) {
         int playerLevel = Math.max(0, getLevel(sPlayer));  // Ensure playerLevel is at least 0
-        double chance = playerLevel * getIncrement().getValue();
+        double chance = playerLevel * getUpgrade().getValue();
         return random.nextDouble() * 70 < chance;
     }
 
@@ -123,7 +123,7 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return List.of(getIncrement(), TELEPORT_MESSAGE, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
+        return List.of(getUpgrade(), TELEPORT_MESSAGE, COOLDOWN_DURATION, COOLDOWN_MESSAGE);
     }
 
     @Override
@@ -143,13 +143,13 @@ public class ShadowStepSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double chance = getLevel(player) * getIncrement().getValue();
+        double chance = getLevel(player) * getUpgrade().getValue();
         return getPercentageFormat().format(chance);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double chance = (getLevel(player) + 1) * getIncrement().getValue();
+        double chance = (getLevel(player) + 1) * getUpgrade().getValue();
         return getPercentageFormat().format(chance);
     }
 

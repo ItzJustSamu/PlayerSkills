@@ -13,10 +13,16 @@ public class SPlayer {
     private final UUID player;
     private final Map<String, Integer> skills;
     private int points;
+    private int resetCount;
+
+
+
 
     public SPlayer(UUID player) {
         this.player = player;
         this.skills = new HashMap<>();
+        this.resetCount = 0;
+
     }
 
     public static void load(UUID uuid) {
@@ -71,6 +77,7 @@ public class SPlayer {
         this.points = points;
     }
 
+
     public int getPointPrice() {
         int base = MainConfig.POINTS_PRICE.getValue();
         int playerPoints = getPoints();
@@ -79,5 +86,13 @@ public class SPlayer {
         }
         return base + (playerPoints * MainConfig.POINTS_INCREMENT_PRICE.getValue());
 
+    }
+
+    public int getResetCount() {
+        return resetCount;
+    }
+
+    public void incrementResetCount() {
+        resetCount++;
     }
 }

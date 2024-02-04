@@ -71,7 +71,7 @@ public class GrapplingSkill extends Skill {
             }
         }
 
-        double originalStrength = getIncrement().getValue() * getLevel(sPlayer);
+        double originalStrength = getUpgrade().getValue() * getLevel(sPlayer);
         double scaledStrength = originalStrength * scalingFactor;
 
         Vector direction = player.getLocation().getDirection();
@@ -88,7 +88,7 @@ public class GrapplingSkill extends Skill {
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
         List<ConfigPath<?>> additionalPaths = new ArrayList<>(super.getAdditionalConfigPaths());
-        additionalPaths.add(getIncrement());
+        additionalPaths.add(getUpgrade());
         additionalPaths.add(airGrappling);
         additionalPaths.add(entityGrappling);
         additionalPaths.add(cooldownMessage);
@@ -113,13 +113,13 @@ public class GrapplingSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double scaledStrength = getIncrement().getValue() * getLevel(player) * scalingFactor;
+        double scaledStrength = getUpgrade().getValue() * getLevel(player) * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double scaledStrength = getIncrement().getValue() * (getLevel(player) + 1) * scalingFactor;
+        double scaledStrength = getUpgrade().getValue() * (getLevel(player) + 1) * scalingFactor;
         return Utils.getPercentageFormat().format(scaledStrength);
     }
 

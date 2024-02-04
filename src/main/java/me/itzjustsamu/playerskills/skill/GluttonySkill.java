@@ -47,7 +47,7 @@ public class GluttonySkill extends Skill {
 
         int diff = event.getFoodLevel() - player.getFoodLevel();
         int gluttonyLevel = getLevel(sPlayer);
-        double multiplier = 1D + (gluttonyLevel * (getIncrement().getValue() / 100D));
+        double multiplier = 1D + (gluttonyLevel * (getUpgrade().getValue() / 100D));
 
         double newLevel = diff * multiplier;
         player.setFoodLevel(player.getFoodLevel() + (int) newLevel);
@@ -55,7 +55,7 @@ public class GluttonySkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -75,13 +75,13 @@ public class GluttonySkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double heal = getLevel(player) * getIncrement().getValue();
+        double heal = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(heal);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double heal = (getLevel(player) + 1) * getIncrement().getValue();
+        double heal = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(heal);
     }
 }

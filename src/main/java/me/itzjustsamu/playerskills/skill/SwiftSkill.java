@@ -56,7 +56,7 @@ public class SwiftSkill extends Skill {
             float defaultSpeedFloat = (float) defaultSpeed;
             player.setWalkSpeed(defaultSpeedFloat);
         } else {
-            double speedMultiplier = 0.1 + (speedLevel * getIncrement().getValue());
+            double speedMultiplier = 0.1 + (speedLevel * getUpgrade().getValue());
             float validSpeed = (float) Math.max(-1.0, Math.min(1.0, speedMultiplier));
             player.setWalkSpeed(validSpeed);
         }
@@ -65,7 +65,7 @@ public class SwiftSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -85,13 +85,13 @@ public class SwiftSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double swift = getLevel(player) * getIncrement().getValue();
+        double swift = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(swift);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double swift = (getLevel(player) + 1) * getIncrement().getValue();
+        double swift = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(swift);
     }
 }

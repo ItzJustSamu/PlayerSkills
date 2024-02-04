@@ -50,7 +50,7 @@ public class KnockBackSkill extends Skill {
         }
 
         int knockbackLevel = getLevel(sPlayer);
-        double knockbackIncrementValue = getIncrement().getValue();
+        double knockbackIncrementValue = getUpgrade().getValue();
 
         // Check if the values are finite
         if (!isFinite(knockbackLevel) || !isFinite(knockbackIncrementValue)) {
@@ -104,18 +104,18 @@ public class KnockBackSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double knockback = getLevel(player) * getIncrement().getValue();
+        double knockback = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double knockback = (getLevel(player) + 1) * getIncrement().getValue();
+        double knockback = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(knockback);
     }
 }

@@ -48,14 +48,14 @@ public class StrengthSkill extends Skill {
         int strengthLevel = getLevel(sPlayer);
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * getIncrement().getValue();
+        percentile = percentile * getUpgrade().getValue();
         double weightedDamage = strengthLevel * percentile;
         event.setDamage(event.getDamage() + weightedDamage);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -75,13 +75,13 @@ public class StrengthSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double damage = getLevel(player) * getIncrement().getValue();
+        double damage = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double damage = (getLevel(player) + 1) * getIncrement().getValue();
+        double damage = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

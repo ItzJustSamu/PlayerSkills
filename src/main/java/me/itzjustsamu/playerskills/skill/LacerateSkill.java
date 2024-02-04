@@ -33,7 +33,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BooleanSupplier;
 
 public class LacerateSkill extends Skill {
-    private final ConfigPath<Double> percentIncrease = Paths.doublePath(new PathString("percent-increase"), 3D);
     private final ConfigPath<Integer> bleedCycles = Paths.integerPath(new PathString("bleed-cycles"), 8);
     private final ConfigPath<Long> bleedInterval = Paths.longPath(new PathString("bleed-interval"), 50L);
     private final ConfigPath<Integer> bleedDamage = Paths.integerPath(new PathString("bleed-damage"), 2);
@@ -69,7 +68,7 @@ public class LacerateSkill extends Skill {
 
         int lacerateLevel = getLevel(sPlayer);
 
-        double chance = lacerateLevel * percentIncrease.getValue();
+        double chance = lacerateLevel * getUpgrade().getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             LivingEntity victim = (LivingEntity) event.getEntity();
@@ -131,7 +130,7 @@ public class LacerateSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(percentIncrease, bleedCycles, bleedInterval, bleedDamage, applyToNonPlayers);
+        return Arrays.asList(getUpgrade(), bleedCycles, bleedInterval, bleedDamage, applyToNonPlayers);
     }
 
     @Override
@@ -156,13 +155,13 @@ public class LacerateSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double damage = getLevel(player) * percentIncrease.getValue();
+        double damage = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double damage = (getLevel(player) + 1) * percentIncrease.getValue();
+        double damage = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

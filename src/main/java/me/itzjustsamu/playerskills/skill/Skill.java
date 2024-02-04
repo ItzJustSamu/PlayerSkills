@@ -13,7 +13,6 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.config.MessageConfig;
 import me.itzjustsamu.playerskills.config.SkillConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
-import me.itzjustsamu.playerskills.util.path.IntegerMapConfigPath;
 import me.itzjustsamu.playerskills.util.path.ItemBuilderConfigPath;
 import me.itzjustsamu.playerskills.util.path.StringListConfigPath;
 import org.bukkit.Bukkit;
@@ -37,8 +36,11 @@ public abstract class Skill implements Listener {
     private final int GUI_SLOT;
     private int INCREMENT;
     private int PRICE;
+    private int INCREMENTED_UPGRADE;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
+    private IntegerConfigPath GET_INCREMENTED_UPGRADE;
+
     private IntegerConfigPath GET_PRICE;
     private final BooleanConfigPath GET_DISABLED = new BooleanConfigPath(new PathString("disable"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
@@ -61,6 +63,8 @@ public abstract class Skill implements Listener {
         GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
+        GET_INCREMENTED_UPGRADE = Paths.integerPath(new PathString("incremented-upgrade"), INCREMENTED_UPGRADE);
+        GET_INCREMENTED_UPGRADE.setConfig(CONFIG);
         GET_PRICE = Paths.integerPath(new PathString("price"), PRICE);
         GET_PRICE.setConfig(CONFIG);
         GET_DISABLED.setConfig(CONFIG);
@@ -76,11 +80,13 @@ public abstract class Skill implements Listener {
             SPlayer sPlayer = SPlayer.get(uuid);
             int level = getLevel(sPlayer);
             int getMaxLevel = GET_MAX_LEVEL.getValue();
-            IntegerConfigPath increment = getIncrement();
+            IntegerConfigPath upgrade = getUpgrade();
+            IntegerConfigPath upgradeIncrement = getIncrementedUpgrade();
+
             IntegerConfigPath price = getPrice();
             if (level >= getMaxLevel) {
-                original = original.replace("{next}", MainConfig.GUI_PLACEHOLDERS_NEXT_MAX.getValue())
-                        .replace("{price}", MainConfig.GUI_PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
+                original = original.replace("{next}", MainConfig.PLACEHOLDERS_NEXT_MAX.getValue())
+                        .replace("{price}", MainConfig.PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
                         .replace("{price}", Integer.toString(price.getValue()));
@@ -89,7 +95,8 @@ public abstract class Skill implements Listener {
                     .replace("{prev}", getPreviousString(sPlayer))
                     .replace("{level}", Integer.toString(level))
                     .replace("{max}", Integer.toString(getMaxLevel))
-                    .replace("{increment}", Integer.toString(increment.getValue()));
+                    .replace("{upgrade}", Integer.toString(upgrade.getValue())
+            .replace("{incremented-upgrade}", Integer.toString(upgradeIncrement.getValue())));
             return original;
         }));
 
@@ -104,6 +111,10 @@ public abstract class Skill implements Listener {
 
     public int getMaxLevel() {
         return GET_MAX_LEVEL.getValue();
+    }
+
+    public void setMaxLevel(int Level) {
+        GET_MAX_LEVEL.setValue(Level, getConfig());
     }
 
     public int getGuiSlot() {
@@ -166,8 +177,12 @@ public abstract class Skill implements Listener {
         return GET_PRICE;
     }
 
-    public IntegerConfigPath getIncrement() {
+    public IntegerConfigPath getUpgrade() {
         return GET_INCREMENT;
+    }
+
+    public IntegerConfigPath getIncrementedUpgrade() {
+        return GET_INCREMENTED_UPGRADE;
     }
 
     public void setIncrement(int increment) {
@@ -177,7 +192,6 @@ public abstract class Skill implements Listener {
     public void setPrice(int price) {
         GET_PRICE.setValue(price, getConfig());
     }
-
 
     public boolean Worlds_Restriction(Player player) {
         List<String> list = WORLDS_RESTRICTIONS.getValue();

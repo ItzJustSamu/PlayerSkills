@@ -1,5 +1,6 @@
 package me.itzjustsamu.playerskills.menu;
 
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
@@ -16,13 +17,14 @@ import org.jetbrains.annotations.NotNull;
 import static me.itzjustsamu.playerskills.menu.Sounds.playExperienceOrbPickupSound;
 import static me.itzjustsamu.playerskills.menu.Sounds.playItemBreakSound;
 
-public class SkillsList implements Menu {
+public class SkillsMenu implements Menu {
     private final PlayerSkills plugin;
     private final Player player;
     private final SPlayer sPlayer;
     private Skill clickedSkill;
+    private BukkitConfig bukkitConfig;
 
-    public SkillsList(PlayerSkills plugin, Player player, SPlayer sPlayer) {
+    public SkillsMenu(PlayerSkills plugin, Player player, SPlayer sPlayer) {
         this.plugin = plugin;
         this.player = player;
         this.sPlayer = sPlayer;
@@ -30,11 +32,11 @@ public class SkillsList implements Menu {
 
     public @NotNull Inventory getInventory() {
         CommonStringReplacer.resetSkill();
-        String title = ColorUtils.colorize(MainConfig.GUI_TITLE.getValue());
-        int size = MainConfig.GUI_SIZE.getValue();
+        String title = ColorUtils.colorize(MainConfig.SKILLS_MENU_TITLE.getValue());
+        int size = MainConfig.SKILLS_MENU_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
-        if (MainConfig.GUI_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
+        if (MainConfig.SKILLS_BACKGROUND_ENABLED.getValue()) {
+            ItemStack background = MainConfig.SKILLS_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
 
             for (int i = 0; i < inventory.getSize(); ++i) {
                 inventory.setItem(i, background);
@@ -54,8 +56,8 @@ public class SkillsList implements Menu {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
                 clickedSkill = skill;
                 CommonStringReplacer.setSkill(clickedSkill);
-                SkillsSettings skillsSettings = new SkillsSettings(plugin, player, skill, sPlayer, clickedSkill);
-                skillsSettings.open(player);
+                SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+                SettingsMenu.open(player);
                 return;
             }
 
@@ -69,7 +71,7 @@ public class SkillsList implements Menu {
                         open(player);
                     };
 
-                    if (MainConfig.GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS.getValue()) {
+                    if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
                         ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                         confirmationMenu.open(player);
                     } else {
@@ -80,9 +82,5 @@ public class SkillsList implements Menu {
                 playItemBreakSound(player);
             }
         }
-    }
-
-    public Skill getClickedSkill() {
-        return clickedSkill;
     }
 }

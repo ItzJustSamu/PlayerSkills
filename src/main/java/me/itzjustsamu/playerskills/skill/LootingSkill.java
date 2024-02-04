@@ -44,7 +44,7 @@ public class LootingSkill extends Skill {
             int lootingLevel = getLevel(sPlayer);
 
             if (lootingLevel > 0) {
-                double lootingIncrementValue = getIncrement().getValue();
+                double lootingIncrementValue = getUpgrade().getValue();
                 List<ItemStack> drops = event.getDrops();
 
                 for (ItemStack drop : drops) {
@@ -58,7 +58,7 @@ public class LootingSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -78,13 +78,13 @@ public class LootingSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double lootBonus = getLevel(player) * getIncrement().getValue();
+        double lootBonus = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double lootBonus = (getLevel(player) + 1) * getIncrement().getValue();
+        double lootBonus = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(lootBonus);
     }
 }

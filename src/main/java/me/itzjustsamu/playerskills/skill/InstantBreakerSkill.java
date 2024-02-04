@@ -63,7 +63,7 @@ public class InstantBreakerSkill extends Skill {
 
     private boolean hasCooldown(Player player, SPlayer sPlayer) {
         long currentTime = System.currentTimeMillis();
-        long cooldown = Math.min((long) getLevel(sPlayer) * getIncrement().getValue(), COOLDOWN_MAX.getValue());
+        long cooldown = Math.min((long) getLevel(sPlayer) * getUpgrade().getValue(), COOLDOWN_MAX.getValue());
 
         if (cooldownMap.containsKey(player) && currentTime < cooldownMap.get(player)) {
             sendActionBar(player, String.valueOf(cooldownMap.get(player) - currentTime));
@@ -74,13 +74,13 @@ public class InstantBreakerSkill extends Skill {
     }
 
     private void setCooldown(Player player, SPlayer sPlayer) {
-        long cooldown = Math.min((long) getLevel(sPlayer) * getIncrement().getValue(), COOLDOWN_MAX.getValue());
+        long cooldown = Math.min((long) getLevel(sPlayer) * getUpgrade().getValue(), COOLDOWN_MAX.getValue());
         cooldownMap.put(player, System.currentTimeMillis() + cooldown);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -100,12 +100,12 @@ public class InstantBreakerSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        return Utils.getPercentageFormat().format(Math.min((long) getLevel(player) * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) getLevel(player) * getUpgrade().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        return Utils.getPercentageFormat().format(Math.min((long) (getLevel(player) + 1) * getIncrement().getValue(), COOLDOWN_MAX.getValue()));
+        return Utils.getPercentageFormat().format(Math.min((long) (getLevel(player) + 1) * getUpgrade().getValue(), COOLDOWN_MAX.getValue()));
     }
 
     private void sendActionBar(Player player, String message) {

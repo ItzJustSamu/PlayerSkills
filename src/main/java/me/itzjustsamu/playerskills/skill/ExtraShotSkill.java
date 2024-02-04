@@ -77,7 +77,7 @@ public class ExtraShotSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -97,13 +97,13 @@ public class ExtraShotSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double arrows = getLevel(player) * getIncrement().getValue();
+        double arrows = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double arrows = (getLevel(player) + 1) * getIncrement().getValue();
+        double arrows = (getLevel(player) + 1) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(arrows);
     }
 }

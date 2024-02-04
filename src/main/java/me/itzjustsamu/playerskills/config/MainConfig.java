@@ -58,58 +58,214 @@ public class MainConfig extends PathableConfig {
     public static final LongConfigPath OPTIONS_AUTO_SAVE_TICKS = new LongConfigPath(new PathString("options", "auto-save", "ticks"), 1000L);
     public static final BooleanConfigPath OPTIONS_AUTO_SAVE_ASYNC = new BooleanConfigPath(new PathString("options", "auto-save", "async"), true);
 
-    // GUI-related configurations
-    public static final StringConfigPath GUI_TITLE = new StringConfigPath(new PathString("gui", "title"), "&6Skills");
-    public static final IntegerConfigPath GUI_SIZE = new IntegerConfigPath(new PathString("gui", "size"), 54);
 
-    // Background configurations
-    public static final BooleanConfigPath GUI_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("gui", "background", "enabled"), true);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "background", "display"),
+    // Skills Configurations
+
+
+    public static final StringConfigPath SKILLS_MENU_TITLE = new StringConfigPath(new PathString("skills", "menu", "title"), "&c&lSkills");
+    public static final IntegerConfigPath SKILLS_MENU_SIZE = new IntegerConfigPath(new PathString("skills", "menu", "size"), 54);
+
+    public static final BooleanConfigPath SKILLS_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("skills", "background", "enabled"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "background", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&r"))
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
-    public static final StringConfigPath GUI_PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath(new PathString("gui", "placeholders", "skill-price-max"), "--");
-    public static final StringConfigPath GUI_PLACEHOLDERS_NEXT_MAX = new StringConfigPath(new PathString("gui", "placeholders", "next-max"), "--");
-    public static final IntegerConfigPath POINTS_SLOT = new IntegerConfigPath(new PathString("points", "slot"), 2);
 
-    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath(new PathString("points", "price"), 1);
-    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "display"),
+
+    // Settings Configurations
+
+
+    public static final StringConfigPath SETTINGS_MENU_TITLE = new StringConfigPath(new PathString("settings" ,"menu", "title"), "&c&lSkills Settings");
+    public static final IntegerConfigPath SETTINGS_MENU_SIZE = new IntegerConfigPath(new PathString("settings" ,"menu", "size"), 54);
+
+    public static final BooleanConfigPath SETTINGS_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("settings", "background", "enabled"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "background", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new NameModifier().setName("&r"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
+    ));
+    public static final IntegerConfigPath SETTINGS_PURCHASE_SLOT = new IntegerConfigPath(new PathString("settings", "purchase", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_PURCHASE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "purchase", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Points Price: &e{points-price} {symbol}",
-                            "&eLeft-Click &7to decrease price.",
-                            "&eRight-Click &7 to increase price."
+                            "&7You have &e{player-points} &7points.",
+                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
                     ))
     ));
-    public static final IntegerConfigPath POINTS_RESET_SLOT = new IntegerConfigPath(new PathString("points", "reset", "slot"), 3);
 
-    public static final IntegerConfigPath POINTS_RESET_PRICE = new IntegerConfigPath(new PathString("points", "reset-price"), 1);
-    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "reset", "display"),
+    public static final IntegerConfigPath SETTINGS_RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("settings", "reset-skills", "slot"), 5);
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "reset-skills", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet Reset Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new NameModifier().setName("&cReset"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.TNT))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Skills Reset Cost: &e{reset-points}",
-                            "&eLeft-Click &7to decrease price.",
-                            "&eRight-Click &7 to increase price."
+                            "&eLeft-Click &7to completely reset your skills.",
+                            "&7This costs &e{reset-points-price} &7skill point.",
+                            "&7Other skill points invested in existing skills will be refunded.",
+                            "",
+                            "&cThis action is irreversible."
                     ))
     ));
-    public static final IntegerConfigPath POINTS_REFUND_SLOT = new IntegerConfigPath(new PathString("points", "refund", "slot"), 4);
 
-    public static final BooleanConfigPath POINTS_REFUND_POINTS = new BooleanConfigPath(new PathString("points", "refund-points"), true);
-    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_REFUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "refund", "display"),
+    public static final IntegerConfigPath SETTINGS_ADMIN_SLOT = new IntegerConfigPath(new PathString("settings", "admin", "slot"), 8);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_ADMIN_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "admin", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cRefund Skill Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new NameModifier().setName("&cEdit Skills"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.NETHER_STAR))
                     .addItemModifier(new LoreModifier().setLore(
-                            "&7Refund Reset Status &e{refund-status}."
+                            "&eClick to edit skill!"
                     ))
     ));
-    public static final IntegerConfigPath POINTS_FUNDING_SLOT = new IntegerConfigPath(new PathString("points", "funding", "slot"), 5);
 
+    public static final IntegerConfigPath SETTINGS_BACK_SLOT = new IntegerConfigPath(new PathString("settings", "back", "slot"), 45);
+    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "back", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
+    ));
+
+
+    // Admin configurations
+
+
+    public static final StringConfigPath ADMIN_MENU_TITLE = new StringConfigPath(new PathString("admin", "title"), "&c&lSkills Admin");
+    public static final IntegerConfigPath ADMIN_MENU_SIZE = new IntegerConfigPath(new PathString("admin", "size"), 54);
+
+    public static final BooleanConfigPath ADMIN_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("admin", "background", "enabled"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "background", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&r"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
+    ));
+
+    public static final IntegerConfigPath ADMIN_PURCHASE_POINTS_SLOT = new IntegerConfigPath(new PathString("admin", "purchase-points", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_PURCHASE_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "purchase-points", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7You have &e{player-points} &7points.",
+                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("admin", "reset-skills", "slot"), 5);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "reset-skills", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cReset"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.TNT))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&eLeft-Click &7to completely reset your skills.",
+                            "&7This costs &e{reset-points-price} &7skill point.",
+                            "&7Other skill points invested in existing skills will be refunded.",
+                            "",
+                            "&cThis action is irreversible."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_SKILLS_UPGRADE_SLOT = new IntegerConfigPath(new PathString("admin", "skills-upgrade", "slot"), 9);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_SKILLS_UPGRADE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "skills-upgrade", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Upgrade"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Points: &e{skills-upgrade-price}",
+                            "&eLeft-Click &7to decrease points.",
+                            "&eRight-Click &7to increase points."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_SKILLS_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("admin", "skills-point-price", "slot"), 10);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_SKILLS_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "skills-point-price", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Point's price"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Points: &e{skill-point-price}",
+                            "&eLeft-Click &7to decrease points.",
+                            "&eRight-Click &7to increase points."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_SKILLS_INCREMENT_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("admin", "skills-increment", "point-price", "slot"), 11);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_SKILLS_INCREMENT_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "skills-increment","point-price", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} point price increment"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Points: &e{skills-increment-point-price}",
+                            "&eLeft-Click &7to decrease points.",
+                            "&eRight-Click &7to increase points."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_SKILLS_MAX_LEVEL_SLOT = new IntegerConfigPath(new PathString("admin", "skills", "max-level", "slot"), 12);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_SKILLS_MAX_LEVEL_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "skills","max-level", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet {skill} Maximum Level"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Level: &e{skills-max-level}",
+                            "&eLeft-Click &7to decrease a level.",
+                            "&eRight-Click &7to increase a level."
+                    ))
+    ));
+
+    public static final IntegerConfigPath ADMIN_CONFIRMATION_TOGGLE_SLOT = new IntegerConfigPath(new PathString("admin", "confirmation", "toggle", "slot"), 13);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_CONFIRMATION_TOGGLE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "confirmation","toggle", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Confirmation Menu"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Menu: &e{next-confirmation-name} ",
+                            "&7Status: &e{next-confirmation-value}",
+                            "&eLeft-Click &7to toggle Menu.",
+                            "&eRight-Click &7to status."
+                    ))
+    ));
+    public static final StringConfigPath CONFIRMATION_PURCHASE_SKILLS_NAME = new StringConfigPath(new PathString("confirmation", "purchase-skills", "name"), "Purchase Skills");
+    public static final StringConfigPath CONFIRMATION_PURCHASE_POINTS_NAME = new StringConfigPath(new PathString("confirmation", "purchase-points", "name"), "Purchase Points");
+    public static final StringConfigPath CONFIRMATION_RESET_SKILLS_NAME = new StringConfigPath(new PathString("confirmation", "reset", "name"), "Reset");
+
+    public static final BooleanConfigPath CONFIRMATION_PURCHASE_SKILLS = new BooleanConfigPath(new PathString("confirmation", "purchase-skills"), false);
+    public static final BooleanConfigPath CONFIRMATION_PURCHASE_POINTS = new BooleanConfigPath(new PathString("confirmation", "purchase-points"), false);
+    public static final BooleanConfigPath CONFIRMATION_RESET_SKILLS = new BooleanConfigPath(new PathString("confirmation", "reset-skills"), false);
+
+    public static final IntegerConfigPath ADMIN_BACK_SLOT = new IntegerConfigPath(new PathString("admin", "back", "slot"), 45);
+    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "back", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
+    ));
+
+
+    // Points configurations
+
+    public static final StringConfigPath POINTS_MENU_TITLE = new StringConfigPath(new PathString("points", "menu", "title"), "&c&lPoints Customization");
+    public static final IntegerConfigPath POINTS_MENU_SIZE = new IntegerConfigPath(new PathString("points", "menu", "size"), 54);
+
+    public static final BooleanConfigPath POINTS_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("points", "background", "enabled"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "background", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&r"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
+    ));
+    public static final IntegerConfigPath POINTS_PURCHASE_SLOT = new IntegerConfigPath(new PathString("points","purchase", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_PURCHASE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "purchase", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7You have &e{player-points} &7points.",
+                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
+                    ))
+    ));
+
+    public static final IntegerConfigPath POINTS_FUNDING_SLOT = new IntegerConfigPath(new PathString("points", "funding", "slot"), 12);
     public static final ConfigPath<FundingSource> POINTS_FUNDING_SOURCE = new StickyConfigPath<>(
             new AdvancedConfigPath<String, FundingSource>(new PathString("points", "funding-source"), new XPFundingSource()) {
                 @Override
@@ -137,11 +293,23 @@ public class MainConfig extends PathableConfig {
                     ))
     ));
 
-    public static final IntegerConfigPath POINTS_INCREMENT_SLOT = new IntegerConfigPath(new PathString("points", "price", "slot"), 6);
+    public static final IntegerConfigPath POINTS_SLOT = new IntegerConfigPath(new PathString("points", "slot"), 13);
+    public static final IntegerConfigPath POINTS_PRICE = new IntegerConfigPath(new PathString("points", "price"), 1);
+    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Points Price: &e{points-price} {symbol}",
+                            "&eLeft-Click &7to decrease price.",
+                            "&eRight-Click &7 to increase price."
+                    ))
+    ));
 
+    public static final IntegerConfigPath POINTS_INCREMENT_SLOT = new IntegerConfigPath(new PathString("points", "increment", "slot"), 14);
     public static final IntegerConfigPath POINTS_INCREMENT_PRICE = new IntegerConfigPath(new PathString("points", "increment", "price"), 0);
 
-    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_INCREMENT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "price", "display"),
+    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_INCREMENT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "increment", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cSet Increment Points"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
@@ -150,118 +318,118 @@ public class MainConfig extends PathableConfig {
                     ))
     ));
 
-    public static final IntegerConfigPath SKILLS_UPGRADE_SLOT = new IntegerConfigPath(new PathString("skills", "increment", "slot"), 9);
-
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_UPGRADE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
+    public static final IntegerConfigPath POINTS_BACK_SLOT = new IntegerConfigPath(new PathString("points", "back", "slot"), 45);
+    public static final ConfigPath<ItemBuilder<ItemStack>> POINTS_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("points", "back", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} Upgrade"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{skills-upgrade-price}",
-                            "&eLeft-Click &7to decrease points.",
-                            "&eRight-Click &7to increase points."
-                    ))
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
     ));
 
-    public static final IntegerConfigPath SKILLS_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 10);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} Point's price"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{skill-point-price}",
-                            "&eLeft-Click &7to decrease points.",
-                            "&eRight-Click &7to increase points."
-                    ))
-    ));
-    public static final IntegerConfigPath SKILLS_INCREMENT_POINT_PRICE_SLOT = new IntegerConfigPath(new PathString("skills", "price", "slot"), 11);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SKILLS_INCREMENT_POINT_PRICE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("skills", "price", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet {skill} point price increment"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7Points: &e{skills-increment-point-price}",
-                            "&eLeft-Click &7to decrease points.",
-                            "&eRight-Click &7to increase points."
-                    ))
-    ));
-    // Confirmation Menu
-    public static final StringConfigPath GUI_CONFIRMATION_TITLE = new StringConfigPath(new PathString("gui", "title"), "&cSkills");
 
-    public static final IntegerConfigPath GUI_CONFIRMATION_SIZE = new IntegerConfigPath(new PathString("gui-confirmation", "size"), 27);
-    public static final BooleanConfigPath GUI_CONFIRMATION_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("gui", "background", "enabled"), true);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_CONFIRMATION_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "background", "display"),
+    // Reset configurations
+
+
+    public static final StringConfigPath RESET_MENU_TITLE = new StringConfigPath(new PathString("reset", "menu", "title"), "&c&lReset Customization");
+    public static final IntegerConfigPath RESET_MENU_SIZE = new IntegerConfigPath(new PathString("reset", "menu", "size"), 54);
+
+    public static final BooleanConfigPath RESET_BACKGROUND_ENABLED = new BooleanConfigPath(new PathString("reset", "background", "enabled"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> RESET_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "background", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&r"))
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
 
-    public static final BooleanConfigPath GUI_CONFIRMATION_ENABLED_PURCHASE_SKILLS = new BooleanConfigPath(new PathString("gui-confirmation", "enabled", "purchase-skills"), false);
-    public static final BooleanConfigPath GUI_CONFIRMATION_ENABLED_PURCHASE_SKILL_POINTS = new BooleanConfigPath(new PathString("gui-confirmation", "enabled", "purchase-skill-points"), false);
-    public static final BooleanConfigPath GUI_CONFIRMATION_ENABLED_RESET_SKILLS = new BooleanConfigPath(new PathString("gui-confirmation", "enabled", "reset-skills"), true);
-
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_CONFIRMATION_ACCEPT = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui-confirmation", "accept"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&a&lConfirm"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.LIME_STAINED_GLASS_PANE))
-                    .addItemModifier(new LoreModifier().setLore("&7Confirm action."))
-    ));
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_CONFIRMATION_DENY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui-confirmation", "deny"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&c&lDecline"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.RED_STAINED_GLASS_PANE))
-                    .addItemModifier(new LoreModifier().setLore("&7Decline and return to the previous menu."))
-    ));
-
-    // Back Arrow
-    public static final IntegerConfigPath GUI_BACK_SLOT = new IntegerConfigPath(new PathString("gui", "back", "slot"), 45);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "back", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&aBACK"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
-    ));
-    public static final IntegerConfigPath GUI_NEXT_SLOT = new IntegerConfigPath(new PathString("gui", "next", "slot"), 53);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_NEXT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "next", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&aNEXT"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
-    ));
-
-    public static final IntegerConfigPath PURCHASE_POINTS_SLOT = new IntegerConfigPath(new PathString("gui", "points", "slot"), 4);
-    public static final ConfigPath<ItemBuilder<ItemStack>> PURCHASE_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "points", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7You have &e{player-points} &7points.",
-                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
-                    ))
-    ));
-
-    public static final IntegerConfigPath GUI_ADMIN_SLOT = new IntegerConfigPath(new PathString("gui", "admin", "slot"), 8);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_ADMIN_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "admin", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cEdit Skills"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.NETHER_STAR))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&eClick to edit skill!"
-                    ))
-    ));
-
-    public static final IntegerConfigPath GUI_RESET_SLOT = new IntegerConfigPath(new PathString("gui", "reset", "slot"), 5);
-    public static final ConfigPath<ItemBuilder<ItemStack>> GUI_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("gui", "reset", "display"),
+    public static final IntegerConfigPath RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("reset", "skills", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "skills", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cReset"))
                     .addItemModifier(new XMaterialModifier(XMaterial.TNT))
                     .addItemModifier(new LoreModifier().setLore(
                             "&eLeft-Click &7to completely reset your skills.",
-                            "&7This costs &e{reset-points} &7skill point.",
+                            "&7This costs &e{reset-points-price} &7skill point.",
                             "&7Other skill points invested in existing skills will be refunded.",
                             "",
                             "&cThis action is irreversible."
                     ))
     ));
 
+    public static final IntegerConfigPath RESET_SLOT = new IntegerConfigPath(new PathString("reset", "slot"), 13);
+
+    public static final IntegerConfigPath RESET_PRICE = new IntegerConfigPath(new PathString("reset", "price"), 1);
+    public static final ConfigPath<ItemBuilder<ItemStack>> RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Reset Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Reset Cost: &e{reset-price}",
+                            "&eLeft-Click &7to decrease price.",
+                            "&eRight-Click &7 to increase price."
+                    ))
+    ));
+    public static final IntegerConfigPath INCREMENT_RESET_SLOT = new IntegerConfigPath(new PathString("increment", "reset", "slot"), 14);
+
+    public static final IntegerConfigPath INCREMENT_RESET_PRICE = new IntegerConfigPath(new PathString("increment", "reset", "price"), 1);
+    public static final ConfigPath<ItemBuilder<ItemStack>> INCREMENT_RESET_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("increment", "reset", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cSet Increment Reset Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Incremented Reset Cost: &e{reset-increment-price}",
+                            "&eLeft-Click &7to decrease price.",
+                            "&eRight-Click &7 to increase price."
+                    ))
+    ));
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> REFUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("refund", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cRefund Skill Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7Refund Reset Status &e{refund-status}."
+                    ))
+    ));
+    public static final IntegerConfigPath REFUND_SLOT = new IntegerConfigPath(new PathString("reset", "refund", "slot"), 12);
+    public static final BooleanConfigPath REFUND_POINTS = new BooleanConfigPath(new PathString("reset", "refund-points"), true);
+
+    public static final IntegerConfigPath RESET_BACK_SLOT = new IntegerConfigPath(new PathString("reset", "back", "slot"), 45);
+    public static final ConfigPath<ItemBuilder<ItemStack>> RESET_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "back", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
+    ));
+
+
+    // Background configurations
+
+    public static final StringConfigPath PLACEHOLDERS_SKILL_PRICE_MAX = new StringConfigPath(new PathString("placeholders", "skill-price-max"), "--");
+    public static final StringConfigPath PLACEHOLDERS_NEXT_MAX = new StringConfigPath(new PathString("placeholders", "next-max"), "--");
+
+
+    // Confirmation Configurations
+
+
+    public static final StringConfigPath CONFIRMATION_MENU_TITLE = new StringConfigPath(new PathString("confirmation", "menu", "title"), "&a&lConfirmation");
+
+    public static final IntegerConfigPath CONFIRMATION_MENU_SIZE = new IntegerConfigPath(new PathString("confirmation", "menu", "size"), 27);
+    public static final BooleanConfigPath CONFIRMATION_MENU_BACKGROUND = new BooleanConfigPath(new PathString("confirmation", "menu", "background"), true);
+    public static final ConfigPath<ItemBuilder<ItemStack>> CONFIRMATION_MENU_BACKGROUND_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("confirmation", "menu-background", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&r"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
+    ));
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> CONFIRMATION_ACCEPT = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("confirmation", "accept"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&a&lConfirm"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.LIME_STAINED_GLASS_PANE))
+                    .addItemModifier(new LoreModifier().setLore("&7Confirm action."))
+    ));
+    public static final ConfigPath<ItemBuilder<ItemStack>> CONFIRMATION_DENY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("confirmation", "deny"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&c&lDecline"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.RED_STAINED_GLASS_PANE))
+                    .addItemModifier(new LoreModifier().setLore("&7Decline and return to the previous menu."))
+    ));
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
     }

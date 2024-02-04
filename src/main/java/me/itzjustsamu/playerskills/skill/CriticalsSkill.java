@@ -54,7 +54,7 @@ public class CriticalsSkill extends Skill {
 
         int criticalLevel = getLevel(sPlayer);
 
-        double chance = criticalLevel * getIncrement().getValue();
+        double chance = criticalLevel * getUpgrade().getValue();
 
         if (ThreadLocalRandom.current().nextInt(100) < chance) {
             String message = CRITICAL_MESSAGE.getValue();
@@ -68,7 +68,7 @@ public class CriticalsSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Arrays.asList(getIncrement(), CRITICAL_MULTIPLIER);
+        return Arrays.asList(getUpgrade(), CRITICAL_MULTIPLIER);
     }
 
     @Override
@@ -93,13 +93,13 @@ public class CriticalsSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double damage = getLevel(player) * getIncrement().getValue();
+        double damage = getLevel(player) * getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double damage = getLevel(player) + getIncrement().getValue();
+        double damage = getLevel(player) + getUpgrade().getValue();
         return Utils.getPercentageFormat().format(damage);
     }
 }

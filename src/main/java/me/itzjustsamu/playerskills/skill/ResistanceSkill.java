@@ -4,9 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
-import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
-import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
@@ -50,14 +48,14 @@ public class ResistanceSkill extends Skill {
         int resistanceLevel = getLevel(sPlayer);
 
         double percentile = event.getDamage() / 100;
-        percentile = percentile * getIncrement().getValue();
+        percentile = percentile * getUpgrade().getValue();
         double weightedDamage = resistanceLevel * percentile;
         event.setDamage(event.getDamage() - weightedDamage);
     }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {
-        return Collections.singletonList(getIncrement());
+        return Collections.singletonList(getUpgrade());
     }
 
     @Override
@@ -77,13 +75,13 @@ public class ResistanceSkill extends Skill {
 
     @Override
     public String getPreviousString(SPlayer player) {
-        double damage = 100 - (getLevel(player) * getIncrement().getValue());
+        double damage = 100 - (getLevel(player) * getUpgrade().getValue());
         return Utils.getPercentageFormat().format(damage);
     }
 
     @Override
     public String getNextString(SPlayer player) {
-        double damage = 100 - ((getLevel(player) + 1) * getIncrement().getValue());
+        double damage = 100 - ((getLevel(player) + 1) * getUpgrade().getValue());
         return Utils.getPercentageFormat().format(damage);
     }
 }

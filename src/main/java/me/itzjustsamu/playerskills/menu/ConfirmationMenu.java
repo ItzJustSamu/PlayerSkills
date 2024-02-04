@@ -19,10 +19,6 @@ public class ConfirmationMenu implements Menu {
     private final Runnable callback;
     private final Menu superMenu;
 
-    public ConfirmationMenu(PlayerSkills plugin, Player player, ItemStack display, Runnable callback) {
-        this(plugin, player, display, callback, null);
-    }
-
     public ConfirmationMenu(PlayerSkills plugin, Player player, ItemStack display, Runnable callback, Menu superMenu) {
         this.plugin = plugin;
         this.player = player;
@@ -33,19 +29,19 @@ public class ConfirmationMenu implements Menu {
 
     @Override
     public @NotNull Inventory getInventory() {
-        String title = ColorUtils.colorize(MainConfig.GUI_CONFIRMATION_TITLE.getValue());
-        int size = MainConfig.GUI_CONFIRMATION_SIZE.getValue();
+        String title = ColorUtils.colorize(MainConfig.CONFIRMATION_MENU_TITLE.getValue());
+        int size = MainConfig.CONFIRMATION_MENU_SIZE.getValue();
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
-        if (MainConfig.GUI_CONFIRMATION_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.GUI_CONFIRMATION_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
+        if (MainConfig.CONFIRMATION_MENU_BACKGROUND.getValue()) {
+            ItemStack background = MainConfig.CONFIRMATION_MENU_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        ItemStack yes = MainConfig.GUI_CONFIRMATION_ACCEPT.getValue().build(player.getUniqueId());
-        ItemStack no = MainConfig.GUI_CONFIRMATION_DENY.getValue().build(player.getUniqueId());
+        ItemStack yes = MainConfig.CONFIRMATION_ACCEPT.getValue().build(player.getUniqueId());
+        ItemStack no = MainConfig.CONFIRMATION_DENY.getValue().build(player.getUniqueId());
 
         inventory.setItem(10, no);
         inventory.setItem(11, no);
