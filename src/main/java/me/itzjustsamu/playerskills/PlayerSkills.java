@@ -38,9 +38,6 @@ public class PlayerSkills extends BasePlugin {
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
-    public PlayerSkills() {
-    }
-
     public MessageConfig getMessageConfig() {
         return messageConfig;
     }

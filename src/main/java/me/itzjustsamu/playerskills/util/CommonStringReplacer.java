@@ -20,48 +20,16 @@ public final class CommonStringReplacer {
         if (MainConfig.RESET_PRICE.getValue() > 0) {
             int base = MainConfig.RESET_PRICE.getValue();
             int playerPoints = sPlayer.getResetCount();
-            resetPointPrice = base + (playerPoints * MainConfig.INCREMENT_RESET_PRICE.getValue());
+            resetPointPrice = base + (playerPoints * MainConfig.RESET_INCREMENT_PRICE.getValue());
         } else {
-            resetPointPrice = sPlayer.getResetCount() * MainConfig.INCREMENT_RESET_PRICE.getValue();
+            resetPointPrice = sPlayer.getResetCount() * MainConfig.RESET_INCREMENT_PRICE.getValue();
         }
-
-        String nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
-        switch (nextConfirmationName) {
-            case "Purchase Skills":
-                nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_POINTS_NAME.getValue();
-                break;
-            case "Purchase Points":
-                nextConfirmationName = MainConfig.CONFIRMATION_RESET_SKILLS_NAME.getValue();
-                break;
-            case "Reset Skills":
-            default:
-                nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
-                break;
-        }
-
-
-        String currentConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
-        boolean currentConfirmationValue;
-
-        switch (currentConfirmationName) {
-            case "Purchase Skills":
-                currentConfirmationValue = MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue();
-                break;
-            case "Purchase Points":
-                currentConfirmationValue = MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue();
-                break;
-            case "Reset Skills":
-            default:
-                currentConfirmationValue = MainConfig.CONFIRMATION_RESET_SKILLS.getValue();
-                break;
-        }
-
 
         return original.replace("{player-price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
                 .replace("{player-points}", Integer.toString(sPlayer.getPoints()))
                 .replace("{reset-price}", Integer.toString(MainConfig.RESET_PRICE.getValue()))
-                .replace("{reset-increment-price}", Integer.toString(MainConfig.INCREMENT_RESET_PRICE.getValue()))
+                .replace("{reset-increment-price}", Integer.toString(MainConfig.RESET_INCREMENT_PRICE.getValue()))
                 .replace("{reset-points-price}", Integer.toString(resetPointPrice))
                 .replace("{refund-status}", Boolean.toString(MainConfig.REFUND_POINTS.getValue()))
                 .replace("{points-price}", Integer.toString(MainConfig.POINTS_PRICE.getValue()))
@@ -70,8 +38,9 @@ public final class CommonStringReplacer {
                 .replace("{points-increment-price}", Integer.toString(MainConfig.POINTS_INCREMENT_PRICE.getValue()))
                 .replace("{skill}", (skill != null) ? skill.getSkillsConfigName() : "")
                 .replace("{skill-point-price}", Integer.toString(skillPrice))
-                .replace("{next-confirmation-name}", nextConfirmationName)
-                .replace("{next-confirmation-value}", Boolean.toString(currentConfirmationValue))
+                .replace("{skills-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()))
+                .replace("{points-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()))
+                .replace("{reset-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_RESET_SKILLS.getValue()))
                 .replace("{skills-max-level}", Integer.toString(skillMaxLevel));
     });
 

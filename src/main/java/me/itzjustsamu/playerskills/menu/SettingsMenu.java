@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static me.itzjustsamu.playerskills.Permissions.ADMIN;
 import static me.itzjustsamu.playerskills.menu.Sounds.*;
 
 public class SettingsMenu implements Menu {
@@ -54,7 +55,8 @@ public class SettingsMenu implements Menu {
             inventory.setItem(MainConfig.SETTINGS_PURCHASE_SLOT.getValue(), MainConfig.SETTINGS_PURCHASE_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.SETTINGS_RESET_SKILLS_SLOT.getValue(), MainConfig.SETTINGS_RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.SETTINGS_BACK_SLOT.getValue(), MainConfig.SETTINGS_BACK_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(MainConfig.SETTINGS_ADMIN_SLOT.getValue(), MainConfig.SETTINGS_ADMIN_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.ADMIN_SLOT.getValue(), MainConfig.ADMIN_DISPLAY.getValue().build(player.getUniqueId()));
+
             inventory.setItem(3, clickedSkill.getDisplayItem(player));
         }
 
@@ -62,8 +64,11 @@ public class SettingsMenu implements Menu {
     }
 
     @Override
-    public void onClick(int slot, ClickType event) {
-        if (slot == MainConfig.SETTINGS_PURCHASE_SLOT.getValue()) {
+    public void onClick(int slot, ClickType clickType) {
+        if (slot == 3) {
+            handleSkillClick(clickType);
+        }
+        else if (slot == MainConfig.SETTINGS_PURCHASE_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (slot == MainConfig.SETTINGS_PURCHASE_SLOT.getValue() && MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
@@ -71,24 +76,22 @@ public class SettingsMenu implements Menu {
             } else {
                 callback.run();
             }
-        } else if (slot == MainConfig.SETTINGS_RESET_SKILLS_SLOT.getValue()) {
-            Runnable callback = getRunnable(event);
-            if (slot == MainConfig.SETTINGS_RESET_SKILLS_SLOT.getValue() && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
+        } else if (slot == MainConfig.ADMIN_RESET_SKILLS_SLOT.getValue()) {
+            Runnable callback = getRunnable(clickType);
+            if (slot == MainConfig.ADMIN_RESET_SKILLS_SLOT.getValue() && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
             }
+        } else if (slot == MainConfig.ADMIN_SLOT.getValue() && player.hasPermission(ADMIN)) {
+            AdminMenu AdminMenu = new AdminMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+            AdminMenu.open(player);
         } else if (slot == MainConfig.SETTINGS_BACK_SLOT.getValue()) {
             SkillsMenu skillsMenu = new SkillsMenu(plugin, player, sPlayer);
             skillsMenu.open(player);
             playUIButtonClickSound(player);
             CommonStringReplacer.resetSkill();
-        } else if (slot == 3) {
-            handleSkillClick(event);
-        } else if (slot == MainConfig.SETTINGS_ADMIN_SLOT.getValue()) {
-            AdminMenu AdminMenu = new AdminMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
-            AdminMenu.open(player);
         }
     }
 
@@ -129,8 +132,8 @@ public class SettingsMenu implements Menu {
     private Runnable getResetSkillsCallback() {
         return () -> {
             int resetPoint;
-            if (MainConfig.INCREMENT_RESET_PRICE.getValue() > 0) {
-                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.INCREMENT_RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
+            if (MainConfig.RESET_INCREMENT_PRICE.getValue() > 0) {
+                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.RESET_INCREMENT_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             } else {
                 resetPoint = MainConfig.RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             }
@@ -144,7 +147,7 @@ public class SettingsMenu implements Menu {
                 sPlayer.incrementResetCount();
                 open(player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.ADMIN_RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
                 confirmationMenu.open(player);
             }
         };
@@ -162,8 +165,8 @@ public class SettingsMenu implements Menu {
     private Runnable getCallbackWithoutConfirmation() {
         return () -> {
             int resetPoint;
-            if (MainConfig.INCREMENT_RESET_PRICE.getValue() > 0) {
-                resetPoint = sPlayer.getResetCount() * (MainConfig.RESET_PRICE.getValue() * MainConfig.INCREMENT_RESET_PRICE.getValue());
+            if (MainConfig.RESET_INCREMENT_PRICE.getValue() > 0) {
+                resetPoint = sPlayer.getResetCount() * (MainConfig.RESET_PRICE.getValue() * MainConfig.RESET_INCREMENT_PRICE.getValue());
             } else {
                 resetPoint = MainConfig.RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             }

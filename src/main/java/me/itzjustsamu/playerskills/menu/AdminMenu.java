@@ -5,6 +5,9 @@ import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.fundingsource.FundingSource;
+import me.itzjustsamu.playerskills.fundingsource.VaultFundingSource;
+import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
@@ -52,15 +55,23 @@ public class AdminMenu implements Menu {
         }
 
         if (clickedSkill != null) {
+            inventory.setItem(3, clickedSkill.getDisplayItem(player));
             inventory.setItem(MainConfig.ADMIN_PURCHASE_POINTS_SLOT.getValue(), MainConfig.ADMIN_PURCHASE_POINTS_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_RESET_SKILLS_SLOT.getValue(), MainConfig.ADMIN_RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_SKILLS_UPGRADE_SLOT.getValue(), MainConfig.ADMIN_SKILLS_UPGRADE_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_SKILLS_POINT_PRICE_SLOT.getValue(), MainConfig.ADMIN_SKILLS_POINT_PRICE_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_SKILLS_INCREMENT_POINT_PRICE_SLOT.getValue(), MainConfig.ADMIN_SKILLS_INCREMENT_POINT_PRICE_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(MainConfig.ADMIN_CONFIRMATION_TOGGLE_SLOT.getValue(), MainConfig.ADMIN_CONFIRMATION_TOGGLE_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.ADMIN_SKILLS_CONFIRMATION_TOGGLE_SLOT.getValue(), MainConfig.ADMIN_SKILLS_CONFIRMATION_TOGGLE_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_SKILLS_MAX_LEVEL_SLOT.getValue(), MainConfig.ADMIN_SKILLS_MAX_LEVEL_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_FUNDING_SLOT.getValue(), MainConfig.POINTS_FUNDING_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_SLOT.getValue(), MainConfig.POINTS_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_INCREMENT_SLOT.getValue(), MainConfig.POINTS_INCREMENT_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.POINTS_CONFIRMATION_TOGGLE_SLOT.getValue(), MainConfig.POINTS_CONFIRMATION_TOGGLE_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.RESET_REFUND_SLOT.getValue(), MainConfig.RESET_REFUND_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.RESET_SLOT.getValue(), MainConfig.RESET_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.RESET_INCREMENT_SLOT.getValue(), MainConfig.RESET_INCREMENT_DISPLAY.getValue().build(player.getUniqueId()));
+            inventory.setItem(MainConfig.RESET_CONFIRMATION_TOGGLE_SLOT.getValue(), MainConfig.RESET_CONFIRMATION_TOGGLE_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_BACK_SLOT.getValue(), MainConfig.ADMIN_BACK_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(3, clickedSkill.getDisplayItem(player));
         }
 
         return inventory;
@@ -68,29 +79,21 @@ public class AdminMenu implements Menu {
 
     @Override
     public void onClick(int slot, ClickType clickType) {
-        if (slot == MainConfig.ADMIN_PURCHASE_POINTS_SLOT.getValue()) {
+        if (slot == MainConfig.SETTINGS_PURCHASE_SLOT.getValue()) {
             Runnable callback = getRunnable();
-            if (clickType == ClickType.LEFT && MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()) {
+            if (slot == MainConfig.SETTINGS_PURCHASE_SLOT.getValue() && MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue() && player.hasPermission(ADMIN)) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
-            }
-            if (clickType == ClickType.RIGHT && player.hasPermission(ADMIN)) {
-                PointsMenu pointsMenu = new PointsMenu(plugin, player, skill, sPlayer, clickedSkill);
-                pointsMenu.open(player);
             }
         } else if (slot == MainConfig.ADMIN_RESET_SKILLS_SLOT.getValue()) {
             Runnable callback = getRunnable(clickType);
-            if (clickType == ClickType.LEFT && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
+            if (slot == MainConfig.ADMIN_RESET_SKILLS_SLOT.getValue() && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
-            }
-            if (clickType == ClickType.RIGHT) {
-                ResetMenu resetMenu = new ResetMenu(plugin, player, skill, sPlayer, clickedSkill);
-                resetMenu.open(player);
             }
         } else if (slot == 3) {
             handleSkillClick(clickType);
@@ -106,8 +109,56 @@ public class AdminMenu implements Menu {
             SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
             SettingsMenu.open(player);
             playUIButtonClickSound(player);
-        } else if (slot == MainConfig.ADMIN_CONFIRMATION_TOGGLE_SLOT.getValue()) {
-            toggleConfirmation(clickType, slot);
+        } else if (slot == MainConfig.ADMIN_SKILLS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+            toggleConfirmation(slot);
+            playUIButtonClickSound(player);
+        } else if (slot == MainConfig.POINTS_FUNDING_SLOT.getValue()) {
+            toggleFundingSource();
+            playUIButtonClickSound(player);
+        } else if (slot == MainConfig.POINTS_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreasePoints();
+                playUIButtonClickSound(player);
+            } else if (clickType == ClickType.RIGHT) {
+                increasePoints();
+                playUIButtonClickSound(player);
+            }
+        } else if (slot == MainConfig.POINTS_INCREMENT_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreaseIncrementedPoints();
+                playUIButtonClickSound(player);
+            } else if (clickType == ClickType.RIGHT) {
+                increaseIncrementedPoints();
+                playUIButtonClickSound(player);
+            }
+        } else if (slot == MainConfig.ADMIN_BACK_SLOT.getValue()) {
+            SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+            SettingsMenu.open(player);
+            playUIButtonClickSound(player);
+        } else if (slot == MainConfig.POINTS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+            togglePointsConfirmation(slot);
+            playUIButtonClickSound(player);
+        } else if (slot == MainConfig.RESET_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreaseResetPrice();
+                playUIButtonClickSound(player);
+            } else if (clickType == ClickType.RIGHT) {
+                increaseResetPrice();
+                playUIButtonClickSound(player);
+            }
+        } else if (slot == MainConfig.RESET_INCREMENT_SLOT.getValue()) {
+            if (clickType == ClickType.LEFT) {
+                decreaseIncrementResetPrice();
+                playUIButtonClickSound(player);
+            } else if (clickType == ClickType.RIGHT) {
+                increaseIncrementResetPrice();
+                playUIButtonClickSound(player);
+            }
+        } else if (slot == MainConfig.RESET_REFUND_SLOT.getValue()) {
+            toggleRefundPoints();
+            playUIButtonClickSound(player);
+        } else if (slot == MainConfig.RESET_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+            toggleResetConfirmation(slot);
             playUIButtonClickSound(player);
         }
     }
@@ -178,6 +229,20 @@ public class AdminMenu implements Menu {
     }
 
     @NotNull
+    private Runnable getRunnable() {
+        int price = sPlayer.getPointPrice();
+        return () -> {
+            if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(this.sPlayer, price, this.player)) {
+                sPlayer.setPoints(sPlayer.getPoints() + 1);
+                playUIButtonClickSound(player);
+                open(player);
+            } else {
+                playItemBreakSound(player);
+            }
+        };
+    }
+
+    @NotNull
     private Runnable getRunnable(ClickType event) {
         if ((event == ClickType.LEFT) && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
             return getResetSkillsCallback();
@@ -190,8 +255,8 @@ public class AdminMenu implements Menu {
     private Runnable getResetSkillsCallback() {
         return () -> {
             int resetPoint;
-            if (MainConfig.INCREMENT_RESET_PRICE.getValue() > 0) {
-                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.INCREMENT_RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
+            if (MainConfig.RESET_INCREMENT_PRICE.getValue() > 0) {
+                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.RESET_INCREMENT_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             } else {
                 resetPoint = MainConfig.RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             }
@@ -206,7 +271,7 @@ public class AdminMenu implements Menu {
                 playGenericExplodeSound(player);
                 this.open(player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.ADMIN_RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
                 confirmationMenu.open(player);
             }
         };
@@ -224,8 +289,8 @@ public class AdminMenu implements Menu {
     private Runnable getCallbackWithoutConfirmation() {
         return () -> {
             int resetPoint;
-            if (MainConfig.INCREMENT_RESET_PRICE.getValue() > 0) {
-                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.INCREMENT_RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
+            if (MainConfig.RESET_INCREMENT_PRICE.getValue() > 0) {
+                resetPoint = MainConfig.RESET_PRICE.getValue() * MainConfig.RESET_INCREMENT_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             } else {
                 resetPoint = MainConfig.RESET_PRICE.getValue() * (sPlayer.getResetCount() + 1);
             }
@@ -241,20 +306,6 @@ public class AdminMenu implements Menu {
             } else {
                 playItemBreakSound(player);
                 open(player);
-            }
-        };
-    }
-
-    @NotNull
-    private Runnable getRunnable() {
-        int price = sPlayer.getPointPrice();
-        return () -> {
-            if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(this.sPlayer, price, this.player)) {
-                sPlayer.setPoints(sPlayer.getPoints() + 1);
-                playUIButtonClickSound(player);
-                open(player);
-            } else {
-                playItemBreakSound(player);
             }
         };
     }
@@ -342,44 +393,119 @@ public class AdminMenu implements Menu {
         }
     }
 
-    private void toggleConfirmation(ClickType event, int slot) {
-        if ((event == ClickType.LEFT) && slot == MainConfig.ADMIN_CONFIRMATION_TOGGLE_SLOT.getValue()) {
-            String nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
-
-            switch (nextConfirmationName) {
-                case "Purchase Skills":
-                    nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_POINTS_NAME.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getPath(), nextConfirmationName);
-                    break;
-                case "Purchase Points":
-                    nextConfirmationName = MainConfig.CONFIRMATION_RESET_SKILLS_NAME.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_POINTS_NAME.getPath(), nextConfirmationName);
-                    break;
-                case "Reset Skills":
-                    nextConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_RESET_SKILLS_NAME.getPath(), nextConfirmationName);
-                    break;
-            }
+    private void toggleConfirmation(int slot) {
+        if (slot == MainConfig.ADMIN_SKILLS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+            boolean confirmationStatus = !MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue();
+            MainConfig.CONFIRMATION_PURCHASE_SKILLS.setValue(confirmationStatus);
+            bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getPath(), MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue());
             bukkitConfig.save();
         }
-        if ((event == ClickType.RIGHT) && slot == MainConfig.ADMIN_CONFIRMATION_TOGGLE_SLOT.getValue()) {
-            boolean currentConfirmationValue;
-            String currentConfirmationName = MainConfig.CONFIRMATION_PURCHASE_SKILLS_NAME.getValue();
+        player.openInventory(getInventory());
+    }
 
-            switch (currentConfirmationName) {
-                case "Purchase Skills":
-                    currentConfirmationValue = MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getPath(), !currentConfirmationValue);
-                    break;
-                case "Purchase Points":
-                    currentConfirmationValue = MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_POINTS.getPath(), !currentConfirmationValue);
-                    break;
-                case "Reset Skills":
-                    currentConfirmationValue = MainConfig.CONFIRMATION_RESET_SKILLS.getValue();
-                    bukkitConfig.set(MainConfig.CONFIRMATION_RESET_SKILLS.getPath(), !currentConfirmationValue);
-                    break;
-            }
+    private void increasePoints() {
+        int newPoints = MainConfig.POINTS_PRICE.getValue() + 1;
+        MainConfig.POINTS_PRICE.setValue(newPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        bukkitConfig.save();
+    }
+
+    private void decreasePoints() {
+        int newPoints = Math.max(0, MainConfig.POINTS_PRICE.getValue() - 1);
+        MainConfig.POINTS_PRICE.setValue(newPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        bukkitConfig.save();
+    }
+
+    private void toggleFundingSource() {
+        FundingSource currentFundingSource = MainConfig.POINTS_FUNDING_SOURCE.getValue();
+
+        FundingSource newFundingSource = (currentFundingSource instanceof VaultFundingSource)
+        ? new XPFundingSource()
+        : new VaultFundingSource();
+
+        String newFundingSourceIdentifier = (newFundingSource instanceof VaultFundingSource) ? "VAULT" : "XP";
+
+        MainConfig.POINTS_FUNDING_SOURCE.setValue(newFundingSource);
+        player.openInventory(getInventory());
+
+        bukkitConfig.set(MainConfig.POINTS_FUNDING_SOURCE.getPath(), newFundingSourceIdentifier);
+        bukkitConfig.save();
+    }
+
+    private void increaseIncrementedPoints() {
+        int newPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue() + 1;
+        MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        bukkitConfig.save();
+    }
+
+    private void decreaseIncrementedPoints() {
+        int newPoints = Math.max(0, MainConfig.POINTS_INCREMENT_PRICE.getValue() - 1);
+        MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        bukkitConfig.save();
+    }
+
+    private void togglePointsConfirmation(int slot) {
+        if (slot == MainConfig.POINTS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+        boolean confirmationStatus = !MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue();
+        MainConfig.CONFIRMATION_PURCHASE_POINTS.setValue(confirmationStatus);
+        bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_POINTS.getPath(), MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue());
+        bukkitConfig.save();
+        }
+        player.openInventory(getInventory());
+    }
+
+    private void increaseResetPrice() {
+        int newResetPoints = MainConfig.RESET_PRICE.getValue() + 1;
+        MainConfig.RESET_PRICE.setValue(newResetPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
+        bukkitConfig.save();
+    }
+
+    private void decreaseResetPrice() {
+        int newResetPoints = Math.max(0, MainConfig.RESET_PRICE.getValue() - 1);
+        MainConfig.RESET_PRICE.setValue(newResetPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
+        bukkitConfig.save();
+    }
+
+    private void increaseIncrementResetPrice() {
+        int newIncrementResetPoints = MainConfig.RESET_INCREMENT_PRICE.getValue() + 1;
+        MainConfig.RESET_INCREMENT_PRICE.setValue(newIncrementResetPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
+        bukkitConfig.save();
+    }
+
+    private void decreaseIncrementResetPrice() {
+        int newIncrementResetPoints = Math.max(0, MainConfig.RESET_INCREMENT_PRICE.getValue() - 1);
+        MainConfig.RESET_INCREMENT_PRICE.setValue(newIncrementResetPoints);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
+        bukkitConfig.save();
+    }
+
+    private void toggleRefundPoints() {
+        boolean newRefundStatus = !MainConfig.REFUND_POINTS.getValue();
+        MainConfig.REFUND_POINTS.setValue(newRefundStatus);
+        player.openInventory(getInventory());
+        bukkitConfig.set(MainConfig.REFUND_POINTS.getPath(), newRefundStatus);
+        bukkitConfig.save();
+    }
+
+    private void toggleResetConfirmation(int slot) {
+        if (slot == MainConfig.RESET_CONFIRMATION_TOGGLE_SLOT.getValue()) {
+            boolean confirmationStatus = !MainConfig.CONFIRMATION_RESET_SKILLS.getValue();
+            MainConfig.CONFIRMATION_RESET_SKILLS.setValue(confirmationStatus);
+            bukkitConfig.set(MainConfig.CONFIRMATION_RESET_SKILLS.getPath(), MainConfig.CONFIRMATION_RESET_SKILLS.getValue());
             bukkitConfig.save();
         }
         player.openInventory(getInventory());
