@@ -66,7 +66,7 @@ public class ResistanceSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill decreases damage received.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cIncoming damage: ",
                         "   &e{prev}% &7 >>> &e{next}%"

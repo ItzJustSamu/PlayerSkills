@@ -76,7 +76,7 @@ public class SwiftSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases your movement speed.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cSpeed Increase: ",
                         "   &e{prev}x &7 >>> &e{next}x"

@@ -15,14 +15,13 @@ public final class CommonStringReplacer {
         int skillPrice = (skill != null) ? skill.getPrice().getValue() : 0;
         int price = sPlayer.getPointPrice();
         int skillUpgradeIncrement = (skill != null) ? skill.getIncrementedUpgrade().getValue() : 0;
-        int skillMaxLevel = (skill != null) ? skill.getMaxLevel() : 0;
-        int resetPointPrice;
-        if (MainConfig.RESET_PRICE.getValue() > 0) {
-            int base = MainConfig.RESET_PRICE.getValue();
-            int playerPoints = sPlayer.getResetCount();
-            resetPointPrice = base + (playerPoints * MainConfig.RESET_INCREMENT_PRICE.getValue());
+        int skillMaxLevel = (skill != null) ? skill.getLimit() : 0;
+
+        int resetSkillsPrice;
+        if (MainConfig.RESET_INCREMENT_PRICE.getValue()  > 0) {
+            resetSkillsPrice = MainConfig.RESET_INCREMENT_PRICE.getValue() * (sPlayer.getResetCount());
         } else {
-            resetPointPrice = sPlayer.getResetCount() * MainConfig.RESET_INCREMENT_PRICE.getValue();
+            resetSkillsPrice = MainConfig.RESET_PRICE.getValue() + sPlayer.getResetCount() * (MainConfig.RESET_INCREMENT_PRICE.getValue());
         }
 
         return original.replace("{player-price}", Integer.toString(price))
@@ -30,7 +29,7 @@ public final class CommonStringReplacer {
                 .replace("{player-points}", Integer.toString(sPlayer.getPoints()))
                 .replace("{reset-price}", Integer.toString(MainConfig.RESET_PRICE.getValue()))
                 .replace("{reset-increment-price}", Integer.toString(MainConfig.RESET_INCREMENT_PRICE.getValue()))
-                .replace("{reset-points-price}", Integer.toString(resetPointPrice))
+                .replace("{reset-skills-price}", Integer.toString(resetSkillsPrice))
                 .replace("{refund-status}", Boolean.toString(MainConfig.REFUND_POINTS.getValue()))
                 .replace("{points-price}", Integer.toString(MainConfig.POINTS_PRICE.getValue()))
                 .replace("{skills-upgrade-price}", Integer.toString(skillsUpgrade))
@@ -42,6 +41,7 @@ public final class CommonStringReplacer {
                 .replace("{points-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()))
                 .replace("{reset-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_RESET_SKILLS.getValue()))
                 .replace("{skills-max-level}", Integer.toString(skillMaxLevel));
+
     });
 
     private CommonStringReplacer() {

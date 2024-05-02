@@ -32,35 +32,38 @@ public abstract class Skill implements Listener {
     private final String SKILL;
     private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
 
-    private final int MAX_LEVEL;
+    private final int LIMIT;
     private final int GUI_SLOT;
     private int INCREMENT;
     private int PRICE;
     private int INCREMENTED_UPGRADE;
+    private int INCREMENT_LIMIT;
     private ItemBuilderConfigPath ITEM_CONFIG;
     private IntegerConfigPath GET_INCREMENT;
     private IntegerConfigPath GET_INCREMENTED_UPGRADE;
+    private IntegerConfigPath GET_INCREMENT_LIMIT;
 
     private IntegerConfigPath GET_PRICE;
     private final BooleanConfigPath GET_DISABLED = new BooleanConfigPath(new PathString("disable"), false);
     private ItemBuilder<ItemStack> DISPLAY_ITEM;
-    private IntegerConfigPath GET_MAX_LEVEL;
+    private IntegerConfigPath GET_LIMIT;
     private IntegerConfigPath GET_GUI_SLOT;
 
-    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_MAX_LEVEL, int SET_GUI_SLOT) {
+    public Skill(PlayerSkills PlayerSkills, String SKILL_CONFIG_NAME, String SKILL, int SET_LIMIT, int SET_GUI_SLOT) {
         this.PLUGIN = PlayerSkills;
         this.NAME = SKILL_CONFIG_NAME;
         this.SKILL = SKILL;
-        this.MAX_LEVEL = SET_MAX_LEVEL;
+        this.LIMIT = SET_LIMIT;
         this.GUI_SLOT = SET_GUI_SLOT;
         this.CONFIG = new SkillConfig(this);
     }
 
     public final void setup() {
         CONFIG.setup();
-        GET_MAX_LEVEL = Paths.integerPath(new PathString("max-level"), MAX_LEVEL);
+        GET_LIMIT = Paths.integerPath(new PathString("limit"), LIMIT);
+        GET_LIMIT.setConfig(CONFIG);
+
         GET_GUI_SLOT = Paths.integerPath(new PathString("gui-slot"), GUI_SLOT);
-        GET_MAX_LEVEL.setConfig(CONFIG);
         GET_INCREMENT = Paths.integerPath(new PathString("increment"), INCREMENT);
         GET_INCREMENT.setConfig(CONFIG);
         GET_INCREMENTED_UPGRADE = Paths.integerPath(new PathString("incremented-upgrade"), INCREMENTED_UPGRADE);
@@ -78,25 +81,20 @@ public abstract class Skill implements Listener {
         DISPLAY_ITEM = itemBuilderConfigPath.getValue();
         DISPLAY_ITEM.addStringReplacer(StringReplacer.of((original, uuid) -> {
             SPlayer sPlayer = SPlayer.get(uuid);
-            int level = getLevel(sPlayer);
-            int getMaxLevel = GET_MAX_LEVEL.getValue();
-            IntegerConfigPath upgrade = getUpgrade();
-            IntegerConfigPath upgradeIncrement = getIncrementedUpgrade();
 
-            IntegerConfigPath price = getPrice();
-            if (level >= getMaxLevel) {
+            if (getLevel(sPlayer) >= getLimit()) {
                 original = original.replace("{next}", MainConfig.PLACEHOLDERS_NEXT_MAX.getValue())
                         .replace("{price}", MainConfig.PLACEHOLDERS_SKILL_PRICE_MAX.getValue());
             } else {
                 original = original.replace("{next}",  getNextString(sPlayer))
-                        .replace("{price}", Integer.toString(price.getValue()));
+                        .replace("{price}", Integer.toString(getPrice().getValue()));
             }
             original = original
                     .replace("{prev}", getPreviousString(sPlayer))
-                    .replace("{level}", Integer.toString(level))
-                    .replace("{max}", Integer.toString(getMaxLevel))
-                    .replace("{upgrade}", Integer.toString(upgrade.getValue())
-            .replace("{incremented-upgrade}", Integer.toString(upgradeIncrement.getValue())));
+                    .replace("{level}", Integer.toString(getLevel(sPlayer)))
+                    .replace("{limit}", Integer.toString(getLimit())
+                    .replace("{upgrade}", Integer.toString(getUpgrade().getValue())
+            .replace("{incremented-upgrade}", Integer.toString(getIncrementedUpgrade().getValue()))));
             return original;
         }));
 
@@ -109,12 +107,11 @@ public abstract class Skill implements Listener {
         Bukkit.getPluginManager().registerEvents(this, PLUGIN);
     }
 
-    public int getMaxLevel() {
-        return GET_MAX_LEVEL.getValue();
+    public int getLimit() {
+        return GET_LIMIT.getValue();
     }
-
-    public void setMaxLevel(int Level) {
-        GET_MAX_LEVEL.setValue(Level, getConfig());
+    public void setLimit(int Level) {
+        GET_LIMIT.setValue(Level, getConfig());
     }
 
     public int getGuiSlot() {
@@ -204,6 +201,18 @@ public abstract class Skill implements Listener {
         }
         return !list.contains(world.getName());
     }
+
+    public boolean Worlds_Restriction(World world) {
+        List<String> list = WORLDS_RESTRICTIONS.getValue();
+        if (list.isEmpty()) {
+            return false;
+        }
+        if (world == null) {
+            return true;
+        }
+        return !list.contains(world.getName());
+    }
+
 
     public boolean isSkillDisabled() {
         return GET_DISABLED.getValue();

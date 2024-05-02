@@ -61,7 +61,7 @@ public class SkillsMenu implements Menu {
                 return;
             }
 
-            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(sPlayer) < skill.getMaxLevel()) {
+            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(sPlayer) < skill.getLimit()) {
                 int price = skill.getPrice().getValue();
                 if (sPlayer.getPoints() >= price) {
                     Runnable callback = () -> {

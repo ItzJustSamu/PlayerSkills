@@ -117,7 +117,7 @@ public class HealthSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the amount of health you have.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cExtra hearts: ",
                         "   &e{prev}❤ &7 >>> &e{next}❤"

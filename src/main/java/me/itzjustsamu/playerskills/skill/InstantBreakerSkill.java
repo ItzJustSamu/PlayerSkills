@@ -91,7 +91,7 @@ public class InstantBreakerSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill allows you to instantly break blocks with a cooldown based on skill level.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cCooldown: ",
                         "   &e{prev}% &7 >>> &e{next}%"

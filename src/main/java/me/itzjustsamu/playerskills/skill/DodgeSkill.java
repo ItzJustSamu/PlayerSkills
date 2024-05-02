@@ -101,7 +101,7 @@ public class DodgeSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill gives a chance to completely dodge attacks.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cDodge chance: ",
                         "   &e{prev}% &7 >>> &e{next}%"

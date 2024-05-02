@@ -58,6 +58,38 @@ public class MainConfig extends PathableConfig {
     public static final LongConfigPath OPTIONS_AUTO_SAVE_TICKS = new LongConfigPath(new PathString("options", "auto-save", "ticks"), 1000L);
     public static final BooleanConfigPath OPTIONS_AUTO_SAVE_ASYNC = new BooleanConfigPath(new PathString("options", "auto-save", "async"), true);
 
+    public static final IntegerConfigPath PURCHASE_POINT_SLOT = new IntegerConfigPath(new PathString("purchase", "point", "slot"), 4);
+    public static final ConfigPath<ItemBuilder<ItemStack>> PURCHASE_POINT_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("purchase", "point", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&7You have &e{player-points} &7points.",
+                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
+                    ))
+    ));
+
+    public static final IntegerConfigPath RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("reset", "skills", "slot"), 5);
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "skills", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cReset"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.TNT))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "&eLeft-Click &7to completely reset your skills.",
+                            "&7This costs &e{reset-skills-price} &7skill point.",
+                            "",
+                            "&7Refund status: &e{refund-status}."
+                    ))
+    ));
+
+    public static final IntegerConfigPath BACK_SLOT = new IntegerConfigPath(new PathString("back", "slot"), 45);
+    public static final ConfigPath<ItemBuilder<ItemStack>> BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("back", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&aBACK"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
+    ));
+
 
     // Admin Configurations
 
@@ -94,38 +126,6 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new NameModifier().setName("&r"))
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
-    public static final IntegerConfigPath SETTINGS_PURCHASE_SLOT = new IntegerConfigPath(new PathString("settings", "purchase", "slot"), 4);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_PURCHASE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "purchase", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7You have &e{player-points} &7points.",
-                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
-                    ))
-    ));
-
-    public static final IntegerConfigPath SETTINGS_RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("settings", "reset-skills", "slot"), 5);
-
-    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "reset-skills", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cReset"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.TNT))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&eLeft-Click &7to completely reset your skills.",
-                            "&7This costs &e{reset-points-price} &7skill point.",
-                            "",
-                            "&7Refund status: &e{refund-status}."
-                    ))
-    ));
-
-    public static final IntegerConfigPath SETTINGS_BACK_SLOT = new IntegerConfigPath(new PathString("settings", "back", "slot"), 45);
-    public static final ConfigPath<ItemBuilder<ItemStack>> SETTINGS_BACK_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("settings", "back", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&aBACK"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
-    ));
-
 
     // Admin configurations
 
@@ -140,29 +140,6 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
 
-    public static final IntegerConfigPath ADMIN_PURCHASE_POINTS_SLOT = new IntegerConfigPath(new PathString("admin", "purchase-points", "slot"), 4);
-    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_PURCHASE_POINTS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "purchase-points", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cPurchase Points"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.BOOK))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&7You have &e{player-points} &7points.",
-                            "&eLeft-Click &7to purchase a skill point for &e{player-price} {symbol}&7."
-                    ))
-    ));
-
-    public static final IntegerConfigPath ADMIN_RESET_SKILLS_SLOT = new IntegerConfigPath(new PathString("admin", "reset-skills", "slot"), 5);
-    public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_RESET_SKILLS_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "reset-skills", "display"),
-            new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cReset"))
-                    .addItemModifier(new XMaterialModifier(XMaterial.TNT))
-                    .addItemModifier(new LoreModifier().setLore(
-                            "&eLeft-Click &7to completely reset your skills.",
-                            "&7This costs &e{reset-points-price} &7skill point.",
-                            "",
-                            "&7Refund status: &e{refund-status}."
-                    ))
-    ));
 
     public static final IntegerConfigPath ADMIN_SKILLS_UPGRADE_SLOT = new IntegerConfigPath(new PathString("admin", "skills-upgrade", "slot"), 9);
     public static final ConfigPath<ItemBuilder<ItemStack>> ADMIN_SKILLS_UPGRADE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("admin", "skills-upgrade", "display"),
@@ -330,7 +307,7 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath RESET_CONFIRMATION_TOGGLE_SLOT = new IntegerConfigPath(new PathString("reset","confirmation", "toggle", "slot"), 21);
     public static final ConfigPath<ItemBuilder<ItemStack>> RESET_CONFIRMATION_TOGGLE_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("reset", "confirmation","toggle", "display"),
             new BukkitItemBuilder()
-                    .addItemModifier(new NameModifier().setName("&cSet Points Confirmation Menu"))
+                    .addItemModifier(new NameModifier().setName("&cSet Reset Confirmation Menu"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
                             "&7Menu: &e{reset-confirmation} "

@@ -29,7 +29,7 @@ public class ExplosiveArrowsSkill extends Skill {
     private final ConfigPath<Double> EXPLOSION_DAMAGE = Paths.doublePath(new PathString("explosion-damage"), 5D);
 
     public ExplosiveArrowsSkill(PlayerSkills plugin) {
-        super(plugin, "ExplosiveArrows", "explosivearrows", 20, 4);
+        super(plugin, "ExplosiveArrows", "explosivearrows", 20, 5);
     }
 
     @EventHandler
@@ -116,7 +116,7 @@ public class ExplosiveArrowsSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill allows you to shoot explosive arrows.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cExplosion Radius: ",
                         "   &7{prev} blocks &7 >>> &7{next} blocks",

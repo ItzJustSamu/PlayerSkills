@@ -40,7 +40,8 @@ public class BreederSkill extends Skill {
             Animals animalMother = (Animals) mother;
             World world = animalMother.getWorld();
 
-            if (Worlds_Restriction((Player) world)) {
+
+            if (Worlds_Restriction(world)) {
                 return;
             }
 
@@ -54,12 +55,12 @@ public class BreederSkill extends Skill {
             }
 
             if (getLevel(sPlayer) > 0) {
-
                 // Increase the chances of spawning multiple animals
                 handleBreeding(event, SPAWN_CHANCE_INCREASE.getValue());
             }
         }
     }
+
 
     private void handleBreeding(EntityBreedEvent event, int spawnChanceIncrease) {
         // Apply the spawn chance increase
@@ -95,7 +96,7 @@ public class BreederSkill extends Skill {
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the chances of spawning up to a maximum of 5 animals at once",
                         "&7during the breeding process.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&6Spawn Chance Increase: ",
                         "   &7+{prev}% &7 >>> &7+{next}%",

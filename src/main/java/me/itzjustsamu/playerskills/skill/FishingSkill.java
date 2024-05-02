@@ -71,7 +71,7 @@ public class FishingSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases chances of obtaining rare items and overall catch while fishing.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cCatch Chance Increase: ",
                         "   &e{prev}% &7 >>> &e{next}%"

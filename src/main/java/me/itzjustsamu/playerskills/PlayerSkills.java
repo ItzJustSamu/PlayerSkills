@@ -68,7 +68,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));
         registerSkill(new ExplosiveArrowsSkill(this));
-        registerSkill(new ExtraJumpSkill(this));
+        registerSkill(new DoubleJumpSkill(this));
         registerSkill(new ExtraShotSkill(this));
         registerSkill(new FireBallSkill(this));
         registerSkill(new FishingSkill(this));

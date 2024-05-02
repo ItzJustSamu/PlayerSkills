@@ -146,7 +146,7 @@ public class LacerateSkill extends Skill {
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the chance of making an enemy bleed.",
-                        "&7Level: &e{level}&7/&e{max}&7",
+                        "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cCut chance: ",
                         "   &e{prev}% &7 >>> &e{next}%"
