@@ -29,7 +29,7 @@ public class CriticalsSkill extends Skill {
     private final ConfigPath<String> CRITICAL_MESSAGE = Paths.stringPath(new PathString("critical-message"), "&a*** CRITICAL HIT ***");
 
     public CriticalsSkill(PlayerSkills plugin) {
-        super(plugin, "Criticals", "criticals", 20, 2);
+        super(plugin, "Criticals", "criticals", 20, 1);
     }
 
     @EventHandler

@@ -22,7 +22,7 @@ import java.util.List;
 public class FishingSkill extends Skill {
 
     public FishingSkill(PlayerSkills plugin) {
-        super(plugin, "Fishing", "fishing", 20, 8);
+        super(plugin, "Fishing", "fishing", 20, 7);
     }
 
     @EventHandler

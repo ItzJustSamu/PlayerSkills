@@ -27,7 +27,7 @@ public class SwiftSkill extends Skill {
     private final ConfigPath<Double> DEFAULT_SPEED = Paths.doublePath(new PathString("default-speed"), 0.2);
 
     public SwiftSkill(PlayerSkills plugin) {
-        super(plugin, "Swift", "swift", 5, 20);
+        super(plugin, "Swift", "swift", 5, 19);
     }
 
 

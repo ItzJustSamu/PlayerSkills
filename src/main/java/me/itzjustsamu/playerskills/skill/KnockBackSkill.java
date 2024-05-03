@@ -25,7 +25,7 @@ import java.util.List;
 public class KnockBackSkill extends Skill {
 
     public KnockBackSkill(PlayerSkills plugin) {
-        super(plugin, "Knockback", "knockback", 10, 13);
+        super(plugin, "Knockback", "knockback", 10, 12);
     }
 
     @EventHandler

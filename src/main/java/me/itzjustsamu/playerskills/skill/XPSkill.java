@@ -25,7 +25,7 @@ import java.util.List;
 public class XPSkill extends Skill {
 
     public XPSkill(PlayerSkills plugin) {
-        super(plugin, "XP", "xp", 20, 21);
+        super(plugin, "XP", "xp", 20, 20);
     }
 
     // Event handler for hit event

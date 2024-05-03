@@ -21,7 +21,7 @@ import java.util.List;
 
 public class LootingSkill extends Skill {
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 15);
+        super(plugin, "Looting", "looting", 20, 14);
     }
 
     @EventHandler

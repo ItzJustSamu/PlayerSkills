@@ -254,15 +254,15 @@ public class AdminMenu implements Menu {
     @NotNull
     private Runnable getResetSkillsCallback() {
         return () -> {
-            int resetPoint;
-            if (MainConfig.RESET_INCREMENT_PRICE.getValue()  > 0) {
-                resetPoint = MainConfig.RESET_INCREMENT_PRICE.getValue() * (sPlayer.getResetCount());
-            } else {
-                resetPoint = (sPlayer.getResetCount() * (MainConfig.RESET_INCREMENT_PRICE.getValue() * MainConfig.RESET_PRICE.getValue()));
+            int resetSkillsPrice = 0;
+            if (MainConfig.RESET_PRICE.getValue() > 0) {
+                resetSkillsPrice = MainConfig.RESET_PRICE.getValue();
+            } else if (MainConfig.RESET_INCREMENT_PRICE.getValue() > 0) {
+                resetSkillsPrice = MainConfig.RESET_PRICE.getValue() + (MainConfig.RESET_INCREMENT_PRICE.getValue() * sPlayer.getResetCount());
             }
 
-            if (sPlayer.getPoints() >= resetPoint) {
-                sPlayer.setPoints(sPlayer.getPoints() - resetPoint);
+            if (sPlayer.getPoints() >= resetSkillsPrice) {
+                sPlayer.setPoints(sPlayer.getPoints() - resetSkillsPrice);
                 if (MainConfig.REFUND_POINTS.getValue()) {
                     refundPointsForReset();
                 }

@@ -26,7 +26,7 @@ import java.util.UUID;
 public class ExtraShotSkill extends Skill {
 
     public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 6);
+        super(plugin, "ExtraShot", "extrashot", 10, 5);
     }
 
     @EventHandler

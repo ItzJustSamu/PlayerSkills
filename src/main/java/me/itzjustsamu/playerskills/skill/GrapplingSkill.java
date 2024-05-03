@@ -38,7 +38,7 @@ public class GrapplingSkill extends Skill {
     private final HashMap<Player, Long> cooldownMap = new HashMap<>();
 
     public GrapplingSkill(PlayerSkills plugin) {
-        super(plugin, "Grappling", "grappling", 3, 10);
+        super(plugin, "Grappling", "grappling", 3, 9);
     }
 
     @EventHandler

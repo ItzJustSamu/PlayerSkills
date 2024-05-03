@@ -21,7 +21,7 @@ import java.util.List;
 
 public class GluttonySkill extends Skill {
     public GluttonySkill(PlayerSkills plugin) {
-        super(plugin, "Gluttony", "gluttony", 20, 9);
+        super(plugin, "Gluttony", "gluttony", 20, 8);
     }
 
     @EventHandler
