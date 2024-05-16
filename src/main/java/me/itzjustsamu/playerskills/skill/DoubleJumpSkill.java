@@ -20,6 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -32,7 +33,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class DoubleJumpSkill extends Skill {
+public class DoubleJumpSkill extends Skill implements Listener {
     private final ConfigPath<Long> Cooldown_Time = Paths.longPath(new PathString("cooldown"), 30000L); // Default: 30000L = 30 seconds
     private final ConfigPath<String> Cooldown_Message = Paths.stringPath(new PathString("cooldown-message"), "&cDoubleJump cooldown: &e{remaining_time} seconds.");
 
@@ -42,6 +43,7 @@ public class DoubleJumpSkill extends Skill {
 
     public DoubleJumpSkill(PlayerSkills plugin) {
         super(plugin, "DoubleJump", "doublejump", 5, 3);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
@@ -93,6 +95,7 @@ public class DoubleJumpSkill extends Skill {
             doubleJump(player);
         }
     }
+
     private void doubleJump(Player player) {
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
@@ -103,17 +106,13 @@ public class DoubleJumpSkill extends Skill {
             return;
         }
 
-        // Get the player's jump level
-        int jumpLevel = getLevel(sPlayer);
-
-            // Check if the player has a jump level greater than 0
-        if (jumpLevel > 0) {
+        // Check if the player has a jump level greater than 0
+        if (getLevel(sPlayer) > 0) {
             // Calculate the jump height based on the player's jump level
-            double jumpHeight = jumpLevel * getUpgrade().getValue();
+            double jumpHeight = getLevel(sPlayer) * getUpgrade().getValue();
 
             // Set cooldown for the double jump
             Cooldown_Map.put(player, System.currentTimeMillis() + Cooldown_Time.getValue());
-
 
             // Calculate the direction for the double jump
             Vector direction = player.getLocation().getDirection().normalize();
@@ -141,7 +140,6 @@ public class DoubleJumpSkill extends Skill {
             Jumped.put(player, false);
         }
     }
-
 
     @EventHandler
     public void onSneak(final PlayerToggleSneakEvent event) {
@@ -189,6 +187,39 @@ public class DoubleJumpSkill extends Skill {
     }
 
     private void sendActionBar(Player player, long remainingTime) {
+        if (isLegacyVersion()) {
+            sendActionBarLegacy(player, remainingTime);
+        } else {
+            sendActionBarModern(player, remainingTime);
+        }
+    }
+
+    private void sendActionBarLegacy(Player player, long remainingTime) {
+        new BukkitRunnable() {
+            long timeLeft = remainingTime;
+            long ticks = 0;
+
+            @Override
+            public void run() {
+                if (timeLeft > 0) {
+                    ticks++;
+                    if (ticks % 100 == 0) { // 100 ticks = 5 seconds
+                        String actionBarMessage = ChatColor.translateAlternateColorCodes('&', Cooldown_Message.getValue())
+                                .replace("{remaining_time}", String.valueOf(timeLeft));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', actionBarMessage));
+                        ticks = 0; // Reset ticks count
+                    }
+                    timeLeft--;
+                } else {
+                    player.sendMessage(""); // Clear the action bar
+                    cancel(); // Stop the task when the cooldown ends
+                }
+            }
+        }.runTaskTimer(getPlugin(), 0L, 1L); // Update every tick
+    }
+
+
+    private void sendActionBarModern(Player player, long remainingTime) {
         new BukkitRunnable() {
             long timeLeft = remainingTime;
 
@@ -205,5 +236,17 @@ public class DoubleJumpSkill extends Skill {
                 }
             }
         }.runTaskTimer(getPlugin(), 0L, 20L); // Update every second
+    }
+
+    private boolean isLegacyVersion() {
+        String[] versionParts = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
+        try {
+            int major = Integer.parseInt(versionParts[0]);
+            int minor = Integer.parseInt(versionParts[1]);
+            return major == 1 && minor < 14; // ActionBar was introduced in 1.14
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            // Unable to determine version, assume modern
+            return false;
+        }
     }
 }

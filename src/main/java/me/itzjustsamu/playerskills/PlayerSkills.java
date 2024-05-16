@@ -82,7 +82,6 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new ResistanceSkill(this));
         registerSkill(new ShadowStepSkill(this));
         registerSkill(new StrengthSkill(this));
-        registerSkill(new SwiftSkill(this));
         registerSkill(new XPSkill(this));
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
