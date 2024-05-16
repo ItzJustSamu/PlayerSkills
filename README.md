@@ -5,10 +5,9 @@ Version: 2.5.2 Beta
 - Shadow Step Skill
 - Fishing Skill
 - Grappling Skill
-- Instant breaker
+- Multi Block break Skill
 - Fireball Skill
-- Breeder Skill
-- Explosive Arrow Skill
+- Rapid Fire Skill
 - Cooldowns for most Skills 
 - Skills Menu has been remade
 - 
