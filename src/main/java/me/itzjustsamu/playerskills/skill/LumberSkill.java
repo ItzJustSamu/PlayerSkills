@@ -24,7 +24,7 @@ import java.util.List;
 public class LumberSkill extends Skill {
 
     public LumberSkill(PlayerSkills plugin) {
-        super(plugin, "Lumber", "lumber", 1, 15);
+        super(plugin, "Lumber", "lumber", 1, 13);
     }
 
     @EventHandler

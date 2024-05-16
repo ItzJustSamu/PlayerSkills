@@ -32,7 +32,7 @@ import java.util.List;
 public class FireBallSkill extends Skill implements Listener {
 
     public FireBallSkill(PlayerSkills plugin) {
-        super(plugin, "FireBall", "fireball", 5, 6);
+        super(plugin, "FireBall", "fireball", 5, 4);
     }
 
     @EventHandler

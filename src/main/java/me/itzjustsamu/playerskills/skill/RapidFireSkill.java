@@ -23,10 +23,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class ExtraShotSkill extends Skill {
+public class RapidFireSkill extends Skill {
 
-    public ExtraShotSkill(PlayerSkills plugin) {
-        super(plugin, "ExtraShot", "extrashot", 10, 5);
+    public RapidFireSkill(PlayerSkills plugin) {
+        super(plugin, "Rapidfire", "rapidfire", 10, 15);
     }
 
     @EventHandler
@@ -46,10 +46,9 @@ public class ExtraShotSkill extends Skill {
             return;
         }
 
-        int arrowLevel = getLevel(sPlayer);
 
-        if (arrowLevel > 0) {
-            int numArrows = 1 + arrowLevel; // Increase the number of arrows based on arrowLevel
+        if (getLevel(sPlayer) > 0) {
+            int numArrows = 1 + getLevel(sPlayer); // Increase the number of arrows based on arrowLevel
 
             BukkitScheduler scheduler = Bukkit.getScheduler();
             long delayBetweenShots = 3L; // Adjust this value to control the delay between shots (in ticks)

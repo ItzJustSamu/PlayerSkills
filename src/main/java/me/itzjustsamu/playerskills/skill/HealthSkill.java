@@ -31,7 +31,7 @@ public class HealthSkill extends Skill {
     private Task task;
 
     public HealthSkill(PlayerSkills plugin) {
-        super(plugin, "Health", "health", 20, 10);
+        super(plugin, "Health", "health", 20, 9);
     }
 
     @Override

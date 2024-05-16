@@ -64,22 +64,21 @@ public class PlayerSkills extends BasePlugin {
     @Override
     public void enable() {
         registerSkill(new ArcherySkill(this));
-        registerSkill(new BreederSkill(this));
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));
-        registerSkill(new ExplosiveArrowsSkill(this));
         registerSkill(new DoubleJumpSkill(this));
-        registerSkill(new ExtraShotSkill(this));
+        registerSkill(new RapidFireSkill(this));
         registerSkill(new FireBallSkill(this));
         registerSkill(new FishingSkill(this));
         registerSkill(new GluttonySkill(this));
         registerSkill(new GrapplingSkill(this));
         registerSkill(new HealthSkill(this));
-        registerSkill(new InstantBreakerSkill(this));
         registerSkill(new KnockBackSkill(this));
         registerSkill(new LacerateSkill(this));
         registerSkill(new LootingSkill(this));
         registerSkill(new LumberSkill(this));
+        registerSkill(new MultiBlockBreakSkill(this));
+        registerSkill(new HasteSkill(this));
         registerSkill(new ResistanceSkill(this));
         registerSkill(new ShadowStepSkill(this));
         registerSkill(new StrengthSkill(this));
@@ -131,6 +130,7 @@ public class PlayerSkills extends BasePlugin {
         HandlerList.unregisterAll(this);
 
         skills.clear();
+
     }
 
     public Map<String, Skill> getSkills() {
