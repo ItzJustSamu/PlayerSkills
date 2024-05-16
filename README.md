@@ -7,7 +7,6 @@ Version: 2.5.2 Beta
 - Grappling Skill
 - Multi Block break Skill
 - Fireball Skill
-- Haste Skill
 - Rapid Fire Skill
 - Cooldowns for most Skills 
 - Skills Menu has been remade
