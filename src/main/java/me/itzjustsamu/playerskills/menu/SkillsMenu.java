@@ -61,25 +61,29 @@ public class SkillsMenu implements Menu {
                 return;
             }
 
-            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot() && skill.getLevel(sPlayer) < skill.getLimit()) {
-                int price = skill.getPrice().getValue();
-                if (sPlayer.getPoints() >= price) {
-                    Runnable callback = () -> {
-                        sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
-                        sPlayer.setPoints(sPlayer.getPoints() - price);
-                        playExperienceOrbPickupSound(player);
-                        open(player);
-                    };
+            if (clickType == ClickType.LEFT && slot == skill.getGuiSlot()) {
+                if (skill.getLevel(sPlayer) >= skill.getLimit()) {
+                    playItemBreakSound(player);
+                } else if (skill.getLevel(sPlayer) < skill.getLimit()) {
+                    int price = skill.getPrice().getValue();
+                    if (sPlayer.getPoints() >= price) {
+                        Runnable callback = () -> {
+                            sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
+                            sPlayer.setPoints(sPlayer.getPoints() - price);
+                            playExperienceOrbPickupSound(player);
+                            open(player);
+                        };
 
-                    if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
-                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
-                        confirmationMenu.open(player);
-                    } else {
-                        callback.run();
+                        if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
+                            ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
+                            confirmationMenu.open(player);
+                        } else {
+                            callback.run();
+                        }
+                        return;
                     }
-                    return;
+                    playItemBreakSound(player);
                 }
-                playItemBreakSound(player);
             }
         }
     }
