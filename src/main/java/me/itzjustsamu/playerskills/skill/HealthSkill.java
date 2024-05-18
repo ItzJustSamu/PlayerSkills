@@ -1,6 +1,12 @@
 package me.itzjustsamu.playerskills.skill;
 
 import com.cryptomorin.xseries.XMaterial;
+import me.itzjustsamu.playerskills.PlayerSkills;
+import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.player.SPlayer;
+import me.itzjustsamu.playerskills.util.Utils;
+import me.itzjustsamu.playerskills.util.VersionControl;
+import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import me.hsgamer.hscore.bukkit.item.BukkitItemBuilder;
 import me.hsgamer.hscore.bukkit.item.modifier.LoreModifier;
 import me.hsgamer.hscore.bukkit.item.modifier.NameModifier;
@@ -10,11 +16,6 @@ import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.impl.Paths;
 import me.hsgamer.hscore.minecraft.item.ItemBuilder;
-import me.itzjustsamu.playerskills.PlayerSkills;
-import me.itzjustsamu.playerskills.config.MainConfig;
-import me.itzjustsamu.playerskills.player.SPlayer;
-import me.itzjustsamu.playerskills.util.Utils;
-import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -23,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class HealthSkill extends Skill {
@@ -51,12 +53,16 @@ public class HealthSkill extends Skill {
                     return;
                 }
                 int hpNeeded = getLevel(sPlayer) * (getUpgrade().getValue() * 2);
-                if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
+                if (getLevel(sPlayer) * (getUpgrade().getValue() * 2) != knownMaxHealth.getOrDefault(uuid, 0)) {
                     clearPlayer(player);
-                    if (hpNeeded > 0) {
+                    if (getLevel(sPlayer) * (getUpgrade().getValue() * 2) > 0) {
                         knownMaxHealth.put(player.getUniqueId(), hpNeeded);
                         clearModifier(player);
-                        addNewHealth(player, hpNeeded);
+                        try {
+                            addNewHealth(player, hpNeeded);
+                        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
@@ -77,11 +83,16 @@ public class HealthSkill extends Skill {
         }
     }
 
-    private void addNewHealth(Player player, int amount) {
-        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
-            AttributeModifier modifier = new AttributeModifier("PlayerSkillsHealth", amount, AttributeModifier.Operation.ADD_NUMBER);
-            instance.addModifier(modifier);
-        });
+    private void addNewHealth(Player player, int amount) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (VersionControl.isNewVersion()) {
+            Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
+                AttributeModifier modifier = new AttributeModifier("PlayerSkillsHealth", amount, AttributeModifier.Operation.ADD_NUMBER);
+                instance.addModifier(modifier);
+            });
+        } else {
+            double newMaxHealth = player.getMaxHealth() + amount;
+            player.getClass().getMethod("setMaxHealth", double.class).invoke(player, newMaxHealth);
+        }
     }
 
     private void clearPlayer(Player player) {
@@ -90,13 +101,15 @@ public class HealthSkill extends Skill {
     }
 
     private void clearModifier(Player player) {
-        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
-            for (AttributeModifier modifier : instance.getModifiers()) {
-                if (modifier.getName().equals("PlayerSkillsHealth")) {
-                    instance.removeModifier(modifier);
+        if (VersionControl.isNewVersion()) {
+            Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
+                for (AttributeModifier modifier : instance.getModifiers()) {
+                    if (modifier.getName().equals("PlayerSkillsHealth")) {
+                        instance.removeModifier(modifier);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @EventHandler

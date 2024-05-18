@@ -1,17 +1,11 @@
 package me.itzjustsamu.playerskills.menu;
 
-import org.bukkit.Bukkit;
+import me.itzjustsamu.playerskills.util.VersionControl;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
 public class Sounds {
-
-    private static final boolean IS_NEW_VERSION = isVersionAbove113();
-
-    private static boolean isVersionAbove113() {
-        String version = Bukkit.getServer().getVersion();
-        return version.contains("1.13") || version.contains("1.14") || version.contains("1.15") || version.contains("1.16") ||
-                version.contains("1.17") || version.contains("1.18") || version.contains("1.19") || version.contains("1.20");
-    }
+    private static final boolean IS_NEW_VERSION = VersionControl.isVersionAbove113();
 
     static void playExperienceOrbPickupSound(Player player) {
         if (IS_NEW_VERSION) {

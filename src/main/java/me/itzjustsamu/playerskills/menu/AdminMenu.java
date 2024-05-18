@@ -164,7 +164,9 @@ public class AdminMenu implements Menu {
     }
 
     private void handleSkillClick(ClickType event) {
-        if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(sPlayer) < clickedSkill.getLimit()) {
+        if (clickedSkill.getLevel(sPlayer) >= clickedSkill.getLimit()) {
+            playItemBreakSound(player);
+        } else if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(sPlayer) < clickedSkill.getLimit()) {
             int price = clickedSkill.getPrice().getValue();
             if (sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
@@ -186,7 +188,6 @@ public class AdminMenu implements Menu {
             }
         }
     }
-
 
     private void handleUpgradeClick(ClickType event) {
         if (event == ClickType.RIGHT && player.hasPermission(ADMIN)) {
