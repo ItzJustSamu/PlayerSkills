@@ -53,16 +53,13 @@ public class HealthSkill extends Skill {
                     return;
                 }
                 int hpNeeded = getLevel(sPlayer) * (getUpgrade().getValue() * 2);
-                if (getLevel(sPlayer) * (getUpgrade().getValue() * 2) != knownMaxHealth.getOrDefault(uuid, 0)) {
-                    clearPlayer(player);
-                    if (getLevel(sPlayer) * (getUpgrade().getValue() * 2) > 0) {
-                        knownMaxHealth.put(player.getUniqueId(), hpNeeded);
-                        clearModifier(player);
-                        try {
-                            addNewHealth(player, hpNeeded);
-                        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        }
+                if (hpNeeded != knownMaxHealth.getOrDefault(uuid, 0)) {
+                    knownMaxHealth.put(player.getUniqueId(), hpNeeded);
+                    clearModifier(player);
+                    try {
+                        updateHealth(player, hpNeeded);
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
@@ -83,14 +80,15 @@ public class HealthSkill extends Skill {
         }
     }
 
-    private void addNewHealth(Player player, int amount) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void updateHealth(Player player, int amount) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (VersionControl.isNewVersion()) {
             Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
-                AttributeModifier modifier = new AttributeModifier("PlayerSkillsHealth", amount, AttributeModifier.Operation.ADD_NUMBER);
-                instance.addModifier(modifier);
+                double currentBaseValue = instance.getBaseValue();
+                double newBaseValue = Math.max(20, currentBaseValue + amount);
+                instance.setBaseValue(newBaseValue);
             });
         } else {
-            double newMaxHealth = player.getMaxHealth() + amount;
+            double newMaxHealth = Math.max(20, player.getMaxHealth() + amount);
             player.getClass().getMethod("setMaxHealth", double.class).invoke(player, newMaxHealth);
         }
     }
@@ -108,7 +106,14 @@ public class HealthSkill extends Skill {
                         instance.removeModifier(modifier);
                     }
                 }
+                instance.setBaseValue(20.0); // Reset to the default max health value (10 hearts)
             });
+        } else {
+            try {
+                player.getClass().getMethod("setMaxHealth", double.class).invoke(player, 20.0); // Reset to the default max health value (10 hearts)
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

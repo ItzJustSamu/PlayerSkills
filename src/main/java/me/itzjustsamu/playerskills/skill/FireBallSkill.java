@@ -11,6 +11,7 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
+import me.itzjustsamu.playerskills.util.VersionControl;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -53,8 +54,7 @@ public class FireBallSkill extends Skill implements Listener {
         }
 
         ItemStack item = event.getItem();
-
-        if (item != null && item.getType() == Material.FIRE_CHARGE) {
+        if (item != null && isFireCharge(item.getType())) {
             Action action = event.getAction();
 
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
@@ -77,6 +77,10 @@ public class FireBallSkill extends Skill implements Listener {
                 }
             }
         }
+    }
+
+    private boolean isFireCharge(Material material) {
+        return material == (VersionControl.isNewVersion() ? Material.FIRE_CHARGE : Material.getMaterial("FIREBALL"));
     }
 
     private void summonFireballAtLocation(Player player) {
@@ -107,7 +111,6 @@ public class FireBallSkill extends Skill implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Fireball) {
-            event.getDamager();
             Fireball fireball = (Fireball) event.getEntity();
 
             if (!(fireball.getShooter() instanceof LivingEntity)) {
@@ -115,7 +118,6 @@ public class FireBallSkill extends Skill implements Listener {
             }
 
             LivingEntity shooter = (LivingEntity) fireball.getShooter();
-
             setFireballVelocity(fireball, shooter.getLocation().getDirection());
         }
     }
@@ -126,7 +128,6 @@ public class FireBallSkill extends Skill implements Listener {
 
     private void explodeFireball(Fireball fireball) {
         World world = fireball.getWorld();
-
         world.createExplosion(fireball.getLocation(), 1.5F);
         fireball.remove();
     }

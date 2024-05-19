@@ -3,12 +3,12 @@ package me.itzjustsamu.playerskills.util;
 import org.bukkit.Bukkit;
 
 public class VersionControl {
-    private static final String version = Bukkit.getServer().getVersion();
+    private static final String version = Bukkit.getServer().getClass().getPackage().getName();
 
     public static boolean isAtLeastVersion(int major, int minor) {
-        String[] serverVersionComponents = getServerVersion().split("\\.");
-        int serverMajor = Integer.parseInt(serverVersionComponents[0]);
-        int serverMinor = Integer.parseInt(serverVersionComponents[1]);
+        String[] versionParts = getServerVersion().replace("v", "").split("_");
+        int serverMajor = Integer.parseInt(versionParts[0]);
+        int serverMinor = Integer.parseInt(versionParts[1]);
 
         return (serverMajor > major) || (serverMajor == major && serverMinor >= minor);
     }
@@ -22,13 +22,20 @@ public class VersionControl {
         return isAtLeastVersion(1, 13);
     }
 
-    public static boolean isNewVersion() {
-        // Determine if the server is running a version with the Attribute class (1.9+)
+    private static final boolean NEW_VERSION;
+
+    static {
+        boolean newVersion;
         try {
             Class.forName("org.bukkit.attribute.Attribute");
-            return true;
+            newVersion = true;
         } catch (ClassNotFoundException e) {
-            return false;
+            newVersion = false;
         }
+        NEW_VERSION = newVersion;
+    }
+
+    public static boolean isNewVersion() {
+        return NEW_VERSION;
     }
 }
