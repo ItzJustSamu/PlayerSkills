@@ -10,6 +10,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
+import me.itzjustsamu.playerskills.util.VersionControl;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,15 +20,44 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
-
-import java.util.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class MultiBlockBreakSkill extends Skill implements Listener {
+    private final Method getItemInMainHandMethod;
 
     public MultiBlockBreakSkill(PlayerSkills plugin) {
         super(plugin, "Multibreak", "multiblockbreak", 10, 14);
+        getItemInMainHandMethod = getGetItemInMainHandMethod();
+    }
+
+    private Method getGetItemInMainHandMethod() {
+        try {
+            return PlayerInventory.class.getMethod("getItemInMainHand");
+        } catch (NoSuchMethodException e) {
+            try {
+                return PlayerInventory.class.getMethod("getItemInHand");
+            } catch (NoSuchMethodException ex) {
+                return null;
+            }
+        }
+    }
+
+    private ItemStack getItemInHand(Player player) {
+        try {
+            if (getItemInMainHandMethod != null) {
+                return (ItemStack) getItemInMainHandMethod.invoke(player.getInventory());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return player.getInventory().getItemInHand(); // Fallback in case reflection fails
     }
 
     @EventHandler
@@ -44,7 +74,7 @@ public class MultiBlockBreakSkill extends Skill implements Listener {
         }
 
         // Check if player has the skill and if the tool is a hammer (replace with your hammer check)
-        if (getLevel(sPlayer) > 0 && isHammer(player.getInventory().getItemInMainHand())) {
+        if (getLevel(sPlayer) > 0 && isHammer(getItemInHand(player))) {
             int baseRadius = getLevel(sPlayer) * getUpgrade().getValue();
             Block block = event.getBlock();
             Location eyeLocation = player.getEyeLocation();
@@ -65,12 +95,22 @@ public class MultiBlockBreakSkill extends Skill implements Listener {
 
     // Method to check if the item is a hammer (replace with your logic)
     private boolean isHammer(ItemStack item) {
+        if (item == null) return false;
         Material itemType = item.getType();
-        return itemType == Material.WOODEN_PICKAXE ||
-                itemType == Material.STONE_PICKAXE ||
-                itemType == Material.IRON_PICKAXE ||
-                itemType == Material.GOLDEN_PICKAXE ||
-                itemType == Material.DIAMOND_PICKAXE;
+
+        if (VersionControl.isOldVersion()) {
+            return itemType == Material.valueOf("WOOD_PICKAXE") ||
+                    itemType == Material.STONE_PICKAXE ||
+                    itemType == Material.IRON_PICKAXE ||
+                    itemType == Material.valueOf("GOLD_PICKAXE") ||
+                    itemType == Material.DIAMOND_PICKAXE;
+        } else {
+            return itemType == Material.WOODEN_PICKAXE ||
+                    itemType == Material.STONE_PICKAXE ||
+                    itemType == Material.IRON_PICKAXE ||
+                    itemType == Material.GOLDEN_PICKAXE ||
+                    itemType == Material.DIAMOND_PICKAXE;
+        }
     }
 
     private List<Location> getBreakLocations(Block block, Vector direction, int radius) {

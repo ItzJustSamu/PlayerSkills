@@ -11,6 +11,7 @@ import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -422,7 +423,12 @@ public class AdminMenu implements Menu {
 
     private void toggleFundingSource() {
         FundingSource currentFundingSource = MainConfig.POINTS_FUNDING_SOURCE.getValue();
-
+        try {
+            Class.forName("net.milkbowl.vault.economy.Economy");
+        } catch (ClassNotFoundException e) {
+            player.sendMessage(ChatColor.RED + "Vault is not installed. Please install Vault to use economy features.");
+            return;
+        }
         FundingSource newFundingSource = (currentFundingSource instanceof VaultFundingSource)
         ? new XPFundingSource()
         : new VaultFundingSource();

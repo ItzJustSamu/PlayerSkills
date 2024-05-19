@@ -38,4 +38,9 @@ public class VersionControl {
     public static boolean isNewVersion() {
         return NEW_VERSION;
     }
+
+    public static boolean isOldVersion() {
+        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        return version.equals("v1_8_R3") || version.startsWith("v1_8");
+    }
 }
