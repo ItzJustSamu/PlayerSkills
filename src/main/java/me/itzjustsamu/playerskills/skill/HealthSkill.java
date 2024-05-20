@@ -58,8 +58,7 @@ public class HealthSkill extends Skill {
                     clearModifier(player);
                     try {
                         updateHealth(player, hpNeeded);
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                    } catch (final Exception ignored) {
                     }
                 }
             }
@@ -82,16 +81,22 @@ public class HealthSkill extends Skill {
 
     private void updateHealth(Player player, int amount) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (VersionControl.isNewVersion()) {
-            Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
-                double currentBaseValue = instance.getBaseValue();
-                double newBaseValue = Math.max(20, currentBaseValue + amount);
-                instance.setBaseValue(newBaseValue);
-            });
+            try {
+                Object attribute = player.getClass().getMethod("getAttribute", Attribute.class).invoke(player, Attribute.GENERIC_MAX_HEALTH);
+                if (attribute != null) {
+                    double currentBaseValue = (double) attribute.getClass().getMethod("getBaseValue").invoke(attribute);
+                    double newBaseValue = Math.max(20, currentBaseValue + amount);
+                    attribute.getClass().getMethod("setBaseValue", double.class).invoke(attribute, newBaseValue);
+                }
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                // Handle the exception or log it
+            }
         } else {
             double newMaxHealth = Math.max(20, player.getMaxHealth() + amount);
             player.getClass().getMethod("setMaxHealth", double.class).invoke(player, newMaxHealth);
         }
     }
+
 
     private void clearPlayer(Player player) {
         knownMaxHealth.remove(player.getUniqueId());
@@ -100,22 +105,30 @@ public class HealthSkill extends Skill {
 
     private void clearModifier(Player player) {
         if (VersionControl.isNewVersion()) {
-            Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).ifPresent(instance -> {
-                for (AttributeModifier modifier : instance.getModifiers()) {
-                    if (modifier.getName().equals("PlayerSkillsHealth")) {
-                        instance.removeModifier(modifier);
+            try {
+                Object attribute = player.getClass().getMethod("getAttribute", Attribute.class).invoke(player, Attribute.GENERIC_MAX_HEALTH);
+                if (attribute != null) {
+                    Iterable<?> modifiers = (Iterable<?>) attribute.getClass().getMethod("getModifiers").invoke(attribute);
+                    for (Object modifier : modifiers) {
+                        String name = (String) modifier.getClass().getMethod("getName").invoke(modifier);
+                        if ("PlayerSkillsHealth".equals(name)) {
+                            attribute.getClass().getMethod("removeModifier", modifier.getClass()).invoke(attribute, modifier);
+                        }
                     }
+                    attribute.getClass().getMethod("setBaseValue", double.class).invoke(attribute, 20.0); // Reset to the default max health value (10 hearts)
                 }
-                instance.setBaseValue(20.0); // Reset to the default max health value (10 hearts)
-            });
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                // Handle the exception or log it
+            }
         } else {
             try {
                 player.getClass().getMethod("setMaxHealth", double.class).invoke(player, 20.0); // Reset to the default max health value (10 hearts)
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                // Handle the exception or log it
             }
         }
     }
+
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
