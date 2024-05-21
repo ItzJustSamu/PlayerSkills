@@ -8,6 +8,7 @@ Version: 2.5.2 Beta
 - Multi Block break Skill
 - Fireball Skill
 - Rapid Fire Skill
+- XP Skill
 - Cooldowns for most Skills 
 - Skills Menu has been remade
 - 
