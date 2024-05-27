@@ -50,19 +50,17 @@ public class XPSkill extends Skill {
             return;
         }
 
-        double increment = getUpgrade().getValue();
-
-        // Calculate additional XP from killing an entity
-        int xpLevel = (int) (getLevel(sPlayer) * increment);
-
-        int xp = killer.getTotalExperience() + xpLevel;
+        double reductionFactor = 0.05;
+        int baseXp = getLevel(sPlayer) + killer.getTotalExperience() * getUpgrade().getValue();
+        int reducedXp = (int) (baseXp * reductionFactor);
 
         // Set the new experience points
-        killer.setTotalExperience(xp);
+        killer.setTotalExperience(reducedXp);
 
-        // You might also want to update the player's visible XP bar
-        killer.setLevel(killer.getLevel() + xpLevel);
+        // Update the player's visible XP bar
+        killer.setLevel(killer.getLevel() + reducedXp);
     }
+
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -82,19 +80,14 @@ public class XPSkill extends Skill {
             return;
         }
 
-        int xpSkillLevel = getLevel(sPlayer);
-        double XPIncrement = getUpgrade().getValue();
 
         // Check if the mined block should yield experience
         if (blockDropsExperience(block.getType())) {
             // Calculate the additional XP from mining
-            double additionalXP = xpSkillLevel * XPIncrement;
-
-            int currentExperience = player.getTotalExperience();
-            int newExperience = currentExperience + (int) additionalXP;
+            double XP = getLevel(sPlayer) + player.getTotalExperience() * getUpgrade().getValue();
 
             // Set the new experience points
-            player.setTotalExperience(newExperience);
+            player.setTotalExperience((int) XP);
         }
     }
 

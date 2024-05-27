@@ -426,7 +426,7 @@ public class AdminMenu implements Menu {
         try {
             Class.forName("net.milkbowl.vault.economy.Economy");
         } catch (ClassNotFoundException e) {
-            player.sendMessage(ChatColor.RED + "Vault is not installed. Please install Vault to use economy features.");
+            player.sendMessage(ChatColor.RED + "Vault or Economy is not installed. Please install Vault to use economy features.");
             return;
         }
         FundingSource newFundingSource = (currentFundingSource instanceof VaultFundingSource)

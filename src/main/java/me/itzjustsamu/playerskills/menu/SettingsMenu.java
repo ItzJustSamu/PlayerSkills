@@ -158,11 +158,17 @@ public class SettingsMenu implements Menu {
 
     private void refundPointsForReset() {
         for (String s : sPlayer.getSkills().keySet()) {
-            for (int i = 1; i <= sPlayer.Level(s); ++i) {
-                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice().getValue());
+            Skill skill = plugin.getSkills().get(s);
+            if (skill != null) {
+                for (int i = 1; i <= sPlayer.Level(s); ++i) {
+                    sPlayer.setPoints(sPlayer.getPoints() + skill.getPrice().getValue());
+                }
+            } else {
+                plugin.getLogger().severe("Skill not found for name: " + s);
             }
         }
     }
+
 
     @NotNull
     private Runnable getCallbackWithoutConfirmation() {
