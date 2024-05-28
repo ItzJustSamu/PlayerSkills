@@ -14,6 +14,7 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -44,6 +45,7 @@ public class CriticalsSkill extends Skill {
         }
 
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
+
 
         if (sPlayer == null) {
             if (MainConfig.isVerboseLogging()) {

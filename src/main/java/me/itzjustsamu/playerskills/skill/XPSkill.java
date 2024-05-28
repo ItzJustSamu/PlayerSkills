@@ -25,7 +25,7 @@ import java.util.List;
 public class XPSkill extends Skill {
 
     public XPSkill(PlayerSkills plugin) {
-        super(plugin, "XP", "xp", 20, 19);
+        super(plugin, "XP", "xp", 20, 20);
     }
 
     // Event handler for hit event
@@ -50,7 +50,7 @@ public class XPSkill extends Skill {
             return;
         }
 
-        double reductionFactor = 0.05;
+        double reductionFactor = 0.02;
         int baseXp = getLevel(sPlayer) + killer.getTotalExperience() * getUpgrade().getValue();
         int reducedXp = (int) (baseXp * reductionFactor);
 

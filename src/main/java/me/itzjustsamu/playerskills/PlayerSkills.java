@@ -35,6 +35,8 @@ public class PlayerSkills extends BasePlugin {
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final MainConfig mainConfig = new MainConfig(this);
 
+
+
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
@@ -82,6 +84,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new ResistanceSkill(this));
         registerSkill(new ShadowStepSkill(this));
         registerSkill(new StrengthSkill(this));
+        registerSkill(new SpeedSkill(this));
         registerSkill(new XPSkill(this));
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));

@@ -41,16 +41,16 @@ public class LootingSkill extends Skill {
                 return;
             }
 
-            int lootingLevel = getLevel(sPlayer);
 
-            if (lootingLevel > 0) {
-                double lootingIncrementValue = getUpgrade().getValue();
+            if (getLevel(sPlayer) > 0) {
                 List<ItemStack> drops = event.getDrops();
 
                 for (ItemStack drop : drops) {
                     // Apply looting bonus
-                    int amount = (int) (drop.getAmount() * lootingLevel * lootingIncrementValue);
-                    drop.setAmount(amount);
+                    double reductionFactor = 0.02;
+                    int amount = drop.getAmount() * getLevel(sPlayer) * getUpgrade().getValue();
+                    int reducedAmount = (int) (amount * reductionFactor);
+                    drop.setAmount(reducedAmount);
                 }
             }
         }

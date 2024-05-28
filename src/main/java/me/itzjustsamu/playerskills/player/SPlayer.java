@@ -1,6 +1,8 @@
 package me.itzjustsamu.playerskills.player;
 
+import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
+import me.itzjustsamu.playerskills.skill.SpeedSkill;
 import me.itzjustsamu.playerskills.util.Utils;
 
 import java.util.HashMap;
@@ -15,14 +17,10 @@ public class SPlayer {
     private int points;
     private int resetCount;
 
-
-
-
     public SPlayer(UUID player) {
         this.player = player;
         this.skills = new HashMap<>();
         this.resetCount = 0;
-
     }
 
     public static void load(UUID uuid) {
@@ -68,7 +66,6 @@ public class SPlayer {
         skills.put(skill, level);
     }
 
-
     public int getPoints() {
         return points;
     }
@@ -77,7 +74,6 @@ public class SPlayer {
         this.points = points;
     }
 
-
     public int getPointPrice() {
         int base = MainConfig.POINTS_PRICE.getValue();
         int playerPoints = getPoints();
@@ -85,7 +81,6 @@ public class SPlayer {
             playerPoints += i;
         }
         return base + (playerPoints * MainConfig.POINTS_INCREMENT_PRICE.getValue());
-
     }
 
     public int getResetCount() {
