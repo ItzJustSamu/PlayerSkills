@@ -1,25 +1,5 @@
 # PlayerSkills
 
-Version: 2.5.2 Beta
+Version: 2.5.3 beta
 
-- Shadow Step Skill
-- Fishing Skill
-- Grappling Skill
-- Multi Block break Skill
-- Fireball Skill
-- Rapid Fire Skill
-- XP Skill
-- Cooldowns for most Skills 
-- Skills Menu has been remade
-- 
-Adding or fixing:
-
-- MySQL Support
-
-- More skills
-
-- PlaceholderAPI Support
-
-- API Support
-
-- Tabbing subcommands
+- Toggle Skill option
