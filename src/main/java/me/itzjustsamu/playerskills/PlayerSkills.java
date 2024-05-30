@@ -28,32 +28,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+
 public class PlayerSkills extends BasePlugin {
     public static final Map<String, Supplier<FundingSource>> FUNDING_SOURCE_MAP = new CaseInsensitiveStringHashMap<>();
     public static final Map<String, Supplier<PlayerStorage>> PLAYER_STORAGE_MAP = new CaseInsensitiveStringHashMap<>();
 
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final MainConfig mainConfig = new MainConfig(this);
-
-
-
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
-
-    public MessageConfig getMessageConfig() {
-        return messageConfig;
-    }
-
-    public MainConfig getMainConfig() {
-        return mainConfig;
-    }
-
 
     @Override
     public void preLoad() {
         FUNDING_SOURCE_MAP.put("XP", XPFundingSource::new);
         FUNDING_SOURCE_MAP.put("VAULT", VaultFundingSource::new);
-        PLAYER_STORAGE_MAP.put("FLAT_FILE", FlatFileStorage::new);
+        PLAYER_STORAGE_MAP.put("FLAT_FILE", () -> new FlatFileStorage(this));
     }
 
     @Override
@@ -86,8 +75,10 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new StrengthSkill(this));
         registerSkill(new SpeedSkill(this));
         registerSkill(new XPSkill(this));
+
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
+
         registerListener(new MenuController());
         registerListener(new PlayerListener());
 
@@ -97,7 +88,7 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void postEnable() {
-        this.startAutoSaveTask();
+        startAutoSaveTask();
     }
 
     @Override
@@ -132,7 +123,6 @@ public class PlayerSkills extends BasePlugin {
         HandlerList.unregisterAll(this);
 
         skills.clear();
-
     }
 
     public Map<String, Skill> getSkills() {
@@ -154,5 +144,9 @@ public class PlayerSkills extends BasePlugin {
         skill.setup();
         skill.enable();
         logger.info("Registered skill: " + skill.getSkillsConfigName());
+    }
+
+    public MessageConfig getMessageConfig() {
+        return new MessageConfig(this);
     }
 }

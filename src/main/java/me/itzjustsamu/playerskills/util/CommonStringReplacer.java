@@ -40,7 +40,9 @@ public final class CommonStringReplacer {
                 .replace("{skills-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()))
                 .replace("{points-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()))
                 .replace("{reset-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_RESET_SKILLS.getValue()))
-                .replace("{skills-max-level}", Integer.toString(skillMaxLevel));
+                .replace("{skills-max-level}", Integer.toString(skillMaxLevel))
+                .replace("{toggle-skill}", Boolean.toString(MainConfig.TOGGLE_SKILL.getValue()));
+
 
     });
 

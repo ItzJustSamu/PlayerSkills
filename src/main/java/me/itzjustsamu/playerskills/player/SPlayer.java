@@ -4,6 +4,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.skill.SpeedSkill;
 import me.itzjustsamu.playerskills.util.Utils;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +65,10 @@ public class SPlayer {
 
     public void setLevel(String skill, int level) {
         skills.put(skill, level);
+    }
+
+    public void onJoin(PlayerLoginEvent event) {
+        load(event.getPlayer().getUniqueId());
     }
 
     public int getPoints() {

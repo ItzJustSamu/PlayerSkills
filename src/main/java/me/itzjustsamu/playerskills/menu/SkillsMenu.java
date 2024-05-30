@@ -6,6 +6,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.util.CommonStringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -44,7 +45,6 @@ public class SkillsMenu implements Menu {
         }
         for (Skill skill : plugin.getSkills().values()) {
             if (!skill.isSkillDisabled()) {
-                skill.setup();
                 inventory.setItem(skill.getGuiSlot(), skill.getDisplayItem(player));
             }
         }
@@ -56,7 +56,7 @@ public class SkillsMenu implements Menu {
             if (clickType == ClickType.RIGHT && slot == skill.getGuiSlot()) {
                 clickedSkill = skill;
                 CommonStringReplacer.setSkill(clickedSkill);
-                SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+                SettingsMenu SettingsMenu = new SettingsMenu(plugin, skill, player, sPlayer, bukkitConfig, new FlatFileStorage(plugin));
                 SettingsMenu.open(player);
                 return;
             }

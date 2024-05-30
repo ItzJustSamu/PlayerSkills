@@ -36,9 +36,11 @@ public class MainConfig extends PathableConfig {
 
     public static final BooleanConfigPath OPTIONS_VERBOSE = new BooleanConfigPath(new PathString("options", "verbose"), false);
     public static final StringListConfigPath OPTIONS_MENU_Worlds_Restrictions = new StringListConfigPath(new PathString("options", "menu-world-restriction"), Collections.emptyList());
+    static PlayerSkills plugin;
 
     public static final ConfigPath<PlayerStorage> OPTIONS_PLAYER_STORAGE = new StickyConfigPath<>(
-            new AdvancedConfigPath<String, PlayerStorage>(new PathString("options", "player-storage"), new FlatFileStorage()) {
+            new AdvancedConfigPath<String, PlayerStorage>(new PathString("options", "player-storage"), new FlatFileStorage(plugin)) {
+
                 @Override
                 public @Nullable String getFromConfig(@NotNull me.hsgamer.hscore.config.Config config) {
                     return config.getInstance(getPath(), String.class);
@@ -46,7 +48,7 @@ public class MainConfig extends PathableConfig {
 
                 @Override
                 public @Nullable PlayerStorage convert(@NotNull String rawValue) {
-                    return PlayerSkills.PLAYER_STORAGE_MAP.getOrDefault(rawValue, FlatFileStorage::new).get();
+                    return PlayerSkills.PLAYER_STORAGE_MAP.getOrDefault(rawValue, () -> new FlatFileStorage(plugin)).get();
                 }
 
                 @Override
@@ -127,6 +129,18 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
 
+    public static final IntegerConfigPath TOGGLE_SKILL_SLOT = new IntegerConfigPath(new PathString("toggle-skill", "slot"), 12);
+    public static final BooleanConfigPath TOGGLE_SKILL = new BooleanConfigPath(new PathString("toggle-skill"), false);
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> TOGGLE_SKILL_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("toggle-skill", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cToggle {skill}"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+                    .addItemModifier(new LoreModifier().setLore(
+                            "",
+                            "&7{skill} Status: &e{toggle-skill}"
+                    ))
+    ));
     // Admin configurations
 
 
@@ -352,6 +366,7 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.RED_STAINED_GLASS_PANE))
                     .addItemModifier(new LoreModifier().setLore("&7Decline and return to the previous menu."))
     ));
+
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
     }

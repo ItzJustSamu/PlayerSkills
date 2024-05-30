@@ -1,5 +1,6 @@
 package me.itzjustsamu.playerskills.skill;
 
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.common.StringReplacer;
 import me.hsgamer.hscore.config.PathString;
 import me.hsgamer.hscore.config.path.ConfigPath;
@@ -28,6 +29,7 @@ public abstract class Skill implements Listener {
 
     private final SkillConfig CONFIG;
     private final PlayerSkills PLUGIN;
+
     private final String NAME;
     private final String SKILL;
     private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
@@ -149,7 +151,6 @@ public abstract class Skill implements Listener {
     public final SkillConfig getConfig() {
         return CONFIG;
     }
-
     public ItemStack getDisplayItem(Player player) {
         return DISPLAY_ITEM.build(player.getUniqueId());
     }

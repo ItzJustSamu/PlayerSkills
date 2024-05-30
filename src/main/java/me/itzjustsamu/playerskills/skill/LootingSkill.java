@@ -11,17 +11,20 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-public class LootingSkill extends Skill {
+public class LootingSkill extends Skill implements Listener {
     public LootingSkill(PlayerSkills plugin) {
-        super(plugin, "Looting", "looting", 20, 12);
+        super(plugin, "Looting", "looting", 10, 12);
     }
 
     @EventHandler
@@ -41,17 +44,26 @@ public class LootingSkill extends Skill {
                 return;
             }
 
-
             if (getLevel(sPlayer) > 0) {
                 List<ItemStack> drops = event.getDrops();
+                double reductionFactor = 0.5;
 
                 for (ItemStack drop : drops) {
-                    // Apply looting bonus
-                    double reductionFactor = 0.02;
                     int amount = drop.getAmount() * getLevel(sPlayer) * getUpgrade().getValue();
                     int reducedAmount = (int) (amount * reductionFactor);
-                    drop.setAmount(reducedAmount);
+                    setItemAmount(drop, reducedAmount);
                 }
+            }
+        }
+    }
+
+    private void setItemAmount(ItemStack itemStack, int amount) {
+        try {
+            Method setAmountMethod = itemStack.getClass().getMethod("setAmount", int.class);
+            setAmountMethod.invoke(itemStack, amount);
+        } catch (Exception e) {
+            if (MainConfig.isVerboseLogging()) {
+                Utils.logError("Failed to set item amount: " + e.getMessage());
             }
         }
     }
@@ -72,7 +84,7 @@ public class LootingSkill extends Skill {
                         "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
                         "&cLoot Bonus: ",
-                        "   &e{prev}x &7 >>> &e{next}x"
+                        "   &e{prev}% &7 >>> &e{next}%"
                 ));
     }
 

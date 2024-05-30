@@ -6,6 +6,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.util.CommonStringReplacer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static me.itzjustsamu.playerskills.Permissions.ADMIN;
 import static me.itzjustsamu.playerskills.menu.Sounds.*;
@@ -22,21 +25,25 @@ import static me.itzjustsamu.playerskills.menu.Sounds.*;
 public class SettingsMenu implements Menu {
 
     private final PlayerSkills plugin;
-    private final Player player;
     private final Skill skill;
-    private final SPlayer sPlayer;
-    private final BukkitConfig bukkitConfig;
-    private final Skill clickedSkill;
 
-    public SettingsMenu(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, BukkitConfig bukkitConfig,Skill clickedSkill) {
+    private final Player player;
+    private final SPlayer sPlayer;
+    private final BukkitConfig config;
+    private final Map<String, Integer> toggleSkill;
+    private final FlatFileStorage storage;
+
+    public SettingsMenu(PlayerSkills plugin, Skill skill, Player player, SPlayer sPlayer, BukkitConfig config, FlatFileStorage storage) {
         this.plugin = plugin;
-        this.player = player;
         this.skill = skill;
+        this.player = player;
         this.sPlayer = sPlayer;
-        this.bukkitConfig = bukkitConfig = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
-        this.clickedSkill = clickedSkill;
-        bukkitConfig.setup();
+        this.config = config = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
+        this.toggleSkill = new HashMap<>();
+        this.storage = storage;
     }
+
+
 
     @Override
     public @NotNull Inventory getInventory() {
@@ -45,19 +52,19 @@ public class SettingsMenu implements Menu {
         Inventory inventory = Bukkit.createInventory(this, size, title);
 
         if (MainConfig.SETTINGS_BACKGROUND_ENABLED.getValue()) {
-            ItemStack background = MainConfig.SETTINGS_BACKGROUND_DISPLAY.getValue().build(player.getUniqueId());
+            ItemStack background = MainConfig.SETTINGS_BACKGROUND_DISPLAY.getValue().build(sPlayer.getPlayer());
             for (int i = 0; i < inventory.getSize(); i++) {
                 inventory.setItem(i, background);
             }
         }
 
-        if (clickedSkill != null) {
-            inventory.setItem(MainConfig.PURCHASE_POINT_SLOT.getValue(), MainConfig.PURCHASE_POINT_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(MainConfig.RESET_SKILLS_SLOT.getValue(), MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(MainConfig.BACK_SLOT.getValue(), MainConfig.BACK_DISPLAY.getValue().build(player.getUniqueId()));
-            inventory.setItem(MainConfig.ADMIN_SLOT.getValue(), MainConfig.ADMIN_DISPLAY.getValue().build(player.getUniqueId()));
-
-            inventory.setItem(3, clickedSkill.getDisplayItem(player));
+        if (skill != null) {
+            inventory.setItem(3, skill.getDisplayItem(player));
+            inventory.setItem(MainConfig.PURCHASE_POINT_SLOT.getValue(), MainConfig.PURCHASE_POINT_DISPLAY.getValue().build(sPlayer.getPlayer()));
+            inventory.setItem(MainConfig.RESET_SKILLS_SLOT.getValue(), MainConfig.RESET_SKILLS_DISPLAY.getValue().build(sPlayer.getPlayer()));
+            inventory.setItem(MainConfig.ADMIN_SLOT.getValue(), MainConfig.ADMIN_DISPLAY.getValue().build(sPlayer.getPlayer()));
+            inventory.setItem(MainConfig.TOGGLE_SKILL_SLOT.getValue(), MainConfig.TOGGLE_SKILL_DISPLAY.getValue().build(sPlayer.getPlayer()));
+            inventory.setItem(MainConfig.BACK_SLOT.getValue(), MainConfig.BACK_DISPLAY.getValue().build(sPlayer.getPlayer()));
         }
 
         return inventory;
@@ -67,10 +74,9 @@ public class SettingsMenu implements Menu {
     public void onClick(int slot, ClickType clickType) {
         if (slot == 3) {
             handleSkillClick(clickType);
-        }
-        else if (slot == MainConfig.PURCHASE_POINT_SLOT.getValue()) {
+        } else if (slot == MainConfig.PURCHASE_POINT_SLOT.getValue()) {
             Runnable callback = getRunnable();
-            if (slot == MainConfig.PURCHASE_POINT_SLOT.getValue() && MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()) {
+            if (MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
@@ -78,15 +84,17 @@ public class SettingsMenu implements Menu {
             }
         } else if (slot == MainConfig.RESET_SKILLS_SLOT.getValue()) {
             Runnable callback = getRunnable(clickType);
-            if (slot == MainConfig.RESET_SKILLS_SLOT.getValue() && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
+            if (MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
                 ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
             }
         } else if (slot == MainConfig.ADMIN_SLOT.getValue() && player.hasPermission(ADMIN)) {
-            AdminMenu AdminMenu = new AdminMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
-            AdminMenu.open(player);
+            AdminMenu adminMenu = new AdminMenu(player, skill, sPlayer, storage);
+            adminMenu.open(player);
+        } else if (slot == MainConfig.TOGGLE_SKILL_SLOT.getValue()) {
+            handleToggleSkill(clickType);
         } else if (slot == MainConfig.BACK_SLOT.getValue()) {
             SkillsMenu skillsMenu = new SkillsMenu(plugin, player, sPlayer);
             skillsMenu.open(player);
@@ -96,20 +104,20 @@ public class SettingsMenu implements Menu {
     }
 
     private void handleSkillClick(ClickType event) {
-        if (clickedSkill.getLevel(sPlayer) >= clickedSkill.getLimit()) {
+        if (skill.getLevel(sPlayer) >= skill.getLimit()) {
             playItemBreakSound(player);
-        } else if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(sPlayer) < clickedSkill.getLimit()) {
-            int price = clickedSkill.getPrice().getValue();
+        } else if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(sPlayer) < skill.getLimit()) {
+            int price = skill.getPrice().getValue();
             if (sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
-                    sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(sPlayer) + 1);
+                    sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
                     sPlayer.setPoints(sPlayer.getPoints() - price);
                     playExperienceOrbPickupSound(player);
                     open(player);
                 };
 
                 if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, clickedSkill.getDisplayItem(player), callback, this);
+                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, (player), skill.getDisplayItem(player), callback, this);
                     confirmationMenu.open(player);
                 } else {
                     callback.run();
@@ -120,6 +128,36 @@ public class SettingsMenu implements Menu {
             }
         }
     }
+
+    private void handleToggleSkill(ClickType clickType) {
+        String skillName = skill.getSkillsConfigName();
+        int currentLevel = skill.getLevel(sPlayer);
+
+        if (currentLevel == 0) {
+            // Restore the original skill level
+            Integer previousLevel = storage.loadPreviousSkillLevel(sPlayer.getPlayer(), skillName);
+            if (previousLevel != null) {
+                sPlayer.setLevel(skillName, previousLevel);
+            }
+        } else {
+            // Save the current skill level
+            storage.savePreviousSkillLevel(sPlayer.getPlayer(), skillName, currentLevel);
+            // Set the skill level to 0
+            sPlayer.setLevel(skillName, 0);
+        }
+
+        // Update the toggle state
+        MainConfig.TOGGLE_SKILL.setValue(!MainConfig.TOGGLE_SKILL.getValue());
+        skill.getConfig().set(MainConfig.TOGGLE_SKILL.getPath(), MainConfig.TOGGLE_SKILL.getValue());
+        skill.getConfig().save();
+
+        playUIButtonClickSound(player);
+        open(player);
+    }
+
+
+
+
 
     @NotNull
     private Runnable getRunnable(ClickType event) {
@@ -150,7 +188,7 @@ public class SettingsMenu implements Menu {
                 sPlayer.incrementResetCount();
                 open(player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, (player), MainConfig.RESET_SKILLS_DISPLAY.getValue().build(sPlayer.getPlayer()), null, this);
                 confirmationMenu.open(player);
             }
         };
@@ -168,7 +206,6 @@ public class SettingsMenu implements Menu {
             }
         }
     }
-
 
     @NotNull
     private Runnable getCallbackWithoutConfirmation() {
@@ -199,7 +236,7 @@ public class SettingsMenu implements Menu {
     private Runnable getRunnable() {
         int price = sPlayer.getPointPrice();
         return () -> {
-            if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(sPlayer, price, player)) {
+            if (MainConfig.POINTS_FUNDING_SOURCE.getValue().doTransaction(sPlayer, price, (player))) {
                 sPlayer.setPoints(sPlayer.getPoints() + 1);
                 playUIButtonClickSound(player);
                 open(player);

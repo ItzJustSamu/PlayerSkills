@@ -3,13 +3,13 @@ package me.itzjustsamu.playerskills.menu;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
-import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.fundingsource.FundingSource;
 import me.itzjustsamu.playerskills.fundingsource.VaultFundingSource;
 import me.itzjustsamu.playerskills.fundingsource.XPFundingSource;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,21 +25,20 @@ import static me.itzjustsamu.playerskills.menu.Sounds.*;
 
 public class AdminMenu implements Menu {
 
-    private final PlayerSkills plugin;
     private final Player player;
     private final Skill skill;
     private final SPlayer sPlayer;
-    private final BukkitConfig bukkitConfig;
-    private final Skill clickedSkill;
 
-    public AdminMenu(PlayerSkills plugin, Player player, Skill skill, SPlayer sPlayer, BukkitConfig bukkitConfig, Skill clickedSkill) {
-        this.plugin = plugin;
+    private final FlatFileStorage storage;
+
+
+    public AdminMenu(Player player, Skill skill, SPlayer sPlayer, FlatFileStorage storage) {
         this.player = player;
         this.skill = skill;
         this.sPlayer = sPlayer;
-        this.bukkitConfig = bukkitConfig = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
-        this.clickedSkill = clickedSkill;
-        bukkitConfig.setup();
+        this.storage = storage;
+        new BukkitConfig(new File(skill.getPlugin().getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
+        skill.getConfig().setup();
     }
 
     @Override
@@ -55,8 +54,8 @@ public class AdminMenu implements Menu {
             }
         }
 
-        if (clickedSkill != null) {
-            inventory.setItem(3, clickedSkill.getDisplayItem(player));
+        if (skill != null) {
+            inventory.setItem(3, skill.getDisplayItem(player));
             inventory.setItem(MainConfig.PURCHASE_POINT_SLOT.getValue(), MainConfig.PURCHASE_POINT_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.RESET_SKILLS_SLOT.getValue(), MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()));
             inventory.setItem(MainConfig.ADMIN_SKILLS_UPGRADE_SLOT.getValue(), MainConfig.ADMIN_SKILLS_UPGRADE_DISPLAY.getValue().build(player.getUniqueId()));
@@ -83,7 +82,7 @@ public class AdminMenu implements Menu {
         if (slot == MainConfig.PURCHASE_POINT_SLOT.getValue()) {
             Runnable callback = getRunnable();
             if (slot == MainConfig.PURCHASE_POINT_SLOT.getValue() && MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue() && player.hasPermission(ADMIN)) {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(skill.getPlugin(), player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
@@ -91,7 +90,7 @@ public class AdminMenu implements Menu {
         } else if (slot == MainConfig.RESET_SKILLS_SLOT.getValue()) {
             Runnable callback = getRunnable(clickType);
             if (slot == MainConfig.RESET_SKILLS_SLOT.getValue() && MainConfig.CONFIRMATION_RESET_SKILLS.getValue()) {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(skill.getPlugin(), player, player.getOpenInventory().getTopInventory().getItem(slot), callback, this);
                 confirmationMenu.open(player);
             } else {
                 callback.run();
@@ -129,7 +128,7 @@ public class AdminMenu implements Menu {
                 playUIButtonClickSound(player);
             }
         } else if (slot == MainConfig.ADMIN_BACK_SLOT.getValue()) {
-            SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+            SettingsMenu SettingsMenu = new SettingsMenu(skill.getPlugin(), skill, player, sPlayer, skill.getConfig(), storage);
             SettingsMenu.open(player);
             playUIButtonClickSound(player);
         } else if (slot == MainConfig.POINTS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
@@ -158,27 +157,27 @@ public class AdminMenu implements Menu {
             toggleResetConfirmation(slot);
             playUIButtonClickSound(player);
         } else if (slot == MainConfig.ADMIN_BACK_SLOT.getValue()) {
-            SettingsMenu SettingsMenu = new SettingsMenu(plugin, player, skill, sPlayer, bukkitConfig, clickedSkill);
+            SettingsMenu SettingsMenu = new SettingsMenu(skill.getPlugin(), skill, (player), sPlayer, skill.getConfig(), storage);
             SettingsMenu.open(player);
             playUIButtonClickSound(player);
         }
     }
 
     private void handleSkillClick(ClickType event) {
-        if (clickedSkill.getLevel(sPlayer) >= clickedSkill.getLimit()) {
+        if (skill.getLevel(sPlayer) >= skill.getLimit()) {
             playItemBreakSound(player);
-        } else if ((event == ClickType.LEFT || event == ClickType.RIGHT) && clickedSkill.getLevel(sPlayer) < clickedSkill.getLimit()) {
-            int price = clickedSkill.getPrice().getValue();
+        } else if ((event == ClickType.LEFT || event == ClickType.RIGHT) && skill.getLevel(sPlayer) < skill.getLimit()) {
+            int price = skill.getPrice().getValue();
             if (sPlayer.getPoints() >= price) {
                 Runnable callback = () -> {
-                    sPlayer.setLevel(clickedSkill.getSkillsConfigName(), clickedSkill.getLevel(sPlayer) + 1);
+                    sPlayer.setLevel(skill.getSkillsConfigName(), skill.getLevel(sPlayer) + 1);
                     sPlayer.setPoints(sPlayer.getPoints() - price);
                     playExperienceOrbPickupSound(player);
                     open(player);
                 };
 
                 if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, clickedSkill.getDisplayItem(player), callback, this);
+                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(skill.getPlugin(), player, skill.getDisplayItem(player), callback, this);
                     confirmationMenu.open(player);
                 } else {
                     callback.run();
@@ -273,7 +272,7 @@ public class AdminMenu implements Menu {
                 playGenericExplodeSound(player);
                 this.open(player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(skill.getPlugin(), player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(player.getUniqueId()), null, this);
                 confirmationMenu.open(player);
             }
         };
@@ -282,7 +281,7 @@ public class AdminMenu implements Menu {
     private void refundPointsForReset() {
         for (String s : sPlayer.getSkills().keySet()) {
             for (int i = 1; i <= sPlayer.Level(s); ++i) {
-                sPlayer.setPoints(sPlayer.getPoints() + plugin.getSkills().get(s).getPrice().getValue());
+                sPlayer.setPoints(sPlayer.getPoints() + skill.getPlugin().getSkills().get(s).getPrice().getValue());
             }
         }
     }
@@ -313,84 +312,84 @@ public class AdminMenu implements Menu {
     }
 
     public void increaseSkillsUpgrade() {
-        if (clickedSkill != null) {
-            IntegerConfigPath incrementedSkill = clickedSkill.getUpgrade();
+        if (skill != null) {
+            IntegerConfigPath incrementedSkill = skill.getUpgrade();
             int currentIncrement = incrementedSkill.getValue();
             int newIncrement = currentIncrement + 1;
-            clickedSkill.setIncrement(newIncrement);
-            clickedSkill.getConfig().save();
+            skill.setIncrement(newIncrement);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsUpgrade() {
-        if (clickedSkill != null) {
-            IntegerConfigPath incrementedSkill = clickedSkill.getUpgrade();
+        if (skill != null) {
+            IntegerConfigPath incrementedSkill = skill.getUpgrade();
             int currentIncrement = incrementedSkill.getValue();
             int newIncrement = Math.max(0, currentIncrement - 1);
-            clickedSkill.setIncrement(newIncrement);
-            clickedSkill.getConfig().save();
+            skill.setIncrement(newIncrement);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsPrice() {
-        if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice().getValue();
+        if (skill != null) {
+            int currentPrice = skill.getPrice().getValue();
             int newPrice = Math.max(0, currentPrice - 1);
-            clickedSkill.setPrice(newPrice);
-            clickedSkill.getConfig().save();
+            skill.setPrice(newPrice);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void increaseSkillsPrice() {
-        if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice().getValue();
+        if (skill != null) {
+            int currentPrice = skill.getPrice().getValue();
             int newPrice = currentPrice + 1;
-            clickedSkill.setPrice(newPrice);
-            clickedSkill.getConfig().save();
+            skill.setPrice(newPrice);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void decreaseSkillsUpgradeIncrementPrice() {
-        if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice().getValue();
+        if (skill != null) {
+            int currentPrice = skill.getPrice().getValue();
             int newPrice = Math.max(0, currentPrice - 1);
-            clickedSkill.setPrice(newPrice);
-            clickedSkill.getConfig().save();
+            skill.setPrice(newPrice);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void increaseSkillsUpgradeIncrementPrice() {
-        if (clickedSkill != null) {
-            int currentPrice = clickedSkill.getPrice().getValue();
+        if (skill != null) {
+            int currentPrice = skill.getPrice().getValue();
             int newPrice = currentPrice + 1;
-            clickedSkill.setPrice(newPrice);
-            clickedSkill.getConfig().save();
+            skill.setPrice(newPrice);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
 
     public void increaseSkillsMaxLevel() {
-        if (clickedSkill != null) {
-            int currentMaxLevel = clickedSkill.getLimit();
+        if (skill != null) {
+            int currentMaxLevel = skill.getLimit();
             int newMaxLevel = currentMaxLevel + 1;
-            clickedSkill.setLimit(newMaxLevel);
-            clickedSkill.getConfig().save();
+            skill.setLimit(newMaxLevel);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
 
     }
 
     public void decreaseSkillsMaxLevel() {
-        if (clickedSkill != null) {
-            int currentMaxLevel = clickedSkill.getLimit();
+        if (skill != null) {
+            int currentMaxLevel = skill.getLimit();
             int newMaxLevel = Math.max(0, currentMaxLevel - 1);
-            clickedSkill.setLimit(newMaxLevel);
-            clickedSkill.getConfig().save();
+            skill.setLimit(newMaxLevel);
+            skill.getConfig().save();
             player.openInventory(getInventory());
         }
     }
@@ -399,8 +398,8 @@ public class AdminMenu implements Menu {
         if (slot == MainConfig.ADMIN_SKILLS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
             boolean confirmationStatus = !MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue();
             MainConfig.CONFIRMATION_PURCHASE_SKILLS.setValue(confirmationStatus);
-            bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getPath(), MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue());
-            bukkitConfig.save();
+            skill.getConfig().set(MainConfig.CONFIRMATION_PURCHASE_SKILLS.getPath(), MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue());
+            skill.getConfig().save();
         }
         player.openInventory(getInventory());
     }
@@ -409,16 +408,16 @@ public class AdminMenu implements Menu {
         int newPoints = MainConfig.POINTS_PRICE.getValue() + 1;
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        skill.getConfig().save();
     }
 
     private void decreasePoints() {
         int newPoints = Math.max(0, MainConfig.POINTS_PRICE.getValue() - 1);
         MainConfig.POINTS_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.POINTS_PRICE.getPath(), newPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.POINTS_PRICE.getPath(), newPoints);
+        skill.getConfig().save();
     }
 
     private void toggleFundingSource() {
@@ -438,32 +437,33 @@ public class AdminMenu implements Menu {
         MainConfig.POINTS_FUNDING_SOURCE.setValue(newFundingSource);
         player.openInventory(getInventory());
 
-        bukkitConfig.set(MainConfig.POINTS_FUNDING_SOURCE.getPath(), newFundingSourceIdentifier);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.POINTS_FUNDING_SOURCE.getPath(), newFundingSourceIdentifier);
+        skill.getConfig().save();
     }
 
     private void increaseIncrementedPoints() {
         int newPoints = MainConfig.POINTS_INCREMENT_PRICE.getValue() + 1;
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        skill.getConfig().save();
     }
 
     private void decreaseIncrementedPoints() {
         int newPoints = Math.max(0, MainConfig.POINTS_INCREMENT_PRICE.getValue() - 1);
         MainConfig.POINTS_INCREMENT_PRICE.setValue(newPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.POINTS_INCREMENT_PRICE.getPath(), newPoints);
+        skill.getConfig().save();
     }
 
     private void togglePointsConfirmation(int slot) {
         if (slot == MainConfig.POINTS_CONFIRMATION_TOGGLE_SLOT.getValue()) {
         boolean confirmationStatus = !MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue();
         MainConfig.CONFIRMATION_PURCHASE_POINTS.setValue(confirmationStatus);
-        bukkitConfig.set(MainConfig.CONFIRMATION_PURCHASE_POINTS.getPath(), MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue());
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.CONFIRMATION_PURCHASE_POINTS.getPath(),
+                MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue());
+        skill.getConfig().save();
         }
         player.openInventory(getInventory());
     }
@@ -472,48 +472,48 @@ public class AdminMenu implements Menu {
         int newResetPoints = MainConfig.RESET_PRICE.getValue() + 1;
         MainConfig.RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
+        skill.getConfig().save();
     }
 
     private void decreaseResetPrice() {
         int newResetPoints = Math.max(0, MainConfig.RESET_PRICE.getValue() - 1);
         MainConfig.RESET_PRICE.setValue(newResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.RESET_PRICE.getPath(), newResetPoints);
+        skill.getConfig().save();
     }
 
     private void increaseIncrementResetPrice() {
         int newIncrementResetPoints = MainConfig.RESET_INCREMENT_PRICE.getValue() + 1;
         MainConfig.RESET_INCREMENT_PRICE.setValue(newIncrementResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
+        skill.getConfig().save();
     }
 
     private void decreaseIncrementResetPrice() {
         int newIncrementResetPoints = Math.max(0, MainConfig.RESET_INCREMENT_PRICE.getValue() - 1);
         MainConfig.RESET_INCREMENT_PRICE.setValue(newIncrementResetPoints);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.RESET_INCREMENT_PRICE.getPath(), newIncrementResetPoints);
+        skill.getConfig().save();
     }
 
     private void toggleRefundPoints() {
         boolean newRefundStatus = !MainConfig.REFUND_POINTS.getValue();
         MainConfig.REFUND_POINTS.setValue(newRefundStatus);
         player.openInventory(getInventory());
-        bukkitConfig.set(MainConfig.REFUND_POINTS.getPath(), newRefundStatus);
-        bukkitConfig.save();
+        skill.getConfig().set(MainConfig.REFUND_POINTS.getPath(), newRefundStatus);
+        skill.getConfig().save();
     }
 
     private void toggleResetConfirmation(int slot) {
         if (slot == MainConfig.RESET_CONFIRMATION_TOGGLE_SLOT.getValue()) {
             boolean confirmationStatus = !MainConfig.CONFIRMATION_RESET_SKILLS.getValue();
             MainConfig.CONFIRMATION_RESET_SKILLS.setValue(confirmationStatus);
-            bukkitConfig.set(MainConfig.CONFIRMATION_RESET_SKILLS.getPath(), MainConfig.CONFIRMATION_RESET_SKILLS.getValue());
-            bukkitConfig.save();
+            skill.getConfig().set(MainConfig.CONFIRMATION_RESET_SKILLS.getPath(), MainConfig.CONFIRMATION_RESET_SKILLS.getValue());
+            skill.getConfig().save();
         }
         player.openInventory(getInventory());
     }
