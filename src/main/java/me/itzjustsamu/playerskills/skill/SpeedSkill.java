@@ -39,7 +39,7 @@ public class SpeedSkill extends Skill implements Listener {
     }
 
     public void applySpeedModifier(Player player) {
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

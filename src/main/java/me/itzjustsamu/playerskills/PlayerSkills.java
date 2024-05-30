@@ -147,6 +147,6 @@ public class PlayerSkills extends BasePlugin {
     }
 
     public MessageConfig getMessageConfig() {
-        return new MessageConfig(this);
+        return messageConfig;
     }
 }

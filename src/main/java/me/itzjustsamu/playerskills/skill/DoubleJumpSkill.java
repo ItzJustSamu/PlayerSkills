@@ -79,7 +79,7 @@ public class DoubleJumpSkill extends Skill implements Listener {
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
 
-        if (player.getGameMode() == GameMode.CREATIVE || Worlds_Restriction(player)) {
+        if (player.getGameMode() == GameMode.CREATIVE || isWorldRestricted(player)) {
             return;
         }
 

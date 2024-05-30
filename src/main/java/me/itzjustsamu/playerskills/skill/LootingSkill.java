@@ -31,7 +31,7 @@ public class LootingSkill extends Skill implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
-            if (Worlds_Restriction(player)) {
+            if (isWorldRestricted(player)) {
                 return;
             }
 

@@ -32,7 +32,7 @@ public class ResistanceSkill extends Skill {
         }
 
         Player player = (Player) event.getEntity();
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

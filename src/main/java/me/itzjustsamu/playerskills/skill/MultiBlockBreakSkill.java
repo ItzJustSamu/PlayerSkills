@@ -50,14 +50,11 @@ public class MultiBlockBreakSkill extends Skill implements Listener {
     }
 
     private ItemStack getItemInHand(Player player) {
-        try {
-            if (getItemInMainHandMethod != null) {
-                return (ItemStack) getItemInMainHandMethod.invoke(player.getInventory());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionControl.isOldVersion()) {
+            return player.getInventory().getItemInHand();
+        } else {
+            return player.getInventory().getItemInMainHand();
         }
-        return player.getInventory().getItemInHand(); // Fallback in case reflection fails
     }
 
     @EventHandler

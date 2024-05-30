@@ -8,12 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultFundingSource implements FundingSource {
-    private Economy economy;
+    private final Economy economy;
+    private static final RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
 
     public VaultFundingSource() {
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-                return;
+            Utils.logError("Failed to initialize VaultFundingSource: Economy service provider is null.");
+            throw new IllegalStateException("Economy service provider is null");
         }
         economy = rsp.getProvider();
     }

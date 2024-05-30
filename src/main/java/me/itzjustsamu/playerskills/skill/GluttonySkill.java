@@ -27,7 +27,7 @@ public class GluttonySkill extends Skill {
     @EventHandler
     public void onFood(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

@@ -14,14 +14,12 @@ import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,7 +38,7 @@ public class CriticalsSkill extends Skill {
         }
 
         Player player = (Player) event.getDamager();
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 
@@ -54,16 +52,17 @@ public class CriticalsSkill extends Skill {
             return;
         }
 
-        int criticalLevel = getLevel(sPlayer);
+        int playerLevel = getLevel(sPlayer);
 
-        double chance = criticalLevel * getUpgrade().getValue();
+        double criticalMultiplier = CRITICAL_MULTIPLIER.getValue();
+        double chance = playerLevel * getUpgrade().getValue();
+        String criticalMessage = CRITICAL_MESSAGE.getValue();
 
-        if (ThreadLocalRandom.current().nextInt(100) < chance) {
-            String message = CRITICAL_MESSAGE.getValue();
-            if (!message.isEmpty()) {
-                MessageUtils.sendMessage(player, message, "");
+        if (ThreadLocalRandom.current().nextDouble() < chance / 100.0) {
+            if (!criticalMessage.isEmpty()) {
+                MessageUtils.sendMessage(player, criticalMessage, "");
             }
-            event.setDamage(event.getDamage() * CRITICAL_MULTIPLIER.getValue());
+            event.setDamage(event.getDamage() * criticalMultiplier);
         }
 
     }
@@ -75,9 +74,8 @@ public class CriticalsSkill extends Skill {
 
     @Override
     public List<ConfigPath<?>> getMessageConfigPaths() {
-        return Collections.singletonList(CRITICAL_MESSAGE);
+        return List.of(CRITICAL_MESSAGE);
     }
-
     @Override
     public ItemBuilder<ItemStack> getDefaultItem() {
         return new BukkitItemBuilder()

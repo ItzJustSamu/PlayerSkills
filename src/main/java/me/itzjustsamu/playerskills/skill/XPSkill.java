@@ -37,7 +37,7 @@ public class XPSkill extends Skill {
 
         Player killer = event.getEntity().getKiller();
 
-        if (Worlds_Restriction(killer)) {
+        if (isWorldRestricted(killer)) {
             return;
         }
 
@@ -67,7 +67,7 @@ public class XPSkill extends Skill {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

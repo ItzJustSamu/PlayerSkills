@@ -39,7 +39,7 @@ public class ArcherySkill extends Skill {
 
         Player player = (Player) arrow.getShooter();
 
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 
@@ -47,17 +47,14 @@ public class ArcherySkill extends Skill {
 
         if (sPlayer == null) {
             if (MainConfig.isVerboseLogging()) {
-                Utils.logError("Failed event. SPlayer for " + player.getUniqueId() + " is null.");
+                Utils.logError(String.format("Failed event. SPlayer for %s is null.", player.getUniqueId()));
             }
             return;
         }
 
-        if (getLevel(sPlayer) > 0) {
-            int increment = getUpgrade().getValue();
-            double damage = event.getDamage() / 100;
-            damage = damage * increment;
-            double finalDamage = getLevel(sPlayer) * damage;
-            event.setDamage(event.getDamage() + finalDamage);
+        int playerLevel = getLevel(sPlayer);
+        if (playerLevel > 0) {
+            event.setDamage(event.getDamage() + (playerLevel * (event.getDamage() / 100) * getUpgrade().getValue()));
         }
     }
 

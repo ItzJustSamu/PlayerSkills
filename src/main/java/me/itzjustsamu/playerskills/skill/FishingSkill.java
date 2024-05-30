@@ -29,7 +29,7 @@ public class FishingSkill extends Skill {
     public void onFish(PlayerFishEvent event) {
         Player player = event.getPlayer();
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

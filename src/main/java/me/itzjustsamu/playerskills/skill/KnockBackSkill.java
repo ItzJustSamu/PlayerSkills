@@ -36,7 +36,7 @@ public class KnockBackSkill extends Skill {
 
         Player player = (Player) event.getDamager();
 
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

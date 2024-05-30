@@ -50,7 +50,7 @@ public class ShadowStepSkill extends Skill {
         Player target = (Player) event.getEntity();
         Player player = (Player) event.getDamager();
 
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 

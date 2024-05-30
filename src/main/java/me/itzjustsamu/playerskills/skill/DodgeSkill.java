@@ -42,7 +42,7 @@ public class DodgeSkill extends Skill {
         }
 
         Player player = (Player) event.getEntity();
-        if (Worlds_Restriction(player)) {
+        if (isWorldRestricted(player)) {
             return;
         }
 
@@ -70,16 +70,15 @@ public class DodgeSkill extends Skill {
         int dodgeLevel = getLevel(sPlayer);
 
         double chance = dodgeLevel * getUpgrade().getValue();
-
-        if (ThreadLocalRandom.current().nextInt(100) < chance) {
-            String message = dodgeMessage.getValue();
+        String message = dodgeMessage.getValue();
+        if (ThreadLocalRandom.current().nextDouble(100) < chance) {
             if (!message.isEmpty()) {
                 MessageUtils.sendMessage(player, message, "");
             }
             event.setCancelled(true);
 
             // Set cooldown
-            cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + COOLDOWN_DURATION.getValue());
+            cooldowns.computeIfAbsent(player.getUniqueId(), key -> System.currentTimeMillis() + COOLDOWN_DURATION.getValue());
         }
     }
 

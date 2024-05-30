@@ -46,7 +46,7 @@ public class GrapplingSkill extends Skill {
         Player player = event.getPlayer();
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
-        if (!isFishingRod(player) || Worlds_Restriction(player) || sPlayer == null) {
+        if (!isFishingRod(player) || isWorldRestricted(player) || sPlayer == null) {
             return;
         }
 

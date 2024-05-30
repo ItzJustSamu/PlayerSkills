@@ -42,9 +42,9 @@ public class HasteSkill extends Skill implements Listener {
             return;
         }
 
-        // Check if the player has the haste skill
-        if (getLevel(sPlayer) > 0) {
-            int hasteAmount = getLevel(sPlayer) * getUpgrade().getValue(); // Set the initial haste amount based on skill level
+        int playerLevel = getLevel(sPlayer);
+        if (playerLevel > 0) {
+            int hasteAmount = playerLevel * getUpgrade().getValue(); // Set the initial haste amount based on skill level
 
             // Apply haste effect to the player
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, hasteAmount - 1, false, false));

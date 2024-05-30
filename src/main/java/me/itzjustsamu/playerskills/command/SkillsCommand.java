@@ -37,9 +37,9 @@ public class SkillsCommand extends Command {
         Player player = (Player) sender;
         SPlayer sPlayer = SPlayer.get(player.getUniqueId());
 
-        List<String> listOfWorlds = MainConfig.OPTIONS_MENU_Worlds_Restrictions.getValue();
+        List<String> listOfWorlds = MainConfig.OPTIONS_MENU_isWorldRestricteds.getValue();
         if (!listOfWorlds.isEmpty() && !listOfWorlds.contains(player.getWorld().getName())) {
-            MessageUtils.sendMessage(player, MessageConfig.MENU_Worlds_Restrictions.getValue());
+            MessageUtils.sendMessage(player, MessageConfig.MENU_isWorldRestricteds.getValue());
             return true;
         }
 

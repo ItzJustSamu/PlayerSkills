@@ -48,7 +48,7 @@ public class HealthSkill extends Skill {
                     }
                     continue;
                 }
-                if (Worlds_Restriction(player)) {
+                if (isWorldRestricted(player)) {
                     clearPlayer(player);
                     return;
                 }

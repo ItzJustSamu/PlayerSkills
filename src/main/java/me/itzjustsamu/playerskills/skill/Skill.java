@@ -32,7 +32,7 @@ public abstract class Skill implements Listener {
 
     private final String NAME;
     private final String SKILL;
-    private final ConfigPath<List<String>> WORLDS_RESTRICTIONS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
+    private final ConfigPath<List<String>> isWorldRestrictedS = new StickyConfigPath<>(new StringListConfigPath(new PathString("only-in-worlds"), Collections.emptyList()));
 
     private final int LIMIT;
     private final int GUI_SLOT;
@@ -74,7 +74,7 @@ public abstract class Skill implements Listener {
         GET_PRICE.setConfig(CONFIG);
         GET_DISABLED.setConfig(CONFIG);
         GET_GUI_SLOT.setConfig(CONFIG);
-        WORLDS_RESTRICTIONS.setConfig(CONFIG);
+        isWorldRestrictedS.setConfig(CONFIG);
         getAdditionalConfigPaths().forEach(configPath -> configPath.setConfig(CONFIG));
         ItemBuilderConfigPath itemBuilderConfigPath = new ItemBuilderConfigPath(new PathString("display"), getDefaultItem());
         itemBuilderConfigPath.setConfig(CONFIG);
@@ -191,8 +191,8 @@ public abstract class Skill implements Listener {
         GET_PRICE.setValue(price, getConfig());
     }
 
-    public boolean Worlds_Restriction(Player player) {
-        List<String> list = WORLDS_RESTRICTIONS.getValue();
+    public boolean isWorldRestricted(Player player) {
+        List<String> list = isWorldRestrictedS.getValue();
         if (list.isEmpty()) {
             return false;
         }
@@ -203,8 +203,8 @@ public abstract class Skill implements Listener {
         return !list.contains(world.getName());
     }
 
-    public boolean Worlds_Restriction(World world) {
-        List<String> list = WORLDS_RESTRICTIONS.getValue();
+    public boolean isWorldRestricted(World world) {
+        List<String> list = isWorldRestrictedS.getValue();
         if (list.isEmpty()) {
             return false;
         }

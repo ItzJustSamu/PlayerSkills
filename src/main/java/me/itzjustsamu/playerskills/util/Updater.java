@@ -3,10 +3,13 @@ package me.itzjustsamu.playerskills.util;
 import me.itzjustsamu.playerskills.PlayerSkills;
 import org.bukkit.Bukkit;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -41,10 +44,13 @@ public class Updater {
             try {
                 URI uri = new URI("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId);
                 URL url = uri.toURL();
-
-                try (InputStream inputStream = url.openStream(); Scanner scanner = new Scanner(inputStream)) {
-                    if (scanner.hasNext()) {
-                        consumer.accept(scanner.next());
+                URLConnection connection = url.openConnection();
+                connection.setConnectTimeout(5000); // 5 seconds timeout
+                connection.setReadTimeout(5000); // 5 seconds timeout
+                try (InputStream inputStream = url.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                    String line = reader.readLine();
+                    if (line != null) {
+                        consumer.accept(line);
                     }
                 }
             } catch (IOException | RuntimeException | Error exception) {
