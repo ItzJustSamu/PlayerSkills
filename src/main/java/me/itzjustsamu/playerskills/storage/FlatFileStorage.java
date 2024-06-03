@@ -15,6 +15,7 @@ public class FlatFileStorage implements PlayerStorage {
     private static final PathString SKILLS_PATH = new PathString("skills");
     private static final PathString POINTS_PATH = new PathString("points");
     private static final PathString RESTORED_SKILL_PATH = new PathString("restored-skills");
+    private static final PathString LEVEL_PATH = new PathString("levels");
     private final PlayerSkills plugin;
 
     public FlatFileStorage(PlayerSkills plugin) {
@@ -69,6 +70,17 @@ public class FlatFileStorage implements PlayerStorage {
     public void savePreviousSkillLevel(UUID uuid, String skillName, int level) {
         Config config = setupFile(uuid);
         config.set(RESTORED_SKILL_PATH.append(skillName), level);
+        config.save();
+    }
+
+    public Integer loadSkillLevel(UUID uuid, String skillName) {
+        Config config = setupFile(uuid);
+        return config.getInstance(LEVEL_PATH.append(skillName), Integer.class);
+    }
+
+    public void saveSkillLevel(UUID uuid, String skillName, int level) {
+        Config config = setupFile(uuid);
+        config.set(LEVEL_PATH.append(skillName), level);
         config.save();
     }
 }

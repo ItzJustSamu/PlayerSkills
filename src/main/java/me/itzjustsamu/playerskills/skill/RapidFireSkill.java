@@ -46,33 +46,32 @@ public class RapidFireSkill extends Skill {
             return;
         }
 
-
-        if (getLevel(sPlayer) > 0) {
-            int numArrows = 1 + getLevel(sPlayer); // Increase the number of arrows based on arrowLevel
-
-            BukkitScheduler scheduler = Bukkit.getScheduler();
-            long delayBetweenShots = 3L; // Adjust this value to control the delay between shots (in ticks)
-
-            for (int i = 0; i < numArrows; i++) {
-                int finalI = i;
-                scheduler.runTaskLater(getPlugin(), () -> {
-                    Arrow arrow = player.launchProjectile(Arrow.class, player.getLocation().getDirection());
-
-                    // Adjust arrow speed and distance here
-                    double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
-                    arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
-
-                    // Deny arrow pickup (Paper-specific)
-                    arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
-
-                    if (finalI != numArrows - 1) {
-                    }
-                    // This is the last arrow, perform any final actions here
-                }, i * delayBetweenShots);
-            }
-        }
+        createArrows(player, sPlayer);
     }
 
+    private void createArrows(Player player, SPlayer sPlayer) {
+        int numArrows = 1 + getLevel(sPlayer); // Increase the number of arrows based on arrowLevel
+        long delayBetweenShots = 1L; // Default delay between shots
+
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        for (int i = 0; i < numArrows; i++) {
+            int finalI = i;
+            scheduler.runTaskLater(getPlugin(), () -> {
+                Arrow arrow = player.launchProjectile(Arrow.class, player.getLocation().getDirection());
+
+                // Adjust arrow speed and distance here
+                double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
+                arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
+
+                // Deny arrow pickup (Paper-specific)
+                arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
+
+                if (finalI == numArrows - 1) {
+                    // This is the last arrow, perform any final actions here
+                }
+            }, i * delayBetweenShots);
+        }
+    }
 
     @Override
     public List<ConfigPath<?>> getAdditionalConfigPaths() {

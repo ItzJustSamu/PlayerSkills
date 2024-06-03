@@ -70,7 +70,8 @@ public class LacerateSkill extends Skill {
 
         double chance = lacerateLevel * getUpgrade().getValue();
 
-        if (ThreadLocalRandom.current().nextInt(100) < chance) {
+        double randomValue = ThreadLocalRandom.current().nextDouble();
+        if (randomValue < chance / 100.0) {
             LivingEntity victim = (LivingEntity) event.getEntity();
 
             bleed(victim);

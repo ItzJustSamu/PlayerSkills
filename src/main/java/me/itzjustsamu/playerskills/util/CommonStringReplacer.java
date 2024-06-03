@@ -5,10 +5,15 @@ import me.hsgamer.hscore.common.StringReplacer;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.Skill;
+import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 
 public final class CommonStringReplacer {
     public static final StringReplacer COLORIZE = ColorUtils::colorize;
     private static Skill skill;
+    private static FlatFileStorage storage; // Make sure to initialize this somewhere
+    public static void setStorage(FlatFileStorage storage) {
+        CommonStringReplacer.storage = storage;
+    }
     public static final StringReplacer PLAYER_PROPERTIES = StringReplacer.of((original, uuid) -> {
         SPlayer sPlayer = SPlayer.get(uuid);
         int skillsUpgrade = (skill != null) ? skill.getUpgrade().getValue() : 0;
@@ -23,6 +28,8 @@ public final class CommonStringReplacer {
         } else {
             resetSkillsPrice = MainConfig.RESET_PRICE.getValue() + sPlayer.getResetCount() * (MainConfig.RESET_INCREMENT_PRICE.getValue());
         }
+        Integer toggleLevel = skill != null ? storage.loadSkillLevel(sPlayer.getPlayer(), skill.getSkillsConfigName()) : null;
+        int currentLevel = skill != null ? skill.getLevel(sPlayer) : 0;
 
         return original.replace("{player-price}", Integer.toString(price))
                 .replace("{symbol}", MainConfig.POINTS_FUNDING_SOURCE.getValue().getSymbol(price))
@@ -41,7 +48,8 @@ public final class CommonStringReplacer {
                 .replace("{points-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_PURCHASE_POINTS.getValue()))
                 .replace("{reset-confirmation}", Boolean.toString(MainConfig.CONFIRMATION_RESET_SKILLS.getValue()))
                 .replace("{skills-max-level}", Integer.toString(skillMaxLevel))
-                .replace("{toggle-skill}", Boolean.toString(MainConfig.TOGGLE_SKILL.getValue()));
+                .replace("{toggle-skill-level}", toggleLevel != null ? toggleLevel.toString() : "0")
+                .replace("{current-skill-level}", Integer.toString(currentLevel));
 
 
     });
@@ -54,5 +62,6 @@ public final class CommonStringReplacer {
     }
 
     public static void resetSkill() {
+        skill = null;
     }
 }

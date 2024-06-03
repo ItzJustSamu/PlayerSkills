@@ -17,6 +17,7 @@ import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.skill.*;
 import me.itzjustsamu.playerskills.storage.FlatFileStorage;
 import me.itzjustsamu.playerskills.storage.PlayerStorage;
+import me.itzjustsamu.playerskills.util.CommonStringReplacer;
 import me.itzjustsamu.playerskills.util.Updater;
 import org.bukkit.event.HandlerList;
 
@@ -37,6 +38,7 @@ public class PlayerSkills extends BasePlugin {
     private final MainConfig mainConfig = new MainConfig(this);
     private final Map<String, Skill> skills = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
+    private final FlatFileStorage storage = new FlatFileStorage(this);
 
     @Override
     public void preLoad() {
@@ -54,10 +56,12 @@ public class PlayerSkills extends BasePlugin {
 
     @Override
     public void enable() {
+        registerSkill(new AcrobatSkill(this));
         registerSkill(new ArcherySkill(this));
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));
         registerSkill(new DoubleJumpSkill(this));
+        registerSkill(new ExcavatorSkill(this));
         registerSkill(new RapidFireSkill(this));
         registerSkill(new FireBallSkill(this));
         registerSkill(new FishingSkill(this));
@@ -78,6 +82,7 @@ public class PlayerSkills extends BasePlugin {
 
         registerCommand(new SkillsCommand(this));
         registerCommand(new SkillsAdminCommand(this));
+        CommonStringReplacer.setStorage(this.storage);
 
         registerListener(new MenuController());
         registerListener(new PlayerListener());

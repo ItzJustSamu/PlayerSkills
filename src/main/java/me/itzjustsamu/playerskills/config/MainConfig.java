@@ -129,16 +129,24 @@ public class MainConfig extends PathableConfig {
                     .addItemModifier(new XMaterialModifier(XMaterial.GRAY_STAINED_GLASS_PANE))
     ));
 
-    public static final IntegerConfigPath TOGGLE_SKILL_SLOT = new IntegerConfigPath(new PathString("toggle-skill", "slot"), 12);
+    public static final IntegerConfigPath TOGGLE_SKILL_SLOT = new IntegerConfigPath(new PathString("toggle-skill", "slot"), 9);
     public static final BooleanConfigPath TOGGLE_SKILL = new BooleanConfigPath(new PathString("toggle-skill"), false);
 
     public static final ConfigPath<ItemBuilder<ItemStack>> TOGGLE_SKILL_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("toggle-skill", "display"),
             new BukkitItemBuilder()
                     .addItemModifier(new NameModifier().setName("&cToggle {skill}"))
                     .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
+    ));
+
+    public static final IntegerConfigPath TOGGLE_SKILL_LEVEL_SLOT = new IntegerConfigPath(new PathString("toggle", "skill-level", "slot"), 10);
+
+    public static final ConfigPath<ItemBuilder<ItemStack>> TOGGLE_SKILL_LEVEL_DISPLAY = new StickyConfigPath<>(new ItemBuilderConfigPath(new PathString("toggle", "skill-level", "display"),
+            new BukkitItemBuilder()
+                    .addItemModifier(new NameModifier().setName("&cToggle {skill} Levels"))
+                    .addItemModifier(new XMaterialModifier(XMaterial.PAPER))
                     .addItemModifier(new LoreModifier().setLore(
                             "",
-                            "&7{skill} Status: &e{toggle-skill}"
+                            "&7Level: &e{toggle-skill-level}&7&l/&e{current-skill-level}"
                     ))
     ));
     // Admin configurations

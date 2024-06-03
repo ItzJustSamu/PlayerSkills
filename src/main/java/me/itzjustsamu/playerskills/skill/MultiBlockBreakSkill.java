@@ -20,33 +20,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class MultiBlockBreakSkill extends Skill implements Listener {
-    private final Method getItemInMainHandMethod;
 
     public MultiBlockBreakSkill(PlayerSkills plugin) {
         super(plugin, "Multibreak", "multiblockbreak", 10, 14);
-        getItemInMainHandMethod = getGetItemInMainHandMethod();
-    }
-
-    private Method getGetItemInMainHandMethod() {
-        try {
-            return PlayerInventory.class.getMethod("getItemInMainHand");
-        } catch (NoSuchMethodException e) {
-            try {
-                return PlayerInventory.class.getMethod("getItemInHand");
-            } catch (NoSuchMethodException ex) {
-                return null;
-            }
-        }
     }
 
     private ItemStack getItemInHand(Player player) {
@@ -112,20 +93,21 @@ public class MultiBlockBreakSkill extends Skill implements Listener {
 
     private List<Location> getBreakLocations(Block block, Vector direction, int radius) {
         List<Location> locations = new ArrayList<>();
-
+        // Precompute relative positions for efficiency
+        List<Vector> relativePositions = new ArrayList<>();
         for (int i = -radius; i <= radius; i++) {
             for (int j = -radius; j <= radius; j++) {
                 for (int k = -radius; k <= radius; k++) {
                     if (i * i + j * j + k * k <= radius * radius) {
-                        double offsetX = i + 0.5;
-                        double offsetY = j + 0.5;
-                        double offsetZ = k + 0.5;
-
-                        Location loc = block.getLocation().add(offsetX, offsetY, offsetZ).toVector().add(direction.multiply(0.1)).toLocation(block.getWorld());
-                        locations.add(loc);
+                        relativePositions.add(new Vector(i + 0.5, j + 0.5, k + 0.5));
                     }
                 }
             }
+        }
+
+        for (Vector relativePos : relativePositions) {
+            Location loc = block.getLocation().add(relativePos).toVector().add(direction.multiply(0.1)).toLocation(block.getWorld());
+            locations.add(loc);
         }
 
         return locations;

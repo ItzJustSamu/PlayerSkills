@@ -38,12 +38,10 @@ public class SettingsMenu implements Menu {
         this.skill = skill;
         this.player = player;
         this.sPlayer = sPlayer;
-        this.config = config = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
+        this.config = new BukkitConfig(new File(plugin.getDataFolder(), "skills" + File.separator + skill.getSkillsConfigName() + ".yml"));
         this.toggleSkill = new HashMap<>();
         this.storage = storage;
     }
-
-
 
     @Override
     public @NotNull Inventory getInventory() {
@@ -65,6 +63,7 @@ public class SettingsMenu implements Menu {
             inventory.setItem(MainConfig.ADMIN_SLOT.getValue(), MainConfig.ADMIN_DISPLAY.getValue().build(sPlayer.getPlayer()));
             inventory.setItem(MainConfig.TOGGLE_SKILL_SLOT.getValue(), MainConfig.TOGGLE_SKILL_DISPLAY.getValue().build(sPlayer.getPlayer()));
             inventory.setItem(MainConfig.BACK_SLOT.getValue(), MainConfig.BACK_DISPLAY.getValue().build(sPlayer.getPlayer()));
+            inventory.setItem(MainConfig.TOGGLE_SKILL_LEVEL_SLOT.getValue(), MainConfig.TOGGLE_SKILL_LEVEL_DISPLAY.getValue().build(sPlayer.getPlayer()));
         }
 
         return inventory;
@@ -100,6 +99,8 @@ public class SettingsMenu implements Menu {
             skillsMenu.open(player);
             playUIButtonClickSound(player);
             CommonStringReplacer.resetSkill();
+        } else if (slot == MainConfig.TOGGLE_SKILL_LEVEL_SLOT.getValue()) {
+            handleToggleSkillLevel(clickType);
         }
     }
 
@@ -117,7 +118,7 @@ public class SettingsMenu implements Menu {
                 };
 
                 if (MainConfig.CONFIRMATION_PURCHASE_SKILLS.getValue()) {
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, (player), skill.getDisplayItem(player), callback, this);
+                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, skill.getDisplayItem(player), callback, this);
                     confirmationMenu.open(player);
                 } else {
                     callback.run();
@@ -146,17 +147,42 @@ public class SettingsMenu implements Menu {
             sPlayer.setLevel(skillName, 0);
         }
 
-        // Update the toggle state
-        MainConfig.TOGGLE_SKILL.setValue(!MainConfig.TOGGLE_SKILL.getValue());
-        skill.getConfig().set(MainConfig.TOGGLE_SKILL.getPath(), MainConfig.TOGGLE_SKILL.getValue());
-        skill.getConfig().save();
-
         playUIButtonClickSound(player);
         open(player);
     }
 
+    private void handleToggleSkillLevel(ClickType clickType) {
+        String skillName = skill.getSkillsConfigName();
+        int currentLevel = skill.getLevel(sPlayer);
+        Integer storedLevel = storage.loadSkillLevel(sPlayer.getPlayer(), skillName);
 
+        if (storedLevel == null) {
+            storedLevel = currentLevel;
+            storage.saveSkillLevel(sPlayer.getPlayer(), skillName, currentLevel);
+        }
 
+        if (clickType == ClickType.RIGHT) {
+            // Increase the skill level by 1 if it's not at the stored level
+            if (currentLevel < storedLevel) {
+                sPlayer.setLevel(skillName, currentLevel + 1);
+            } else {
+                playItemBreakSound(player);
+            }
+        } else if (clickType == ClickType.LEFT) {
+            // Decrease the skill level by 1 if it's above 0
+            if (currentLevel > 0) {
+                sPlayer.setLevel(skillName, currentLevel - 1);
+            } else {
+                playItemBreakSound(player);
+            }
+        }
+
+        // Save the updated skill level
+        storage.saveSkillLevel(sPlayer.getPlayer(), skillName, skill.getLevel(sPlayer));
+
+        playUIButtonClickSound(player);
+        open(player);
+    }
 
 
     @NotNull
@@ -188,7 +214,7 @@ public class SettingsMenu implements Menu {
                 sPlayer.incrementResetCount();
                 open(player);
             } else {
-                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, (player), MainConfig.RESET_SKILLS_DISPLAY.getValue().build(sPlayer.getPlayer()), null, this);
+                ConfirmationMenu confirmationMenu = new ConfirmationMenu(plugin, player, MainConfig.RESET_SKILLS_DISPLAY.getValue().build(sPlayer.getPlayer()), null, this);
                 confirmationMenu.open(player);
             }
         };
@@ -202,7 +228,7 @@ public class SettingsMenu implements Menu {
                     sPlayer.setPoints(sPlayer.getPoints() + skill.getPrice().getValue());
                 }
             } else {
-                plugin.getLogger().severe("Skill not found for name: " + s);
+                plugin.getLogger().severe("Skill not found for" + s);
             }
         }
     }
