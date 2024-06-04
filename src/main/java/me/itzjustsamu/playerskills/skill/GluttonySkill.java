@@ -47,8 +47,7 @@ public class GluttonySkill extends Skill {
 
         int diff = event.getFoodLevel() - player.getFoodLevel();
         int gluttonyLevel = getLevel(sPlayer);
-        double multiplier = 1D + (gluttonyLevel * (getUpgrade().getValue() / 100D));
-
+        double multiplier = 1.0 + (gluttonyLevel * getUpgrade().getValue() / 100.0);
         double newLevel = diff * multiplier;
         player.setFoodLevel(player.getFoodLevel() + (int) newLevel);
     }

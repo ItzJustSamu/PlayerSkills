@@ -12,6 +12,7 @@ import me.itzjustsamu.playerskills.PlayerSkills;
 import me.itzjustsamu.playerskills.config.MainConfig;
 import me.itzjustsamu.playerskills.player.SPlayer;
 import me.itzjustsamu.playerskills.util.Utils;
+import me.itzjustsamu.playerskills.util.VersionControl;
 import me.itzjustsamu.playerskills.util.modifier.XMaterialModifier;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -64,10 +65,12 @@ public class DoubleJumpSkill extends Skill implements Listener {
     public void onMove(final PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (player.getGameMode() == GameMode.CREATIVE) {
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
-        if (getLevel(SPlayer.get(player.getUniqueId())) == 0) {
+
+        SPlayer sPlayer = SPlayer.get(player.getUniqueId());
+        if (sPlayer == null || getLevel(sPlayer) == 0) {
             player.setAllowFlight(false);
             return;
         }
@@ -79,10 +82,9 @@ public class DoubleJumpSkill extends Skill implements Listener {
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
 
-        if (player.getGameMode() == GameMode.CREATIVE || isWorldRestricted(player)) {
+        if (player.getGameMode() == GameMode.CREATIVE || isWorldRestricted(player) || player.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
-
 
         // Check if the player is on cooldown for double jump
         if (Cooldown_Map.containsKey(player) && System.currentTimeMillis() < Cooldown_Map.get(player)) {
@@ -187,7 +189,7 @@ public class DoubleJumpSkill extends Skill implements Listener {
     }
 
     private void sendActionBar(Player player, long remainingTime) {
-        if (isLegacyVersion()) {
+        if (VersionControl.isOldVersion()) {
             sendActionBarLegacy(player, remainingTime);
         } else {
             sendActionBarModern(player, remainingTime);
@@ -218,35 +220,26 @@ public class DoubleJumpSkill extends Skill implements Listener {
         }.runTaskTimer(getPlugin(), 0L, 1L); // Update every tick
     }
 
-
     private void sendActionBarModern(Player player, long remainingTime) {
         new BukkitRunnable() {
             long timeLeft = remainingTime;
+            long ticks = 0;
 
             @Override
             public void run() {
                 if (timeLeft > 0) {
-                    String actionBarMessage = ChatColor.translateAlternateColorCodes('&', Cooldown_Message.getValue())
-                            .replace("{remaining_time}", String.valueOf(timeLeft));
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBarMessage));
-                    timeLeft--;
+                    ticks++;
+                    if (ticks % 20 == 0) { // 20 ticks = 1 second
+                        String actionBarMessage = ChatColor.translateAlternateColorCodes('&', Cooldown_Message.getValue())
+                                .replace("{remaining_time}", String.valueOf(timeLeft));
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
+                        timeLeft--;
+                    }
                 } else {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
-                    cancel(); // Stop the task when the cooldown ends
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(""));
+                    cancel();
                 }
             }
-        }.runTaskTimer(getPlugin(), 0L, 20L); // Update every second
-    }
-
-    private boolean isLegacyVersion() {
-        String[] versionParts = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
-        try {
-            int major = Integer.parseInt(versionParts[0]);
-            int minor = Integer.parseInt(versionParts[1]);
-            return major == 1 && minor < 14; // ActionBar was introduced in 1.14
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            // Unable to determine version, assume modern
-            return false;
-        }
+        }.runTaskTimer(getPlugin(), 0L, 1L); // Update every tick
     }
 }

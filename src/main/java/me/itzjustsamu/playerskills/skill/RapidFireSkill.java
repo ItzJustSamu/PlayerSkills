@@ -55,7 +55,6 @@ public class RapidFireSkill extends Skill {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         for (int i = 0; i < numArrows; i++) {
-            int finalI = i;
             scheduler.runTaskLater(getPlugin(), () -> {
                 Arrow arrow = player.launchProjectile(Arrow.class, player.getLocation().getDirection());
 
@@ -63,12 +62,7 @@ public class RapidFireSkill extends Skill {
                 double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
                 arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
 
-                // Deny arrow pickup (Paper-specific)
-                arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
-
-                if (finalI == numArrows - 1) {
-                    // This is the last arrow, perform any final actions here
-                }
+                // This is the last arrow, perform any final actions here
             }, i * delayBetweenShots);
         }
     }
@@ -81,14 +75,14 @@ public class RapidFireSkill extends Skill {
     @Override
     public ItemBuilder<ItemStack> getDefaultItem() {
         return new BukkitItemBuilder()
-                .addItemModifier(new NameModifier().setName("&cArrows Overview"))
+                .addItemModifier(new NameModifier().setName("&cRapidFire Overview"))
                 .addItemModifier(new XMaterialModifier(XMaterial.ARROW))
                 .addItemModifier(new LoreModifier().setLore(
                         "&eLeft-Click &7to upgrade this skill using &e{price} &7point(s).",
                         "&7This skill increases the amount of arrows shot.",
                         "&7Level: &e{level}&7/&e{limit}&7",
                         " ",
-                        "&cArrow amount: ",
+                        "&cRapidFire amount: ",
                         "   &e{prev}x&7 >>> &e{next}x"
                 ));
     }
