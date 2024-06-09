@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RapidFireSkill extends Skill {
@@ -62,9 +63,15 @@ public class RapidFireSkill extends Skill {
                 double speedMultiplier = 1.5; // Adjust the speed multiplier as needed
                 arrow.setVelocity(arrow.getVelocity().multiply(speedMultiplier));
 
+                // Make the arrow disappear after being shot
+                scheduler.runTaskLater(getPlugin(), arrow::remove, 1L);
+
                 // This is the last arrow, perform any final actions here
             }, i * delayBetweenShots);
         }
+
+        // Drop a single arrow after all arrows have been shot
+        scheduler.runTaskLater(getPlugin(), () -> player.getWorld().dropItemNaturally(player.getLocation(), new ItemStack(Objects.requireNonNull(XMaterial.ARROW.parseItem()))), numArrows * delayBetweenShots);
     }
 
     @Override

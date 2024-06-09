@@ -61,6 +61,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new CriticalsSkill(this));
         registerSkill(new DodgeSkill(this));
         registerSkill(new DoubleJumpSkill(this));
+        registerSkill(new EnderDragonRewardSkill(this));
         registerSkill(new ExcavatorSkill(this));
         registerSkill(new RapidFireSkill(this));
         registerSkill(new FireBallSkill(this));
@@ -78,6 +79,7 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new ShadowStepSkill(this));
         registerSkill(new SpeedSkill(this));
         registerSkill(new StrengthSkill(this));
+        registerSkill(new WitherRewardSkill(this));
         registerSkill(new XPSkill(this));
 
         registerCommand(new SkillsCommand(this));
