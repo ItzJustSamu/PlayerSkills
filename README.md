@@ -1,7 +1,6 @@
 # PlayerSkills
 
-Version: 2.5.3
+Version: 2.5.4
 
-- Toggle Skill option
-- AcrobatSkill
-- ExcavatorSkill
+- EnderDragon Reward Skill
+- Wither Reward Skill
