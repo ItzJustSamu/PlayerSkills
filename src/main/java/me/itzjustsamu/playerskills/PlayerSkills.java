@@ -73,12 +73,14 @@ public class PlayerSkills extends BasePlugin {
         registerSkill(new LacerateSkill(this));
         registerSkill(new LootingSkill(this));
         registerSkill(new LumberSkill(this));
+        registerSkill(new MagicResistanceSkill(this));
         registerSkill(new MultiBlockBreakSkill(this));
         registerSkill(new HasteSkill(this));
         registerSkill(new ResistanceSkill(this));
         registerSkill(new ShadowStepSkill(this));
         registerSkill(new SpeedSkill(this));
         registerSkill(new StrengthSkill(this));
+        registerSkill(new VeinMinerSkill(this));
         registerSkill(new WitherRewardSkill(this));
         registerSkill(new XPSkill(this));
 

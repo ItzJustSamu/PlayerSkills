@@ -83,9 +83,13 @@ public class LumberSkill extends Skill {
 
     private boolean isAxe(Player player) {
         Material mainHand = player.getInventory().getItemInMainHand().getType();
+        if (mainHand == null || mainHand == Material.AIR) {
+            mainHand = player.getInventory().getItemInHand().getType();
+        }
         Material offHand = player.getInventory().getItemInOffHand().getType();
         return mainHand.toString().endsWith("_AXE") || offHand.toString().endsWith("_AXE");
     }
+
 
 
     @Override
