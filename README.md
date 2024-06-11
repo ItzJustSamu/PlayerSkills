@@ -1,6 +1,6 @@
 # PlayerSkills
 
-Version: 2.5.4
+Version: 2.5.5
 
-- EnderDragon Reward Skill
-- Wither Reward Skill
+- veinminer
+- magicresistance
